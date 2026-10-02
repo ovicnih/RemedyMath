@@ -1,0 +1,618 @@
+{
+  "diagnostic": {
+    "title": "Evaluasi Aljabar Kelas 10",
+    "topic": "Aljabar Dasar",
+    "durationMinutes": 15,
+    "questions": [
+      {
+        "id": "d01",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Modul 1.1",
+        "stem": "Hasil dari operasi bilangan bulat berikut adalah:",
+        "expression": "-7 + 4",
+        "hint": "Tanda berbeda berarti mencari selisih, lalu ikuti tanda bilangan yang lebih besar nilainya.",
+        "options": ["-11", "-3", "3", "11"],
+        "answerIndex": 1,
+        "difficulty": -1.6
+      },
+      {
+        "id": "d02",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Modul 1.1",
+        "stem": "Nilai dari perkalian berikut adalah:",
+        "expression": "(-6) x (-3)",
+        "hint": "Perkalian dua bilangan negatif menghasilkan bilangan positif.",
+        "options": ["-18", "-9", "9", "18"],
+        "answerIndex": 3,
+        "difficulty": -1.3
+      },
+      {
+        "id": "d03",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Modul 1.1",
+        "stem": "Hasil pengurangan berikut adalah:",
+        "expression": "5 - (-8)",
+        "hint": "Mengurangi bilangan negatif sama dengan menjumlahkan lawannya.",
+        "options": ["-13", "-3", "3", "13"],
+        "answerIndex": 3,
+        "difficulty": -1.0
+      },
+      {
+        "id": "d04",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Bentuk paling sederhana dari penjumlahan suku berikut adalah:",
+        "expression": "4x + 5x - 2x",
+        "hint": "Hanya koefisien yang dijumlahkan; pangkat variabel tidak berubah.",
+        "options": ["7x", "7x\u00b3", "11x", "-3x"],
+        "answerIndex": 0,
+        "difficulty": -0.9
+      },
+      {
+        "id": "d05",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "3x + 2x\u00b2 - x",
+        "hint": "Suku dengan pangkat berbeda tidak dapat digabungkan.",
+        "options": ["4x\u00b3", "2x\u00b2 + 2x", "5x\u00b2", "2x\u00b2 + 4x"],
+        "answerIndex": 1,
+        "difficulty": -0.5
+      },
+      {
+        "id": "d06",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Jumlahkan kedua bentuk aljabar berikut:",
+        "expression": "(2a + 3b) + (5a - b)",
+        "hint": "Kelompokkan variabel a dengan a, dan b dengan b.",
+        "options": ["7a + 2b", "7a + 4b", "7ab + 2", "2a + 8b"],
+        "answerIndex": 0,
+        "difficulty": -0.3
+      },
+      {
+        "id": "d07",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Hasil penjabaran bentuk berikut adalah:",
+        "expression": "-2(x - 3)",
+        "hint": "Kalikan -2 ke setiap suku di dalam kurung, termasuk tandanya.",
+        "options": ["-2x - 6", "-2x + 6", "2x - 6", "-2x - 3"],
+        "answerIndex": 1,
+        "difficulty": 0.1
+      },
+      {
+        "id": "d08",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Bentuk penjabaran yang benar dari ekspresi berikut adalah:",
+        "expression": "-(3x - 4y + 2)",
+        "hint": "Tanda minus di depan kurung mengalikan (-1) ke seluruh suku.",
+        "options": [
+          "-3x - 4y + 2",
+          "-3x + 4y - 2",
+          "3x - 4y + 2",
+          "-3x + 4y + 2"
+        ],
+        "answerIndex": 1,
+        "difficulty": 0.3
+      },
+      {
+        "id": "d09",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Nilai yang tepat untuk melengkapi penjabaran berikut adalah:",
+        "expression": "-5(2x - 1) = -10x + ...",
+        "hint": "Perhatikan hasil perkalian -5 dengan -1.",
+        "options": ["-5", "5", "-1", "1"],
+        "answerIndex": 1,
+        "difficulty": 0.4
+      },
+      {
+        "id": "d10",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Modul 1.2",
+        "stem": "Bentuk sederhana dari ekspresi aljabar berikut adalah:",
+        "expression": "3(x + 2) - 2(2x - 1)",
+        "hint": "Perhatikan sifat distributif dan aturan perkalian tanda negatif pada suku kedua.",
+        "options": ["x + 4", "-x + 8", "5x + 4", "-x + 4"],
+        "answerIndex": 1,
+        "difficulty": 0.6
+      },
+      {
+        "id": "d11",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Modul 1.3",
+        "stem": "Hasil perkalian bentuk aljabar berikut adalah:",
+        "expression": "(x + 3)(x - 2)",
+        "hint": "Kalikan setiap suku, lalu gabungkan suku sejenis.",
+        "options": [
+          "x\u00b2 + x - 6",
+          "x\u00b2 - x - 6",
+          "x\u00b2 + 5x - 6",
+          "x\u00b2 - 6"
+        ],
+        "answerIndex": 0,
+        "difficulty": 0.8
+      },
+      {
+        "id": "d12",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Modul 2.1",
+        "stem": "Nilai x yang memenuhi persamaan berikut adalah:",
+        "expression": "2x + 5 = 11",
+        "hint": "Kurangi kedua ruas dengan 5 lebih dahulu.",
+        "options": ["2", "3", "6", "8"],
+        "answerIndex": 1,
+        "difficulty": 0.2
+      },
+      {
+        "id": "d13",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Modul 2.1",
+        "stem": "Himpunan penyelesaian dari persamaan berikut adalah:",
+        "expression": "3(x - 2) = x + 4",
+        "hint": "Jabarkan ruas kiri, lalu kumpulkan suku x pada satu ruas.",
+        "options": ["x = 1", "x = 3", "x = 5", "x = 10"],
+        "answerIndex": 2,
+        "difficulty": 1.0
+      },
+      {
+        "id": "d14",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Modul 2.2",
+        "stem": "Faktor dari bentuk kuadrat berikut adalah:",
+        "expression": "x\u00b2 + 5x + 6",
+        "hint": "Cari dua bilangan yang hasil kalinya 6 dan jumlahnya 5.",
+        "options": [
+          "(x + 1)(x + 6)",
+          "(x + 2)(x + 3)",
+          "(x - 2)(x - 3)",
+          "(x + 5)(x + 1)"
+        ],
+        "answerIndex": 1,
+        "difficulty": 1.2
+      },
+      {
+        "id": "d15",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Modul 2.2",
+        "stem": "Bentuk faktorisasi dari selisih kuadrat berikut adalah:",
+        "expression": "x\u00b2 - 9",
+        "hint": "Gunakan pola a\u00b2 - b\u00b2 = (a + b)(a - b).",
+        "options": [
+          "(x - 3)(x - 3)",
+          "(x + 3)(x + 3)",
+          "(x + 3)(x - 3)",
+          "(x + 9)(x - 1)"
+        ],
+        "answerIndex": 2,
+        "difficulty": 1.4
+      }
+    ]
+  },
+  "postTests": {
+    "n_operasi_bilangan": [
+      {
+        "id": "p_ob1",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil dari operasi berikut adalah:",
+        "expression": "-9 + 12",
+        "hint": "",
+        "options": ["-21", "-3", "3", "21"],
+        "answerIndex": 2,
+        "difficulty": -1.2
+      },
+      {
+        "id": "p_ob2",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil dari operasi berikut adalah:",
+        "expression": "-4 x 7",
+        "hint": "",
+        "options": ["-28", "-11", "11", "28"],
+        "answerIndex": 0,
+        "difficulty": -1.0
+      },
+      {
+        "id": "p_ob3",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil dari operasi berikut adalah:",
+        "expression": "-15 : (-3)",
+        "hint": "",
+        "options": ["-5", "5", "-45", "45"],
+        "answerIndex": 1,
+        "difficulty": -0.8
+      },
+      {
+        "id": "p_ob4",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil dari operasi berikut adalah:",
+        "expression": "8 - (-6) + (-4)",
+        "hint": "",
+        "options": ["-2", "6", "10", "18"],
+        "answerIndex": 2,
+        "difficulty": -0.4
+      },
+      {
+        "id": "p_ob5",
+        "nodeId": "n_operasi_bilangan",
+        "category": "Bilangan Bulat",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai dari ekspresi berikut adalah:",
+        "expression": "-2 x (5 - 9)",
+        "hint": "",
+        "options": ["-8", "8", "-28", "28"],
+        "answerIndex": 1,
+        "difficulty": 0.0
+      }
+    ],
+    "n_tanda_negatif": [
+      {
+        "id": "p_tn1",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil penjabaran bentuk berikut adalah:",
+        "expression": "-3(x - 4)",
+        "hint": "",
+        "options": ["-3x - 12", "-3x + 12", "3x - 12", "-3x - 4"],
+        "answerIndex": 1,
+        "difficulty": 0.0
+      },
+      {
+        "id": "p_tn2",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil penjabaran bentuk berikut adalah:",
+        "expression": "-(2a - 5b)",
+        "hint": "",
+        "options": ["-2a - 5b", "-2a + 5b", "2a - 5b", "2a + 5b"],
+        "answerIndex": 1,
+        "difficulty": 0.2
+      },
+      {
+        "id": "p_tn3",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "4 - 2(x - 3)",
+        "hint": "",
+        "options": ["-2x + 10", "-2x - 2", "2x + 10", "-2x + 1"],
+        "answerIndex": 0,
+        "difficulty": 0.5
+      },
+      {
+        "id": "p_tn4",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai yang tepat melengkapi penjabaran berikut adalah:",
+        "expression": "-6(3x - 2) = -18x + ...",
+        "hint": "",
+        "options": ["-12", "12", "-2", "2"],
+        "answerIndex": 1,
+        "difficulty": 0.4
+      },
+      {
+        "id": "p_tn5",
+        "nodeId": "n_tanda_negatif",
+        "category": "Sifat Distributif",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "-(x + 2) - (3 - 2x)",
+        "hint": "",
+        "options": ["x - 5", "-3x - 5", "x + 1", "-x - 5"],
+        "answerIndex": 0,
+        "difficulty": 0.9
+      }
+    ],
+    "n_suku_sejenis": [
+      {
+        "id": "p_ss1",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "7y - 3y + y",
+        "hint": "",
+        "options": ["5y", "4y", "11y", "5y\u00b3"],
+        "answerIndex": 0,
+        "difficulty": -0.8
+      },
+      {
+        "id": "p_ss2",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "5a\u00b2 + 2a - a\u00b2",
+        "hint": "",
+        "options": ["6a\u00b2", "4a\u00b2 + 2a", "7a\u00b3", "6a\u00b2 + 2a"],
+        "answerIndex": 1,
+        "difficulty": -0.3
+      },
+      {
+        "id": "p_ss3",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil penjumlahan berikut adalah:",
+        "expression": "(3p - 2q) + (p + 5q)",
+        "hint": "",
+        "options": ["4p + 3q", "4p - 3q", "3p + 3q", "4pq + 3"],
+        "answerIndex": 0,
+        "difficulty": 0.0
+      },
+      {
+        "id": "p_ss4",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Post-Test",
+        "stem": "Manakah pasangan suku yang sejenis?",
+        "expression": "4x\u00b2 ; 4x ; -9x\u00b2 ; 2y",
+        "hint": "",
+        "options": [
+          "4x\u00b2 dan -9x\u00b2",
+          "4x dan 4x\u00b2",
+          "4x dan 2y",
+          "2y dan -9x\u00b2"
+        ],
+        "answerIndex": 0,
+        "difficulty": 0.1
+      },
+      {
+        "id": "p_ss5",
+        "nodeId": "n_suku_sejenis",
+        "category": "Suku Sejenis",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "2m + 3n - 5m + n",
+        "hint": "",
+        "options": ["-3m + 4n", "7m + 4n", "-3m + 2n", "3m + 4n"],
+        "answerIndex": 0,
+        "difficulty": 0.4
+      }
+    ],
+    "n_operasi_aljabar": [
+      {
+        "id": "p_oa1",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "2(x + 4) - 3(x - 1)",
+        "hint": "",
+        "options": ["-x + 11", "-x + 5", "5x + 11", "x + 11"],
+        "answerIndex": 0,
+        "difficulty": 0.6
+      },
+      {
+        "id": "p_oa2",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Post-Test",
+        "stem": "Hasil perkalian berikut adalah:",
+        "expression": "(x - 4)(x + 5)",
+        "hint": "",
+        "options": [
+          "x\u00b2 + x - 20",
+          "x\u00b2 - x - 20",
+          "x\u00b2 + 9x - 20",
+          "x\u00b2 - 20"
+        ],
+        "answerIndex": 0,
+        "difficulty": 0.8
+      },
+      {
+        "id": "p_oa3",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai ekspresi berikut untuk x = 2 adalah:",
+        "expression": "3(x + 1) - 2x",
+        "hint": "",
+        "options": ["5", "7", "9", "11"],
+        "answerIndex": 0,
+        "difficulty": 0.5
+      },
+      {
+        "id": "p_oa4",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "5x - (2x - 7)",
+        "hint": "",
+        "options": ["3x + 7", "3x - 7", "7x - 7", "3x + 2"],
+        "answerIndex": 0,
+        "difficulty": 0.4
+      },
+      {
+        "id": "p_oa5",
+        "nodeId": "n_operasi_aljabar",
+        "category": "Penalaran Aljabar",
+        "moduleLabel": "Post-Test",
+        "stem": "Bentuk sederhana dari ekspresi berikut adalah:",
+        "expression": "4(2x - 1) - (3x + 5)",
+        "hint": "",
+        "options": ["5x - 9", "5x + 1", "11x - 9", "5x - 1"],
+        "answerIndex": 0,
+        "difficulty": 1.0
+      }
+    ],
+    "n_persamaan_linear": [
+      {
+        "id": "p_pl1",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai x yang memenuhi persamaan berikut adalah:",
+        "expression": "3x - 4 = 11",
+        "hint": "",
+        "options": ["3", "5", "7", "15"],
+        "answerIndex": 1,
+        "difficulty": 0.2
+      },
+      {
+        "id": "p_pl2",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai x yang memenuhi persamaan berikut adalah:",
+        "expression": "2(x + 3) = 14",
+        "hint": "",
+        "options": ["4", "5", "7", "10"],
+        "answerIndex": 0,
+        "difficulty": 0.4
+      },
+      {
+        "id": "p_pl3",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai x yang memenuhi persamaan berikut adalah:",
+        "expression": "5x - 3 = 2x + 9",
+        "hint": "",
+        "options": ["2", "3", "4", "6"],
+        "answerIndex": 2,
+        "difficulty": 0.7
+      },
+      {
+        "id": "p_pl4",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai x yang memenuhi persamaan berikut adalah:",
+        "expression": "4 - (x - 2) = 1",
+        "hint": "",
+        "options": ["1", "3", "5", "7"],
+        "answerIndex": 2,
+        "difficulty": 0.9
+      },
+      {
+        "id": "p_pl5",
+        "nodeId": "n_persamaan_linear",
+        "category": "Persamaan Linear",
+        "moduleLabel": "Post-Test",
+        "stem": "Nilai x yang memenuhi persamaan berikut adalah:",
+        "expression": "x/2 + 3 = 7",
+        "hint": "",
+        "options": ["2", "4", "8", "14"],
+        "answerIndex": 2,
+        "difficulty": 0.8
+      }
+    ],
+    "n_pemfaktoran": [
+      {
+        "id": "p_pf1",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Post-Test",
+        "stem": "Faktor dari bentuk kuadrat berikut adalah:",
+        "expression": "x\u00b2 + 7x + 12",
+        "hint": "",
+        "options": [
+          "(x + 3)(x + 4)",
+          "(x + 2)(x + 6)",
+          "(x - 3)(x - 4)",
+          "(x + 1)(x + 12)"
+        ],
+        "answerIndex": 0,
+        "difficulty": 1.0
+      },
+      {
+        "id": "p_pf2",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Post-Test",
+        "stem": "Faktor dari bentuk kuadrat berikut adalah:",
+        "expression": "x\u00b2 - 5x + 6",
+        "hint": "",
+        "options": [
+          "(x - 2)(x - 3)",
+          "(x + 2)(x + 3)",
+          "(x - 1)(x - 6)",
+          "(x - 6)(x + 1)"
+        ],
+        "answerIndex": 0,
+        "difficulty": 1.1
+      },
+      {
+        "id": "p_pf3",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Post-Test",
+        "stem": "Faktor dari bentuk berikut adalah:",
+        "expression": "x\u00b2 - 16",
+        "hint": "",
+        "options": [
+          "(x + 4)(x - 4)",
+          "(x - 4)(x - 4)",
+          "(x + 8)(x - 2)",
+          "(x + 16)(x - 1)"
+        ],
+        "answerIndex": 0,
+        "difficulty": 0.9
+      },
+      {
+        "id": "p_pf4",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Post-Test",
+        "stem": "Faktor dari bentuk kuadrat berikut adalah:",
+        "expression": "x\u00b2 + x - 6",
+        "hint": "",
+        "options": [
+          "(x + 3)(x - 2)",
+          "(x - 3)(x + 2)",
+          "(x + 6)(x - 1)",
+          "(x + 1)(x - 6)"
+        ],
+        "answerIndex": 0,
+        "difficulty": 1.2
+      },
+      {
+        "id": "p_pf5",
+        "nodeId": "n_pemfaktoran",
+        "category": "Pemfaktoran",
+        "moduleLabel": "Post-Test",
+        "stem": "Akar-akar dari persamaan kuadrat berikut adalah:",
+        "expression": "x\u00b2 - 5x + 6 = 0",
+        "hint": "",
+        "options": [
+          "x = 2 atau x = 3",
+          "x = -2 atau x = -3",
+          "x = 1 atau x = 6",
+          "x = -1 atau x = 6"
+        ],
+        "answerIndex": 0,
+        "difficulty": 1.3
+      }
+    ]
+  }
+}
