@@ -32,7 +32,7 @@ class RemedialTabPage extends StatelessWidget {
               EmptyState(
                 icon: Icons.assignment_outlined,
                 title: 'Belum ada rute belajar',
-                message: 'Kerjakan tes diagnostik agar RemediMath dapat menyusun rute remedialmu.',
+                message: 'Kerjakan tes diagnostik agar RemedyMath dapat menyusun rute remedialmu.',
                 action: FilledButton(
                   onPressed: () => Flows.startDiagnostic(context),
                   child: const Text('Mulai Tes Diagnostik'),

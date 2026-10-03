@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-/// Skala tipografi RemediMath. Font monospace dipakai untuk ekspresi
+/// Skala tipografi RemedyMath. Font monospace dipakai untuk ekspresi
 /// matematika agar sejajar dengan tampilan rumus pada desain.
 class AppTextStyles {
   const AppTextStyles._();

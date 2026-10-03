@@ -1,6 +1,6 @@
-name: mp_musyaffailhamaka
+name: remedy_math
 description: >-
-  RemediMath - Asisten Remediasi Matematika SMA Adaptif berbasis Item Response
+  RemedyMath - Asisten Remediasi Matematika SMA Adaptif berbasis Item Response
   Theory (Model Rasch 1PL) dan Knowledge Graph prasyarat materi.
 publish_to: 'none'
 

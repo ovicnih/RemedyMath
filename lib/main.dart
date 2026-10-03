@@ -16,13 +16,13 @@ Future<void> main() async {
   runApp(
     ChangeNotifierProvider<AppController>.value(
       value: controller,
-      child: const RemediMathApp(),
+      child: const RemedyMathApp(),
     ),
   );
 }
 
-class RemediMathApp extends StatelessWidget {
-  const RemediMathApp({super.key});
+class RemedyMathApp extends StatelessWidget {
+  const RemedyMathApp({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-# RemediMath
+# RemedyMath
 
 Aplikasi mobile Flutter: **Asisten Remediasi Matematika SMA berbasis Item
 Response Theory (IRT) & Knowledge Graph**.

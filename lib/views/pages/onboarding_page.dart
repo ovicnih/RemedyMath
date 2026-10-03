@@ -52,7 +52,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: <Widget>[
                     const Center(child: AppLogo(size: 72)),
                     const SizedBox(height: 20),
-                    Text('RemediMath',
+                    Text('RemedyMath',
                         textAlign: TextAlign.center,
                         style: AppTextStyles.displayLg.copyWith(color: AppColors.primary)),
                     const SizedBox(height: 8),

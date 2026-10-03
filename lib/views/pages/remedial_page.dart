@@ -254,7 +254,7 @@ class _VideoCard extends StatelessWidget {
                     const Icon(Icons.circle, size: 8, color: AppColors.tertiaryFixed),
                     const SizedBox(width: 6),
                     Expanded(
-                      child: Text('RemediMath Micro-Learning',
+                      child: Text('RemedyMath Micro-Learning',
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.bodySm.copyWith(color: AppColors.onPrimary)),
                     ),

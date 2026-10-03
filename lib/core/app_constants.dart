@@ -1,8 +1,8 @@
-/// Konstanta global aplikasi RemediMath.
+/// Konstanta global aplikasi RemedyMath.
 class AppConstants {
   const AppConstants._();
 
-  static const String appName = 'RemediMath';
+  static const String appName = 'RemedyMath';
 
   /// Batas bawah dan atas estimasi kemampuan theta.
   static const double thetaMin = -3.0;

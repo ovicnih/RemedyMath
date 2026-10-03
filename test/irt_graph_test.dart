@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mp_musyaffailhamaka/models/models.dart';
-import 'package:mp_musyaffailhamaka/services/irt_service.dart';
-import 'package:mp_musyaffailhamaka/services/knowledge_graph_service.dart';
+import 'package:remedy_math/models/models.dart';
+import 'package:remedy_math/services/irt_service.dart';
+import 'package:remedy_math/services/knowledge_graph_service.dart';
 
 ConceptNode _n(String id, int level, List<String> pre) => ConceptNode(
       id: id,

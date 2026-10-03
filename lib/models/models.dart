@@ -1,4 +1,4 @@
-/// Model data RemediMath.
+/// Model data RemedyMath.
 library;
 
 class Question {

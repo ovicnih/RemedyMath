@@ -1,4 +1,4 @@
-package com.example.mp_musyaffailhamaka
+package com.example.remedy_math
 
 import io.flutter.embedding.android.FlutterActivity
 

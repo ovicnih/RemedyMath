@@ -179,7 +179,7 @@ class SectionTitle extends StatelessWidget {
   }
 }
 
-/// Logo RemediMath (Σ).
+/// Logo RemedyMath (Σ).
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.size = 40});
   final double size;
@@ -241,7 +241,7 @@ PreferredSizeWidget remediAppBar(BuildContext context, String subtitle,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('RemediMath',
+              Text('RemedyMath',
                   style: AppTextStyles.headlineMd.copyWith(color: AppColors.primary)),
               Text(subtitle,
                   overflow: TextOverflow.ellipsis,

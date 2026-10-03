@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Palet warna RemediMath (mengacu pada DESIGN.md).
+/// Palet warna RemedyMath (mengacu pada DESIGN.md).
 class AppColors {
   const AppColors._();
 
