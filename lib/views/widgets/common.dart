@@ -56,8 +56,8 @@ class Pill extends StatelessWidget {
   const Pill({
     super.key,
     required this.label,
-    this.background = AppColors.secondaryContainer,
-    this.foreground = AppColors.onSecondaryContainer,
+    this.background = AppColors.accentYellow,
+    this.foreground = AppColors.ink,
     this.icon,
   });
 
@@ -112,7 +112,7 @@ class MathBox extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Text(
@@ -130,7 +130,7 @@ class StatTile extends StatelessWidget {
     required this.icon,
     required this.value,
     required this.label,
-    this.iconColor = AppColors.primary,
+    this.iconColor = AppColors.accentBlue,
   });
 
   final IconData icon;
@@ -143,7 +143,7 @@ class StatTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -161,7 +161,7 @@ class StatTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.headlineMd,
+                  style: AppTextStyles.titleLg,
                 ),
               ),
             ],
@@ -172,7 +172,7 @@ class StatTile extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
           ),
         ],
       ),
@@ -191,10 +191,10 @@ class SectionTitle extends StatelessWidget {
     return Row(
       children: <Widget>[
         if (icon != null) ...<Widget>[
-          Icon(icon, color: AppColors.primary, size: 22),
+          Icon(icon, color: AppColors.accentBlue, size: 22),
           const SizedBox(width: 8),
         ],
-        Expanded(child: Text(title, style: AppTextStyles.headlineMd)),
+        Expanded(child: Text(title, style: AppTextStyles.titleLg)),
         if (trailing != null) trailing!,
       ],
     );
@@ -213,16 +213,14 @@ class AppLogo extends StatelessWidget {
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: AppColors.accentBlue,
         borderRadius: BorderRadius.circular(size * 0.25),
       ),
       child: Text(
         'Σ',
-        style: TextStyle(
-          color: AppColors.onPrimary,
-          fontSize: size * 0.55,
-          fontWeight: FontWeight.w700,
-        ),
+        // Ukuran mengikuti `size` yang berubah-ubah, jadi token dipakai
+        // lewat `copyWith` — bukan `TextStyle` inline (TASK 2.7).
+        style: AppTextStyles.mathDisplay.copyWith(fontSize: size * 0.55),
       ),
     );
   }
@@ -238,10 +236,10 @@ class ProfileAvatar extends StatelessWidget {
         context.select<AppController, String>((c) => c.profile?.initials ?? '?');
     return CircleAvatar(
       radius: radius,
-      backgroundColor: AppColors.surfaceContainerHighest,
+      backgroundColor: AppColors.surface,
       child: Text(
         initials,
-        style: AppTextStyles.titleMd.copyWith(color: AppColors.primary),
+        style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue),
       ),
     );
   }
@@ -264,10 +262,10 @@ PreferredSizeWidget remediAppBar(BuildContext context, String subtitle,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text('RemedyMath',
-                  style: AppTextStyles.headlineMd.copyWith(color: AppColors.primary)),
+                  style: AppTextStyles.titleLg.copyWith(color: AppColors.accentBlue)),
               Text(subtitle,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary)),
+                  style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
             ],
           ),
         ),
@@ -302,13 +300,13 @@ class EmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: <Widget>[
-          Icon(icon, size: 48, color: AppColors.secondaryStrong),
+          Icon(icon, size: 48, color: AppColors.accentBlue),
           const SizedBox(height: 12),
           Text(title, textAlign: TextAlign.center, style: AppTextStyles.titleMd),
           const SizedBox(height: 6),
           Text(message,
               textAlign: TextAlign.center,
-              style: AppTextStyles.bodyMd.copyWith(color: AppColors.textSecondary)),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.ink)),
           if (action != null) ...<Widget>[const SizedBox(height: 16), action!],
         ],
       ),

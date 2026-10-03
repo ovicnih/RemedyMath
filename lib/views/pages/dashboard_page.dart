@@ -35,17 +35,17 @@ class DashboardPage extends StatelessWidget {
               children: <Widget>[
                 Pill(label: '• ${c.profile?.className ?? 'SMA Kelas 10'} • Matematika Wajib'),
                 const Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  Icon(Icons.verified_outlined, size: 16, color: AppColors.success),
+                  Icon(Icons.verified_outlined, size: 16, color: AppColors.accentGreen),
                   SizedBox(width: 4),
                   Text('Semester Ganjil'),
                 ]),
               ],
             ),
             const SizedBox(height: 16),
-            Text('Halo, ${c.profile?.firstName ?? 'Siswa'} 👋', style: AppTextStyles.headlineLg),
+            Text('Halo, ${c.profile?.firstName ?? 'Siswa'} 👋', style: AppTextStyles.titleLg),
             const SizedBox(height: 4),
             Text('Siap memperkuat pemahaman matematikamu hari ini?',
-                style: AppTextStyles.bodyLg.copyWith(color: AppColors.textSecondary)),
+                style: AppTextStyles.bodyLg.copyWith(color: AppColors.ink)),
             const SizedBox(height: 20),
             _MetricCard(controller: c, result: r, root: root),
             const SizedBox(height: 20),
@@ -56,7 +56,7 @@ class DashboardPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             AppCard(
-              color: AppColors.surfaceContainer,
+              color: AppColors.surface,
               onTap: () => Flows.openRemedial(context, rec.id),
               child: Row(
                 children: <Widget>[
@@ -64,10 +64,11 @@ class DashboardPage extends StatelessWidget {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      gradient: AppColors.heroGradient,
+                      // Tanpa gradien (TASK 2.2).
+                      color: AppColors.accentYellow,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.play_circle_fill, color: AppColors.onPrimary, size: 32),
+                    child: const Icon(Icons.play_circle_fill, color: AppColors.ink, size: 32),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -76,12 +77,12 @@ class DashboardPage extends StatelessWidget {
                       children: <Widget>[
                         Row(children: <Widget>[
                           const Icon(Icons.tips_and_updates_outlined,
-                              size: 18, color: AppColors.secondaryStrong),
+                              size: 18, color: AppColors.accentBlue),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text('Rekomendasi Belajar Hari Ini',
                                 style: AppTextStyles.titleSm
-                                    .copyWith(color: AppColors.secondaryStrong)),
+                                    .copyWith(color: AppColors.accentBlue)),
                           ),
                         ]),
                         const SizedBox(height: 4),
@@ -125,12 +126,12 @@ class DashboardPage extends StatelessWidget {
                 ),
             const SizedBox(height: 12),
             AppCard(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.surface,
               child: Row(
                 children: <Widget>[
                   const CircleAvatar(
-                    backgroundColor: AppColors.surfaceContainerHigh,
-                    child: Icon(Icons.lightbulb_outline, color: AppColors.primary),
+                    backgroundColor: AppColors.surface,
+                    child: Icon(Icons.lightbulb_outline, color: AppColors.accentBlue),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -173,12 +174,12 @@ class _MetricCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('METRIK DIAGNOSTIK IRT',
-                        style: AppTextStyles.labelMd.copyWith(color: AppColors.textSecondary)),
+                        style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                     const SizedBox(height: 4),
                     Text.rich(TextSpan(children: <TextSpan>[
                       TextSpan(
                           text: r == null ? 'θ = –' : 'θ = ${Formatters.theta(theta)}',
-                          style: AppTextStyles.monoNumeric),
+                          style: AppTextStyles.statValue),
                       const TextSpan(text: ' / 3.00', style: AppTextStyles.mathInline),
                     ])),
                     const SizedBox(height: 8),
@@ -186,8 +187,8 @@ class _MetricCard extends StatelessWidget {
                       label: r == null
                           ? 'Belum ada diagnosis'
                           : 'Tingkat Kemahiran: ${controller.irt.proficiencyLabel(theta)}',
-                      background: AppColors.surfaceContainerLow,
-                      foreground: AppColors.textPrimary,
+                      background: AppColors.surface,
+                      foreground: AppColors.ink,
                       icon: Icons.circle,
                     ),
                   ],
@@ -204,16 +205,16 @@ class _MetricCard extends StatelessWidget {
                       child: CircularProgressIndicator(
                         value: pct,
                         strokeWidth: 8,
-                        backgroundColor: AppColors.surfaceContainer,
-                        color: AppColors.secondaryStrong,
+                        backgroundColor: AppColors.surface,
+                        color: AppColors.accentBlue,
                       ),
                     ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(r == null ? '–' : Formatters.percent(pct),
-                            style: AppTextStyles.titleMd.copyWith(color: AppColors.primary)),
-                        Text('Relatif Kelas', style: AppTextStyles.bodySm.copyWith(fontSize: 9)),
+                            style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue)),
+                        Text('Relatif Kelas', style: AppTextStyles.labelMd.copyWith(fontSize: 9)),
                       ],
                     ),
                   ],
@@ -223,7 +224,7 @@ class _MetricCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           AppCard(
-            color: AppColors.surfaceContainerLow,
+            color: AppColors.surface,
             onTap: r == null
                 ? null
                 : () => Navigator.of(context).push(MaterialPageRoute<void>(
@@ -236,22 +237,22 @@ class _MetricCard extends StatelessWidget {
                   runSpacing: 6,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    const Text('Status Diagnostik Terakhir', style: AppTextStyles.bodySm),
+                    const Text('Status Diagnostik Terakhir', style: AppTextStyles.labelMd),
                     if (r == null)
                       const Pill(label: 'Belum Tes', icon: Icons.info_outline)
                     else if (root != null)
                       const Pill(
                         label: 'Akar Masalah Terdeteksi',
                         icon: Icons.error_outline,
-                        background: AppColors.dangerContainer,
-                        foreground: AppColors.onDangerContainer,
+                        background: AppColors.accentPink,
+                        foreground: AppColors.ink,
                       )
                     else
                       const Pill(
                         label: 'Semua Konsep Tuntas',
                         icon: Icons.check_circle_outline,
-                        background: AppColors.successContainer,
-                        foreground: AppColors.onSuccessContainer,
+                        background: AppColors.accentGreen,
+                        foreground: AppColors.ink,
                       ),
                   ],
                 ),
@@ -263,10 +264,10 @@ class _MetricCard extends StatelessWidget {
                       height: 40,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerHigh,
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text('Σ', style: AppTextStyles.headlineMd.copyWith(color: AppColors.primary)),
+                      child: Text('Σ', style: AppTextStyles.titleLg.copyWith(color: AppColors.accentBlue)),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -283,7 +284,7 @@ class _MetricCard extends StatelessWidget {
                                     : 'Tidak ada miskonsepsi yang terdeteksi. Pertahankan!',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.bodySm,
+                            style: AppTextStyles.labelMd,
                           ),
                         ],
                       ),
@@ -307,7 +308,7 @@ class _MetricCard extends StatelessWidget {
               Expanded(
                 child: StatTile(
                   icon: Icons.sync_problem,
-                  iconColor: AppColors.danger,
+                  iconColor: AppColors.accentPink,
                   value: '${controller.remedialCount}',
                   label: 'Perlu Remedial',
                 ),
@@ -339,7 +340,8 @@ class _HeroCta extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: AppColors.heroGradient,
+        // Tanpa gradien (TASK 2.2). Hero memakai warna solid aksen.
+        color: AppColors.accentBlue,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -349,10 +351,10 @@ class _HeroCta extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.onPrimary.withAlpha(30),
+                color: AppColors.ink.withAlpha(30),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.radio_button_checked, color: AppColors.tertiaryFixed),
+              child: const Icon(Icons.radio_button_checked, color: AppColors.accentYellow),
             ),
             const SizedBox(width: 10),
             // Expanded wajib: tanpa ini teks eyebrow yang panjang meluber
@@ -363,17 +365,17 @@ class _HeroCta extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.labelMd
-                    .copyWith(color: AppColors.onPrimary.withAlpha(220)),
+                    .copyWith(color: AppColors.ink.withAlpha(220)),
               ),
             ),
           ]),
           const SizedBox(height: 14),
           Text('Mulai Tes Diagnostik Presisi',
-              style: AppTextStyles.headlineMd.copyWith(color: AppColors.onPrimary, fontSize: 22)),
+              style: AppTextStyles.titleLg.copyWith(color: AppColors.ink, fontSize: 22)),
           const SizedBox(height: 8),
           Text(
             'Identifikasi miskonsepsi & kelemahan materi aljabar dalam $durationMinutes menit dengan analisis butir otomatis.',
-            style: AppTextStyles.bodyMd.copyWith(color: AppColors.onPrimary.withAlpha(210)),
+            style: AppTextStyles.bodyMd.copyWith(color: AppColors.ink.withAlpha(210)),
           ),
           const SizedBox(height: 16),
           Row(
@@ -391,8 +393,8 @@ class _HeroCta extends StatelessWidget {
               FilledButton.icon(
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(110, 50),
-                  backgroundColor: AppColors.tertiaryFixed,
-                  foregroundColor: AppColors.onSuccessContainer,
+                  backgroundColor: AppColors.accentYellow,
+                  foregroundColor: AppColors.ink,
                 ),
                 onPressed: onStart,
                 icon: const Icon(Icons.arrow_forward),
@@ -408,9 +410,9 @@ class _HeroCta extends StatelessWidget {
   Widget _meta(IconData i, String t) => Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(i, size: 16, color: AppColors.onPrimary),
+          Icon(i, size: 16, color: AppColors.ink),
           const SizedBox(width: 4),
-          Text(t, style: AppTextStyles.titleSm.copyWith(color: AppColors.onPrimary)),
+          Text(t, style: AppTextStyles.titleSm.copyWith(color: AppColors.ink)),
         ],
       );
 }

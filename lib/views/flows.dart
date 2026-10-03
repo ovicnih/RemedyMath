@@ -59,7 +59,7 @@ class Flows {
         icon: Icon(
           s.passed ? Icons.verified : Icons.replay_circle_filled_outlined,
           size: 48,
-          color: s.passed ? AppColors.success : AppColors.danger,
+          color: s.passed ? AppColors.accentGreen : AppColors.accentPink,
         ),
         title: Text(s.passed ? 'Konsep Tuntas!' : 'Belum Tuntas'),
         content: Column(
@@ -67,8 +67,8 @@ class Flows {
           children: <Widget>[
             const Text('Skor post-test', style: AppTextStyles.bodyMd),
             Text('${s.score}/100',
-                style: AppTextStyles.monoNumeric.copyWith(
-                    color: s.passed ? AppColors.success : AppColors.danger)),
+                style: AppTextStyles.statValue.copyWith(
+                    color: s.passed ? AppColors.accentGreen : AppColors.accentPink)),
             const SizedBox(height: 8),
             Text(
               'Skor Kemampuan IRT terbaru: θ = ${c.latestResult?.theta.toStringAsFixed(2) ?? '-'}',
@@ -81,7 +81,7 @@ class Flows {
                   ? 'Hebat! Lanjutkan ke materi berikutnya pada rute belajarmu.'
                   : 'Tonton ulang video dan perhatikan poin kunci, lalu coba lagi.',
               textAlign: TextAlign.center,
-              style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
             ),
           ],
         ),

@@ -60,7 +60,7 @@ class RemedialTabPage extends StatelessWidget {
             const SectionTitle('Peta Materi (Knowledge Graph)', icon: Icons.hub_outlined),
             const SizedBox(height: 4),
             Text(c.content.chapter,
-                style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary)),
+                style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
             const SizedBox(height: 10),
             for (final ConceptNode n in c.graph.ordered)
               Padding(
@@ -110,13 +110,13 @@ class _NodeTile extends StatelessWidget {
             children: <Widget>[
               CircleAvatar(
                 radius: 18,
-                backgroundColor: isRoot ? AppColors.dangerContainer : AppColors.surfaceContainer,
+                backgroundColor: isRoot ? AppColors.accentPink : AppColors.surface,
                 child: step != null
                     ? Text('$step',
                         style: AppTextStyles.titleSm.copyWith(
-                            color: isRoot ? AppColors.onDangerContainer : AppColors.primary))
+                            color: isRoot ? AppColors.ink : AppColors.accentBlue))
                     : Text('L${node.level}',
-                        style: AppTextStyles.labelMd.copyWith(color: AppColors.primary)),
+                        style: AppTextStyles.labelMd.copyWith(color: AppColors.accentBlue)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -132,7 +132,7 @@ class _NodeTile extends StatelessWidget {
                         if (watched) 'sudah ditonton',
                         if (prerequisites.isNotEmpty) 'Prasyarat: ${prerequisites.join(', ')}',
                       ].join(' • '),
-                      style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
                     ),
                   ],
                 ),
@@ -150,8 +150,8 @@ class _NodeTile extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: mastery,
                       minHeight: 8,
-                      backgroundColor: AppColors.surfaceContainer,
-                      color: ok ? AppColors.success : AppColors.danger,
+                      backgroundColor: AppColors.surface,
+                      color: ok ? AppColors.accentGreen : AppColors.accentPink,
                     ),
                   ),
                 ),

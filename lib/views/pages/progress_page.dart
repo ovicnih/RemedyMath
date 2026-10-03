@@ -78,8 +78,8 @@ class ProgressPage extends StatelessWidget {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: p.theta >= AppConstants.masteryTheta
-                                                ? AppColors.success
-                                                : AppColors.secondaryStrong,
+                                                ? AppColors.accentGreen
+                                                : AppColors.accentBlue,
                                             borderRadius: BorderRadius.circular(6),
                                           ),
                                         ),
@@ -94,7 +94,7 @@ class ProgressPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text('${c.history.length} pengukuran • terakhir ${hist.isEmpty ? '-' : hist.last.label}',
-                        style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted)),
+                        style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                   ],
                 ],
               ),
@@ -128,10 +128,10 @@ class ProgressPage extends StatelessWidget {
                                 child: LinearProgressIndicator(
                                   value: r.nodeMastery[n.id],
                                   minHeight: 8,
-                                  backgroundColor: AppColors.surfaceContainer,
+                                  backgroundColor: AppColors.surface,
                                   color: r.nodeMastery[n.id]! >= AppConstants.masteryRatio
-                                      ? AppColors.success
-                                      : AppColors.danger,
+                                      ? AppColors.accentGreen
+                                      : AppColors.accentPink,
                                 ),
                               ),
                             ],
@@ -178,7 +178,7 @@ class ProgressPage extends StatelessWidget {
                             c.profile?.className ?? '',
                             if ((c.profile?.school ?? '').isNotEmpty) c.profile!.school,
                           ].join(' • '),
-                          style: AppTextStyles.bodySm,
+                          style: AppTextStyles.labelMd,
                         ),
                       ],
                     ),
@@ -186,7 +186,7 @@ class ProgressPage extends StatelessWidget {
                   IconButton(
                     tooltip: 'Hapus data',
                     onPressed: () => _reset(context),
-                    icon: const Icon(Icons.logout, color: AppColors.danger),
+                    icon: const Icon(Icons.logout, color: AppColors.accentPink),
                   ),
                 ],
               ),

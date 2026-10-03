@@ -42,17 +42,17 @@ class DiagnosisResultPage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
           children: <Widget>[
             AppCard(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.surface,
               child: Row(
                 children: <Widget>[
-                  const Icon(Icons.analytics_outlined, color: AppColors.primary),
+                  const Icon(Icons.analytics_outlined, color: AppColors.accentBlue),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text('HASIL ANALISIS DIAGNOSTIK',
-                            style: AppTextStyles.labelMd.copyWith(color: AppColors.textSecondary)),
+                            style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                         Text(c.content.diagnosticTitle, style: AppTextStyles.titleMd),
                       ],
                     ),
@@ -78,13 +78,13 @@ class DiagnosisResultPage extends StatelessWidget {
                               icon: mastered ? Icons.check_circle_outline : Icons.tune,
                               label: mastered ? 'Tuntas' : 'Membutuhkan Penguatan',
                               background:
-                                  mastered ? AppColors.successContainer : AppColors.dangerContainer,
+                                  mastered ? AppColors.accentGreen : AppColors.accentPink,
                               foreground: mastered
-                                  ? AppColors.onSuccessContainer
-                                  : AppColors.onDangerContainer,
+                                  ? AppColors.ink
+                                  : AppColors.ink,
                             ),
                             const SizedBox(height: 8),
-                            const Text('Skor Kemampuan (θ Theta)', style: AppTextStyles.headlineMd),
+                            const Text('Skor Kemampuan (θ Theta)', style: AppTextStyles.titleLg),
                           ],
                         ),
                       ),
@@ -92,8 +92,8 @@ class DiagnosisResultPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Text(Formatters.theta(r.theta),
-                              style: AppTextStyles.monoNumeric.copyWith(color: AppColors.primary)),
-                          Text(c.irt.levelLabel(r.theta), style: AppTextStyles.bodySm),
+                              style: AppTextStyles.statValue.copyWith(color: AppColors.accentBlue)),
+                          Text(c.irt.levelLabel(r.theta), style: AppTextStyles.labelMd),
                         ],
                       ),
                     ],
@@ -104,7 +104,7 @@ class DiagnosisResultPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainerLow,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -113,8 +113,8 @@ class DiagnosisResultPage extends StatelessWidget {
                         _stat('Selesai', '${r.diagnosticTotal} Soal'),
                         _stat('Akurasi', Formatters.percent(r.accuracy),
                             color: r.accuracy >= AppConstants.masteryRatio
-                                ? AppColors.success
-                                : AppColors.danger),
+                                ? AppColors.accentGreen
+                                : AppColors.accentPink),
                       ],
                     ),
                   ),
@@ -139,7 +139,7 @@ class DiagnosisResultPage extends StatelessWidget {
                       'Rencana Belajar Cepat Menuju Tuntas',
                       icon: Icons.checklist,
                       trailing: Text('${watched ? 2 : 1}/2 Langkah',
-                          style: AppTextStyles.labelMd.copyWith(color: AppColors.secondaryStrong)),
+                          style: AppTextStyles.labelMd.copyWith(color: AppColors.accentBlue)),
                     ),
                     const SizedBox(height: 12),
                     _StepTile(
@@ -177,12 +177,12 @@ class DiagnosisResultPage extends StatelessWidget {
                           contentPadding: EdgeInsets.zero,
                           leading: Icon(
                             id == root.id ? Icons.flag : Icons.circle_outlined,
-                            color: id == root.id ? AppColors.danger : AppColors.textMuted,
+                            color: id == root.id ? AppColors.accentPink : AppColors.ink,
                           ),
                           title: Text(c.graph.node(id)?.title ?? id, style: AppTextStyles.bodyMd),
                           subtitle: Text(
                               'Penguasaan ${Formatters.percent(r.nodeMastery[id] ?? 0)}',
-                              style: AppTextStyles.bodySm),
+                              style: AppTextStyles.labelMd),
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () => Flows.openRemedial(context, id),
                         ),
@@ -192,12 +192,12 @@ class DiagnosisResultPage extends StatelessWidget {
               ],
               const SizedBox(height: 16),
               AppCard(
-                color: AppColors.surfaceContainerHigh,
+                color: AppColors.surface,
                 child: Row(
                   children: <Widget>[
                     const CircleAvatar(
                       backgroundColor: AppColors.surface,
-                      child: Icon(Icons.psychology_alt_outlined, color: AppColors.primary),
+                      child: Icon(Icons.psychology_alt_outlined, color: AppColors.accentBlue),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -205,7 +205,7 @@ class DiagnosisResultPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Normal & Wajar!',
-                              style: AppTextStyles.titleMd.copyWith(color: AppColors.primary)),
+                              style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue)),
                           Text(
                             'Banyak siswa kelas 10 mengalami kendala serupa di awal semester. Tuntaskan dalam ${root.videoDurationMinutes} menit ke depan.',
                             style: AppTextStyles.bodyMd,
@@ -239,7 +239,7 @@ class DiagnosisResultPage extends StatelessWidget {
   Widget _stat(String label, String value, {Color? color}) => Expanded(
         child: Column(
           children: <Widget>[
-            Text(label, style: AppTextStyles.bodySm),
+            Text(label, style: AppTextStyles.labelMd),
             const SizedBox(height: 2),
             Text(value,
                 maxLines: 1,
@@ -259,7 +259,7 @@ class _RootCauseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ConceptNode> chain = controller.graph.chainTo(root.id);
     return AppCard(
-      border: const Border(top: BorderSide(color: AppColors.danger, width: 5)),
+      border: const Border(top: BorderSide(color: AppColors.accentPink, width: 5)),
       padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -269,17 +269,17 @@ class _RootCauseCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('KONSEP SPESIFIK',
-                    style: AppTextStyles.labelMd.copyWith(color: AppColors.textSecondary)),
+                    style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                 const SizedBox(height: 6),
                 Text(root.title,
-                    style: AppTextStyles.titleMd.copyWith(color: AppColors.primary, fontSize: 18)),
+                    style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue, fontSize: 18)),
                 const SizedBox(height: 10),
                 Wrap(
                   spacing: 6,
@@ -289,11 +289,11 @@ class _RootCauseCard extends StatelessWidget {
                     for (int i = 0; i < chain.length; i++) ...<Widget>[
                       Pill(
                         label: chain[i].shortTitle,
-                        background: AppColors.surfaceContainerHighest,
-                        foreground: AppColors.textSecondary,
+                        background: AppColors.surface,
+                        foreground: AppColors.ink,
                       ),
                       if (i < chain.length - 1)
-                        const Icon(Icons.chevron_right, size: 16, color: AppColors.textMuted),
+                        const Icon(Icons.chevron_right, size: 16, color: AppColors.ink),
                     ],
                   ],
                 ),
@@ -304,7 +304,7 @@ class _RootCauseCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Icon(Icons.lightbulb_outline, color: AppColors.secondaryStrong),
+              const Icon(Icons.lightbulb_outline, color: AppColors.accentBlue),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -313,7 +313,7 @@ class _RootCauseCard extends StatelessWidget {
                     const Text('Analisis Cara Berpikirmu', style: AppTextStyles.titleMd),
                     const SizedBox(height: 4),
                     Text(root.misconception,
-                        style: AppTextStyles.bodyMd.copyWith(color: AppColors.textSecondary)),
+                        style: AppTextStyles.bodyMd.copyWith(color: AppColors.ink)),
                   ],
                 ),
               ),
@@ -336,7 +336,7 @@ class _RootCauseCard extends StatelessWidget {
   Widget _pattern(bool correct, String text) => Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: correct ? AppColors.surfaceContainer : AppColors.dangerContainer,
+          color: correct ? AppColors.surface : AppColors.accentPink,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
@@ -344,19 +344,19 @@ class _RootCauseCard extends StatelessWidget {
           children: <Widget>[
             Row(children: <Widget>[
               Icon(correct ? Icons.check : Icons.close,
-                  size: 14, color: correct ? AppColors.success : AppColors.danger),
+                  size: 14, color: correct ? AppColors.accentGreen : AppColors.accentPink),
               const SizedBox(width: 4),
               Flexible(
                 child: Text(correct ? 'SOLUSI TEPAT' : 'POLA KELIRUMU',
                     style: AppTextStyles.labelMd
-                        .copyWith(color: correct ? AppColors.success : AppColors.danger)),
+                        .copyWith(color: correct ? AppColors.accentGreen : AppColors.accentPink)),
               ),
             ]),
             const SizedBox(height: 6),
             Text(
               text,
               style: AppTextStyles.mathInline.copyWith(
-                color: correct ? AppColors.primaryDeep : AppColors.onDangerContainer,
+                color: correct ? AppColors.ink : AppColors.ink,
                 decoration: correct ? null : TextDecoration.lineThrough,
               ),
             ),
@@ -387,18 +387,18 @@ class _StepTile extends StatelessWidget {
     return Opacity(
       opacity: enabled ? 1 : 0.55,
       child: AppCard(
-        color: AppColors.surfaceContainerLow,
+        color: AppColors.surface,
         onTap: enabled ? onTap : null,
         child: Row(
           children: <Widget>[
             CircleAvatar(
               radius: 18,
-              backgroundColor: enabled ? AppColors.primaryDeep : AppColors.surfaceContainer,
+              backgroundColor: enabled ? AppColors.ink : AppColors.surface,
               child: done
-                  ? const Icon(Icons.check, color: AppColors.onPrimary, size: 18)
+                  ? const Icon(Icons.check, color: AppColors.ink, size: 18)
                   : Text('$number',
                       style: AppTextStyles.titleSm.copyWith(
-                          color: enabled ? AppColors.onPrimary : AppColors.textMuted)),
+                          color: enabled ? AppColors.ink : AppColors.ink)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -406,18 +406,18 @@ class _StepTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(title, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.titleSm),
-                  Text(subtitle, style: AppTextStyles.bodySm),
+                  Text(subtitle, style: AppTextStyles.labelMd),
                 ],
               ),
             ),
             const SizedBox(width: 8),
             if (!enabled)
-              const Icon(Icons.lock_outline, color: AppColors.textMuted)
+              const Icon(Icons.lock_outline, color: AppColors.ink)
             else
               Pill(
                 label: done ? 'Selesai' : 'Mulai',
-                background: AppColors.successContainer,
-                foreground: AppColors.onSuccessContainer,
+                background: AppColors.accentGreen,
+                foreground: AppColors.ink,
               ),
           ],
         ),

@@ -54,12 +54,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     const SizedBox(height: 20),
                     Text('RemedyMath',
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.displayLg.copyWith(color: AppColors.primary)),
+                        style: AppTextStyles.displayLg.copyWith(color: AppColors.accentBlue)),
                     const SizedBox(height: 8),
                     Text(
                       'Asisten remediasi matematika SMA berbasis Item Response Theory & Knowledge Graph.',
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.bodyLg.copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.bodyLg.copyWith(color: AppColors.ink),
                     ),
                     const SizedBox(height: 32),
                     TextFormField(
@@ -102,7 +102,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     Text(
                       'Data disimpan hanya di perangkat ini.',
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted),
+                      style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
                     ),
                   ],
                 ),

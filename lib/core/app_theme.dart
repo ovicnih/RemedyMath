@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_sizes.dart';
 import 'app_text_styles.dart';
 
-/// Tema Material 3 aplikasi.
+/// Tema Material 3 aplikasi, gaya neobrutalism.
+///
+/// Ringkas saja: aplikasi memakai `AppTextStyles` dan widget
+/// kustom secara langsung, jadi `textTheme` di sini hanya untuk
+/// memetakan slot Material standar ke token kita. Semua slot ada
+/// isinya supaya tidak ada teks yang jatuh ke default.
+///
+/// Light-only. Tidak ada `dark()` dan tidak ada `ThemeMode.system` —
+/// lihat PLANNING.md §6.
 class AppTheme {
   const AppTheme._();
 
   static ThemeData light() {
     final ColorScheme scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
-      onPrimary: AppColors.onPrimary,
-      secondary: AppColors.secondaryStrong,
+      seedColor: AppColors.accentBlue,
+      primary: AppColors.accentBlue,
+      onPrimary: AppColors.ink,
+      secondary: AppColors.accentGreen,
+      onSecondary: AppColors.ink,
       surface: AppColors.surface,
-      error: AppColors.danger,
+      onSurface: AppColors.ink,
+      error: AppColors.accentPink,
+      onError: AppColors.ink,
     );
 
     return ThemeData(
@@ -24,106 +36,142 @@ class AppTheme {
       splashFactory: InkSparkle.splashFactory,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+        foregroundColor: AppColors.ink,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: AppTextStyles.headlineMd,
+        titleTextStyle: AppTextStyles.titleLg,
       ),
       textTheme: const TextTheme(
         displayLarge: AppTextStyles.displayLg,
-        headlineLarge: AppTextStyles.headlineLg,
-        headlineMedium: AppTextStyles.headlineMd,
+        displayMedium: AppTextStyles.displayNum,
+        headlineLarge: AppTextStyles.titleLg,
+        headlineMedium: AppTextStyles.titleMd,
+        headlineSmall: AppTextStyles.titleSm,
+        titleLarge: AppTextStyles.titleLg,
         titleMedium: AppTextStyles.titleMd,
         titleSmall: AppTextStyles.titleSm,
         bodyLarge: AppTextStyles.bodyLg,
         bodyMedium: AppTextStyles.bodyMd,
-        bodySmall: AppTextStyles.bodySm,
+        bodySmall: AppTextStyles.labelMd,
+        labelLarge: AppTextStyles.labelStrong,
         labelMedium: AppTextStyles.labelMd,
+        labelSmall: AppTextStyles.labelSm,
       ),
       dividerTheme: const DividerThemeData(
-        color: AppColors.border,
+        color: AppColors.ink,
         thickness: 1,
         space: 1,
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
+          backgroundColor: AppColors.accentYellow,
+          foregroundColor: AppColors.ink,
           minimumSize: const Size.fromHeight(50),
-          textStyle: AppTextStyles.titleMd,
+          textStyle: AppTextStyles.labelStrong,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+            side: const BorderSide(
+              color: AppColors.ink,
+              width: AppSizes.borderThick,
+            ),
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          backgroundColor: AppColors.surfaceContainerLow,
+          foregroundColor: AppColors.ink,
+          backgroundColor: AppColors.surface,
           minimumSize: const Size.fromHeight(50),
-          textStyle: AppTextStyles.titleMd,
-          side: const BorderSide(color: AppColors.surfaceContainerHigh),
+          textStyle: AppTextStyles.labelStrong,
+          side: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThick,
+          ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSizes.radiusCard),
           ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.secondaryStrong,
-          textStyle: AppTextStyles.titleSm,
+          foregroundColor: AppColors.ink,
+          textStyle: AppTextStyles.labelStrong,
           minimumSize: const Size(48, 44),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceContainerLow,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        fillColor: AppColors.surface,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.spaceLg,
+          vertical: AppSizes.spaceMd,
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          borderSide: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThin,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          borderSide: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThin,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.6),
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          borderSide: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThick,
+          ),
         ),
         labelStyle: AppTextStyles.bodyMd,
-        hintStyle: AppTextStyles.bodySm,
+        hintStyle: AppTextStyles.labelMd,
       ),
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) => states.contains(WidgetState.selected)
-              ? AppColors.primary
-              : AppColors.surfaceContainer,
+          (Set<WidgetState> states) =>
+              states.contains(WidgetState.selected)
+                  ? AppColors.accentYellow
+                  : AppColors.surface,
         ),
-        checkColor: const WidgetStatePropertyAll<Color>(AppColors.onPrimary),
-        side: const BorderSide(color: AppColors.border, width: 1.4),
+        checkColor: const WidgetStatePropertyAll<Color>(AppColors.ink),
+        side: const BorderSide(color: AppColors.ink, width: 1.4),
+      ),
+      // Token `radioBorder` tidak bisa dipasang lewat RadioThemeData
+      // karena `RadioThemeData` tidak punya parameter `side`. Border-nya
+      // dipasang di level widget `Radio` — lihat UI-REFERENCE §5.1.
+      radioTheme: const RadioThemeData(
+        fillColor: WidgetStatePropertyAll<Color>(AppColors.surface),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.surfaceContainer,
+        indicatorColor: AppColors.accentYellow,
+        elevation: 0,
         height: 68,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
-          (Set<WidgetState> states) => states.contains(WidgetState.selected)
-              ? AppTextStyles.labelMd.copyWith(
-                  color: AppColors.primary,
-                  letterSpacing: 0.2,
-                )
-              : AppTextStyles.labelMd.copyWith(letterSpacing: 0.2),
+          (Set<WidgetState> states) => AppTextStyles.labelMd.copyWith(
+            color: AppColors.ink,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w900
+                : FontWeight.w700,
+          ),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF283044),
-        contentTextStyle: AppTextStyles.bodyMd.copyWith(color: Colors.white),
+        backgroundColor: AppColors.ink,
+        contentTextStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.surface),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          side: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThin,
+          ),
         ),
       ),
     );

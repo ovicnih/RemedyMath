@@ -54,10 +54,10 @@ class RemedialPage extends StatelessWidget {
               pos >= 0
                   ? '• LANGKAH ${pos + 1} DARI ${path.length}: PENGUATAN KONSEP'
                   : '• PENGUATAN KONSEP',
-              style: AppTextStyles.labelMd.copyWith(color: AppColors.secondaryStrong),
+              style: AppTextStyles.labelMd.copyWith(color: AppColors.accentBlue),
             ),
             const SizedBox(height: 4),
-            Text('Materi Perbaikan: ${n.shortTitle}', style: AppTextStyles.headlineMd),
+            Text('Materi Perbaikan: ${n.shortTitle}', style: AppTextStyles.titleLg),
             const SizedBox(height: 14),
             _VideoCard(node: n, watched: watched, onPlay: () => _openVideo(context, n)),
             const SizedBox(height: 16),
@@ -72,27 +72,27 @@ class RemedialPage extends StatelessWidget {
                     children: <Widget>[
                       const Pill(
                         label: 'Analisis Miskonsepsi',
-                        background: AppColors.dangerContainer,
-                        foreground: AppColors.onDangerContainer,
+                        background: AppColors.accentPink,
+                        foreground: AppColors.ink,
                       ),
                       if (pos >= 0)
-                        Text('Prioritas Remedial #${pos + 1}', style: AppTextStyles.bodySm),
+                        Text('Prioritas Remedial #${pos + 1}', style: AppTextStyles.labelMd),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Text(n.videoTitle, style: AppTextStyles.headlineMd),
+                  Text(n.videoTitle, style: AppTextStyles.titleLg),
                   const SizedBox(height: 12),
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainer,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
                       children: <Widget>[
                         const CircleAvatar(
-                          backgroundColor: AppColors.surfaceContainerHighest,
-                          child: Icon(Icons.person, color: AppColors.primary),
+                          backgroundColor: AppColors.surface,
+                          child: Icon(Icons.person, color: AppColors.accentBlue),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -101,7 +101,7 @@ class RemedialPage extends StatelessWidget {
                             children: <Widget>[
                               Text(n.instructor, style: AppTextStyles.titleSm),
                               Text('${n.instructorRole} • Durasi: ${n.videoDurationLabel}',
-                                  style: AppTextStyles.bodySm),
+                                  style: AppTextStyles.labelMd),
                             ],
                           ),
                         ),
@@ -110,11 +110,11 @@ class RemedialPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(n.summary,
-                      style: AppTextStyles.bodyLg.copyWith(color: AppColors.textSecondary)),
+                      style: AppTextStyles.bodyLg.copyWith(color: AppColors.ink)),
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
                     onPressed: () => _openVideo(context, n),
-                    icon: const Icon(Icons.smart_display, color: AppColors.danger),
+                    icon: const Icon(Icons.smart_display, color: AppColors.accentPink),
                     label: const Text('Buka di Aplikasi YouTube'),
                   ),
                 ],
@@ -137,13 +137,13 @@ class RemedialPage extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerLow,
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Icon(Icons.check_circle_outline, color: AppColors.success),
+                          const Icon(Icons.check_circle_outline, color: AppColors.accentGreen),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -152,8 +152,8 @@ class RemedialPage extends StatelessWidget {
                                 Text(k.title, style: AppTextStyles.titleSm),
                                 const SizedBox(height: 4),
                                 Text(k.detail,
-                                    style: AppTextStyles.bodySm
-                                        .copyWith(color: AppColors.textSecondary)),
+                                    style: AppTextStyles.labelMd
+                                        .copyWith(color: AppColors.ink)),
                               ],
                             ),
                           ),
@@ -167,14 +167,15 @@ class RemedialPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                gradient: AppColors.ctaGradient,
+                // Tanpa gradien (TASK 2.2). CTA utama warna kuning.
+                color: AppColors.accentYellow,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundColor: AppColors.onPrimary.withAlpha(40),
-                    child: const Icon(Icons.psychology_outlined, color: AppColors.onPrimary),
+                    backgroundColor: AppColors.ink.withAlpha(40),
+                    child: const Icon(Icons.psychology_outlined, color: AppColors.ink),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -182,12 +183,12 @@ class RemedialPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text('Siap Uji Pemahaman?',
-                            style: AppTextStyles.titleMd.copyWith(color: AppColors.onPrimary)),
+                            style: AppTextStyles.titleMd.copyWith(color: AppColors.ink)),
                         Text(
                           watched
                               ? 'Post-test dirancang adaptif $ptCount soal untuk memastikan tidak ada celah konsep yang tertinggal.'
                               : 'Tonton video terlebih dahulu untuk membuka post-test.',
-                          style: AppTextStyles.bodyMd.copyWith(color: AppColors.onPrimary.withAlpha(220)),
+                          style: AppTextStyles.bodyMd.copyWith(color: AppColors.ink.withAlpha(220)),
                         ),
                       ],
                     ),
@@ -210,11 +211,11 @@ class RemedialPage extends StatelessWidget {
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.trending_up, size: 16, color: AppColors.secondaryStrong),
+                Icon(Icons.trending_up, size: 16, color: AppColors.accentBlue),
                 SizedBox(width: 6),
                 Flexible(
                   child: Text('Selesaikan post-test untuk memperbarui Skor Kemampuan IRT kamu',
-                      textAlign: TextAlign.center, style: AppTextStyles.bodySm),
+                      textAlign: TextAlign.center, style: AppTextStyles.labelMd),
                 ),
               ],
             ),
@@ -238,32 +239,35 @@ class _VideoCard extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Material(
-        color: AppColors.primaryDeep,
+        color: AppColors.ink,
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onPlay,
           child: Container(
-            decoration: const BoxDecoration(gradient: AppColors.heroGradient),
+            decoration: const BoxDecoration(
+              // Tanpa gradien (TASK 2.2).
+              color: AppColors.accentGreen,
+            ),
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    const Icon(Icons.circle, size: 8, color: AppColors.tertiaryFixed),
+                    const Icon(Icons.circle, size: 8, color: AppColors.accentYellow),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text('RemedyMath Micro-Learning',
                           overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.bodySm.copyWith(color: AppColors.onPrimary)),
+                          style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                     ),
                     if (watched)
                       const Pill(
                         label: 'Ditonton',
                         icon: Icons.check,
-                        background: AppColors.successContainer,
-                        foreground: AppColors.onSuccessContainer,
+                        background: AppColors.accentGreen,
+                        foreground: AppColors.ink,
                       ),
                   ],
                 ),
@@ -278,13 +282,13 @@ class _VideoCard extends StatelessWidget {
                             child: FittedBox(
                               child: Text(node.correctPattern,
                                   style: AppTextStyles.mathDisplay
-                                      .copyWith(color: AppColors.onPrimary)),
+                                      .copyWith(color: AppColors.ink)),
                             ),
                           ),
                         const CircleAvatar(
                           radius: 26,
-                          backgroundColor: AppColors.onPrimary,
-                          child: Icon(Icons.play_arrow, size: 32, color: AppColors.primaryDeep),
+                          backgroundColor: AppColors.ink,
+                          child: Icon(Icons.play_arrow, size: 32, color: AppColors.ink),
                         ),
                       ],
                     ),
@@ -293,7 +297,7 @@ class _VideoCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.textPrimary.withAlpha(150),
+                    color: AppColors.ink.withAlpha(150),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -301,7 +305,7 @@ class _VideoCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.bodySm.copyWith(color: AppColors.onPrimary),
+                    style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
                   ),
                 ),
               ],

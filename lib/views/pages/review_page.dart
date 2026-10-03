@@ -36,7 +36,7 @@ class ReviewPage extends StatelessWidget {
             final bool ok = q.isCorrect(a);
             return AppCard(
               border: Border(
-                left: BorderSide(color: ok ? AppColors.success : AppColors.danger, width: 4),
+                left: BorderSide(color: ok ? AppColors.accentGreen : AppColors.accentPink, width: 4),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -48,7 +48,7 @@ class ReviewPage extends StatelessWidget {
                       Flexible(child: Pill(label: q.category)),
                       const Spacer(),
                       Icon(ok ? Icons.check_circle : Icons.cancel,
-                          color: ok ? AppColors.success : AppColors.danger),
+                          color: ok ? AppColors.accentGreen : AppColors.accentPink),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -61,29 +61,29 @@ class ReviewPage extends StatelessWidget {
                   Text(
                     'Jawabanmu: ${a == null ? '(kosong)' : '${String.fromCharCode(65 + a)}. ${q.options[a]}'}',
                     style: AppTextStyles.mathInline
-                        .copyWith(color: ok ? AppColors.success : AppColors.danger),
+                        .copyWith(color: ok ? AppColors.accentGreen : AppColors.accentPink),
                   ),
                   Text(
                     'Kunci: ${String.fromCharCode(65 + q.answerIndex)}. ${q.options[q.answerIndex]}',
-                    style: AppTextStyles.mathInline.copyWith(color: AppColors.primaryDeep),
+                    style: AppTextStyles.mathInline.copyWith(color: AppColors.ink),
                   ),
                   if (q.hint.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Icon(Icons.lightbulb_outline, size: 18, color: AppColors.secondaryStrong),
+                        const Icon(Icons.lightbulb_outline, size: 18, color: AppColors.accentBlue),
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(q.hint,
-                              style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary)),
+                              style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                         ),
                       ],
                     ),
                   ],
                   const SizedBox(height: 4),
                   Text('Materi: ${c.graph.node(q.nodeId)?.shortTitle ?? q.nodeId} • b = ${q.difficulty.toStringAsFixed(1)}',
-                      style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted)),
+                      style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                 ],
               ),
             );

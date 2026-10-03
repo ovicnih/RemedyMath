@@ -175,15 +175,15 @@ class _QuizPageState extends State<QuizPage> {
                           child: Text.rich(TextSpan(children: <TextSpan>[
                             TextSpan(
                                 text: 'Soal ${_index + 1} ',
-                                style: AppTextStyles.headlineMd.copyWith(color: AppColors.primary)),
+                                style: AppTextStyles.titleLg.copyWith(color: AppColors.accentBlue)),
                             TextSpan(text: 'dari $total', style: AppTextStyles.bodyLg),
                           ])),
                         ),
                         Pill(
                           icon: Icons.timer_outlined,
                           label: Formatters.duration(_left),
-                          background: lowTime ? AppColors.dangerContainer : AppColors.secondaryContainer,
-                          foreground: lowTime ? AppColors.onDangerContainer : AppColors.onSecondaryContainer,
+                          background: lowTime ? AppColors.accentPink : AppColors.accentYellow,
+                          foreground: lowTime ? AppColors.ink : AppColors.ink,
                         ),
                       ],
                     ),
@@ -193,8 +193,8 @@ class _QuizPageState extends State<QuizPage> {
                       child: LinearProgressIndicator(
                         value: (_index + 1) / total,
                         minHeight: 10,
-                        backgroundColor: AppColors.surfaceContainer,
-                        color: AppColors.primary,
+                        backgroundColor: AppColors.surface,
+                        color: AppColors.accentBlue,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -202,7 +202,7 @@ class _QuizPageState extends State<QuizPage> {
                       children: <Widget>[
                         Flexible(child: Pill(icon: Icons.school_outlined, label: widget.badge)),
                         const SizedBox(width: 8),
-                        const Text('Bobot: 1 Poin', style: AppTextStyles.bodySm),
+                        const Text('Bobot: 1 Poin', style: AppTextStyles.labelMd),
                       ],
                     ),
                   ],
@@ -236,13 +236,13 @@ class _QuizPageState extends State<QuizPage> {
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: AppColors.surfaceContainerHigh,
+                          color: AppColors.surface,
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Icon(Icons.lightbulb_outline, color: AppColors.secondaryStrong),
+                            const Icon(Icons.lightbulb_outline, color: AppColors.accentBlue),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Column(
@@ -250,7 +250,7 @@ class _QuizPageState extends State<QuizPage> {
                                 children: <Widget>[
                                   Text('Petunjuk Pengingat:',
                                       style: AppTextStyles.bodyMd
-                                          .copyWith(color: AppColors.primaryDeep, fontWeight: FontWeight.w600)),
+                                          .copyWith(color: AppColors.ink, fontWeight: FontWeight.w600)),
                                   Text(q.hint, style: AppTextStyles.bodyMd),
                                 ],
                               ),
@@ -276,15 +276,15 @@ class _QuizPageState extends State<QuizPage> {
               AppCard(
                 child: Row(
                   children: <Widget>[
-                    const Icon(Icons.verified_outlined, color: AppColors.success),
+                    const Icon(Icons.verified_outlined, color: AppColors.accentGreen),
                     const SizedBox(width: 10),
                     const Expanded(
                       child: Text('Pilihan dapat diubah kembali sebelum waktu habis.',
-                          style: AppTextStyles.bodySm),
+                          style: AppTextStyles.labelMd),
                     ),
                     Text(q.moduleLabel,
                         style: AppTextStyles.mathInline
-                            .copyWith(fontSize: 12, color: AppColors.secondaryStrong)),
+                            .copyWith(fontSize: 12, color: AppColors.accentBlue)),
                   ],
                 ),
               ),
@@ -310,8 +310,8 @@ class _QuizPageState extends State<QuizPage> {
                                     children: <Widget>[
                                       const Text('Ragu-ragu', style: AppTextStyles.titleSm),
                                       Text('Tinjau nanti',
-                                          style: AppTextStyles.bodySm
-                                              .copyWith(color: AppColors.textMuted)),
+                                          style: AppTextStyles.labelMd
+                                              .copyWith(color: AppColors.ink)),
                                     ],
                                   ),
                                 ),
@@ -366,13 +366,13 @@ class _QuizPageState extends State<QuizPage> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: _flags[i]
-                              ? AppColors.dangerContainer
+                              ? AppColors.accentPink
                               : _answers[i] != null
-                                  ? AppColors.primary
+                                  ? AppColors.accentBlue
                                   : AppColors.surface,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: i == _index ? AppColors.secondaryStrong : AppColors.border,
+                            color: i == _index ? AppColors.accentBlue : AppColors.ink,
                             width: i == _index ? 2 : 1,
                           ),
                         ),
@@ -380,8 +380,8 @@ class _QuizPageState extends State<QuizPage> {
                           '${i + 1}',
                           style: AppTextStyles.titleSm.copyWith(
                             color: _answers[i] != null && !_flags[i]
-                                ? AppColors.onPrimary
-                                : AppColors.textPrimary,
+                                ? AppColors.ink
+                                : AppColors.ink,
                           ),
                         ),
                       ),
@@ -413,22 +413,22 @@ class _OptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       onTap: onTap,
-      color: selected ? AppColors.surfaceContainerHighest : AppColors.surface,
-      border: Border.all(color: selected ? AppColors.primary : AppColors.surface, width: 1.5),
+      color: selected ? AppColors.surface : AppColors.surface,
+      border: Border.all(color: selected ? AppColors.accentBlue : AppColors.surface, width: 1.5),
       child: Row(
         children: <Widget>[
           CircleAvatar(
             radius: 22,
-            backgroundColor: selected ? AppColors.primaryDeep : AppColors.surfaceContainer,
+            backgroundColor: selected ? AppColors.ink : AppColors.surface,
             child: Text(letter,
                 style: AppTextStyles.titleMd
-                    .copyWith(color: selected ? AppColors.onPrimary : AppColors.textPrimary)),
+                    .copyWith(color: selected ? AppColors.ink : AppColors.ink)),
           ),
           const SizedBox(width: 16),
           Expanded(child: Text(text, style: AppTextStyles.mathInline.copyWith(fontSize: 17))),
           Icon(
             selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-            color: selected ? AppColors.primaryDeep : AppColors.border,
+            color: selected ? AppColors.ink : AppColors.ink,
           ),
         ],
       ),

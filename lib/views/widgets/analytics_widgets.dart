@@ -24,7 +24,7 @@ class ThetaScale extends StatelessWidget {
                 'θ ${theta.toStringAsFixed(2)}',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.mathInline
-                    .copyWith(fontSize: 12, color: AppColors.primary),
+                    .copyWith(fontSize: 12, color: AppColors.accentBlue),
               ),
             ),
             Text('+3.0 (Mahir)', style: AppTextStyles.mathInline.copyWith(fontSize: 12)),
@@ -54,7 +54,9 @@ class ThetaScale extends StatelessWidget {
                   Container(
                     height: 12,
                     decoration: BoxDecoration(
-                      gradient: AppColors.thetaScaleGradient,
+                      // Tanpa gradien (TASK 2.2). Warna track mengikuti
+                      // token "isi progress bar" di UI-REFERENCE §5.1.
+                      color: AppColors.accentYellow,
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),
@@ -72,11 +74,11 @@ class ThetaScale extends StatelessWidget {
                       width: knob,
                       height: knob,
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
+                        color: AppColors.accentBlue,
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.surface, width: 3),
                       ),
-                      child: const Icon(Icons.person, size: 14, color: AppColors.onPrimary),
+                      child: const Icon(Icons.person, size: 14, color: AppColors.ink),
                     ),
                   ),
                 ],
@@ -89,17 +91,17 @@ class ThetaScale extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Text('Perlu Pendampingan',
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted)),
+                  style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
             ),
             Expanded(
               child: Text('Batas Tuntas (θ ≥ ${masteryTheta.toStringAsFixed(1)})',
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.secondaryStrong)),
+                  style: AppTextStyles.labelMd.copyWith(color: AppColors.accentBlue)),
             ),
             Expanded(
               child: Text('Mandiri',
                   textAlign: TextAlign.end,
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted)),
+                  style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
             ),
           ],
         ),
@@ -128,7 +130,7 @@ class SessionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color scoreColor = passed ? AppColors.success : AppColors.danger;
+    final Color scoreColor = passed ? AppColors.accentGreen : AppColors.accentPink;
     return AppCard(
       child: Column(
         children: <Widget>[
@@ -139,11 +141,11 @@ class SessionTile extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: passed ? AppColors.surfaceContainer : AppColors.dangerSurface,
+                  color: passed ? AppColors.surface : AppColors.accentPink,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(passed ? Icons.functions : Icons.calculate_outlined,
-                    color: passed ? AppColors.primary : AppColors.danger),
+                    color: passed ? AppColors.accentBlue : AppColors.accentPink),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -156,7 +158,7 @@ class SessionTile extends StatelessWidget {
                         style: AppTextStyles.titleMd),
                     const SizedBox(height: 4),
                     Text('$dateLabel • $subtitle',
-                        style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary)),
+                        style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                   ],
                 ),
               ),
@@ -164,8 +166,8 @@ class SessionTile extends StatelessWidget {
               Pill(
                 label: passed ? 'Tuntas' : 'Perlu Perbaikan',
                 icon: passed ? Icons.check : null,
-                background: passed ? AppColors.successContainer : AppColors.dangerContainer,
-                foreground: passed ? AppColors.onSuccessContainer : AppColors.onDangerContainer,
+                background: passed ? AppColors.accentGreen : AppColors.accentPink,
+                foreground: passed ? AppColors.ink : AppColors.ink,
               ),
             ],
           ),
@@ -173,7 +175,7 @@ class SessionTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -186,7 +188,7 @@ class SessionTile extends StatelessWidget {
                     TextSpan(children: <InlineSpan>[
                       const TextSpan(
                           text: 'Skor Post-test: ',
-                          style: AppTextStyles.bodySm),
+                          style: AppTextStyles.labelMd),
                       TextSpan(
                           text: '$score',
                           style: AppTextStyles.mathInline.copyWith(

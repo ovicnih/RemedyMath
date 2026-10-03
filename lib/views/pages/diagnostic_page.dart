@@ -31,10 +31,10 @@ class DiagnosticPage extends StatelessWidget {
                 children: <Widget>[
                   const Pill(label: 'Tes Diagnostik Adaptif', icon: Icons.assignment_outlined),
                   const SizedBox(height: 12),
-                  Text(c.content.diagnosticTitle, style: AppTextStyles.headlineLg),
+                  Text(c.content.diagnosticTitle, style: AppTextStyles.titleLg),
                   const SizedBox(height: 6),
                   Text(c.content.chapter,
-                      style: AppTextStyles.bodyMd.copyWith(color: AppColors.textSecondary)),
+                      style: AppTextStyles.bodyMd.copyWith(color: AppColors.ink)),
                   const SizedBox(height: 16),
                   Row(
                     children: <Widget>[
@@ -72,7 +72,7 @@ class DiagnosticPage extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Icon(Icons.check_circle_outline, size: 18, color: AppColors.success),
+                          const Icon(Icons.check_circle_outline, size: 18, color: AppColors.accentGreen),
                           const SizedBox(width: 8),
                           Expanded(child: Text(t, style: AppTextStyles.bodyMd)),
                         ],
@@ -94,18 +94,18 @@ class DiagnosticPage extends StatelessWidget {
                     MaterialPageRoute<void>(builder: (_) => const DiagnosisResultPage())),
                 child: Row(
                   children: <Widget>[
-                    const Icon(Icons.analytics_outlined, color: AppColors.primary, size: 32),
+                    const Icon(Icons.analytics_outlined, color: AppColors.accentBlue, size: 32),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Hasil terakhir • ${Formatters.shortDate(r.date)}',
-                              style: AppTextStyles.bodySm),
+                              style: AppTextStyles.labelMd),
                           Text('θ = ${Formatters.theta(r.theta)} • Akurasi ${Formatters.percent(r.accuracy)}',
                               style: AppTextStyles.titleMd),
                           Text(c.rootCause?.title ?? 'Tidak ada akar masalah',
-                              style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary)),
+                              style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                         ],
                       ),
                     ),

@@ -32,6 +32,10 @@ class RemedyMathApp extends StatelessWidget {
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
+      // Light-only. Aksen neobrutalism sangat jenuh sementara tinta
+      // hampir hitam, jadi pada latar gelap bayangan tajam hilang dan
+      // kartu kehilangan bentuknya. Lihat PLANNING.md §6.
+      themeMode: ThemeMode.light,
       home: hasProfile ? const RootShell() : const OnboardingPage(),
     );
   }
