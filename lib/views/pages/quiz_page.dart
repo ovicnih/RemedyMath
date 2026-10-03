@@ -150,7 +150,7 @@ class _QuizPageState extends State<QuizPage> {
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (!didPop && !_finished) _confirmExit();
       },
       child: Scaffold(

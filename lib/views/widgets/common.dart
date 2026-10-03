@@ -5,6 +5,11 @@ import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_text_styles.dart';
 
+// `ThetaScale` dan `SessionTile` dipindah ke berkas ini agar `common.dart`
+// tidak melewati batas 500 baris (AGENTS.md §5). Diekspor ulang supaya
+// pemanggil tetap cukup mengimpor satu berkas.
+export 'analytics_widgets.dart';
+
 /// Kartu dasar dengan sudut membulat.
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -69,21 +74,28 @@ class Pill extends StatelessWidget {
         color: background,
         borderRadius: BorderRadius.circular(999),
       ),
-      child: Text.rich(
-        TextSpan(children: <InlineSpan>[
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
           if (icon != null)
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Icon(icon, size: 14, color: foreground),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: Icon(icon, size: 14, color: foreground),
             ),
-          TextSpan(text: label),
-        ]),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.labelMd.copyWith(color: foreground, letterSpacing: 0.2),
+          // Flexible supaya `overflow: ellipsis` benar-benar bekerja saat
+          // Pill dibaritkan pada Row/pages Action yang lebarnya terbatas.
+          // Pada konteks tak terbatas (mis. di dalam Wrap) Pill tetap
+          // memakai lebar intrinsiknya karena MainAxisSize.min.
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.labelMd
+                  .copyWith(color: foreground, letterSpacing: 0.2),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -141,7 +153,17 @@ class StatTile extends StatelessWidget {
             children: <Widget>[
               Icon(icon, size: 18, color: iconColor),
               const SizedBox(width: 6),
-              Text(value, style: AppTextStyles.headlineMd),
+              // Flexible wajib: tanpa ini `value` yang panjang (mis. "100%")
+              // membuat Row meluber dari tile yang hanya ~1/3 lebar kartu.
+              Flexible(
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.headlineMd,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 6),
@@ -294,184 +316,3 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-/// Skala θ -3..+3 dengan penanda posisi.
-class ThetaScale extends StatelessWidget {
-  const ThetaScale({super.key, required this.theta, required this.masteryTheta});
-  final double theta;
-  final double masteryTheta;
-
-  @override
-  Widget build(BuildContext context) {
-    final double pos = ((theta + 3) / 6).clamp(0.0, 1.0);
-    final double mPos = ((masteryTheta + 3) / 6).clamp(0.0, 1.0);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text('-3.0 (Dasar)', style: AppTextStyles.mathInline.copyWith(fontSize: 12)),
-            Expanded(
-              child: Text(
-                'θ ${theta.toStringAsFixed(2)}',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.mathInline
-                    .copyWith(fontSize: 12, color: AppColors.primary),
-              ),
-            ),
-            Text('+3.0 (Mahir)', style: AppTextStyles.mathInline.copyWith(fontSize: 12)),
-          ],
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 28,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints c) {
-              final double w = c.maxWidth;
-              return Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.centerLeft,
-                children: <Widget>[
-                  Container(
-                    height: 12,
-                    decoration: BoxDecoration(
-                      gradient: AppColors.thetaScaleGradient,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                  ),
-                  Positioned(
-                    left: (w * mPos - 1).clamp(0.0, w - 2),
-                    child: Container(width: 2, height: 16, color: AppColors.surface),
-                  ),
-                  Positioned(
-                    left: (w * pos - 14).clamp(0.0, w - 28),
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.surface, width: 3),
-                      ),
-                      child: const Icon(Icons.person, size: 14, color: AppColors.onPrimary),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 6),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text('Perlu Pendampingan',
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted)),
-            ),
-            Expanded(
-              child: Text('Batas Tuntas (θ ≥ ${masteryTheta.toStringAsFixed(1)})',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.secondaryStrong)),
-            ),
-            Expanded(
-              child: Text('Mandiri',
-                  textAlign: TextAlign.end,
-                  style: AppTextStyles.bodySm.copyWith(color: AppColors.textMuted)),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// Riwayat sesi remedial (dipakai di Beranda & Progres).
-class SessionTile extends StatelessWidget {
-  const SessionTile({
-    super.key,
-    required this.title,
-    required this.dateLabel,
-    required this.subtitle,
-    required this.score,
-    required this.passed,
-    this.onAction,
-  });
-
-  final String title;
-  final String dateLabel;
-  final String subtitle;
-  final int score;
-  final bool passed;
-  final VoidCallback? onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final Color scoreColor = passed ? AppColors.success : AppColors.danger;
-    return AppCard(
-      child: Column(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: passed ? AppColors.surfaceContainer : AppColors.dangerSurface,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(passed ? Icons.functions : Icons.calculate_outlined,
-                    color: passed ? AppColors.primary : AppColors.danger),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.titleMd),
-                    const SizedBox(height: 4),
-                    Text('$dateLabel • $subtitle',
-                        style: AppTextStyles.bodySm.copyWith(color: AppColors.textSecondary)),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              Pill(
-                label: passed ? 'Tuntas' : 'Perlu Perbaikan',
-                icon: passed ? Icons.check : null,
-                background: passed ? AppColors.successContainer : AppColors.dangerContainer,
-                foreground: passed ? AppColors.onSuccessContainer : AppColors.onDangerContainer,
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: <Widget>[
-                const Text('Skor Post-test: ', style: AppTextStyles.bodySm),
-                Text('$score',
-                    style: AppTextStyles.mathInline
-                        .copyWith(color: scoreColor, fontWeight: FontWeight.w700)),
-                Text('/100', style: AppTextStyles.mathInline.copyWith(fontSize: 12)),
-                const Spacer(),
-                if (onAction != null)
-                  TextButton.icon(
-                    onPressed: onAction,
-                    icon: Icon(passed ? Icons.visibility_outlined : Icons.refresh, size: 16),
-                    label: Text(passed ? 'Lihat Materi' : 'Ulangi Remedial'),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

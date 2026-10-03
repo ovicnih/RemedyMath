@@ -355,8 +355,17 @@ class _HeroCta extends StatelessWidget {
               child: const Icon(Icons.radio_button_checked, color: AppColors.tertiaryFixed),
             ),
             const SizedBox(width: 10),
-            Text('DIAGNOSIS ADAPTIF',
-                style: AppTextStyles.labelMd.copyWith(color: AppColors.onPrimary.withAlpha(220))),
+            // Expanded wajib: tanpa ini teks eyebrow yang panjang meluber
+            // dari Container hero di layar sempit.
+            Expanded(
+              child: Text(
+                'DIAGNOSIS ADAPTIF',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.labelMd
+                    .copyWith(color: AppColors.onPrimary.withAlpha(220)),
+              ),
+            ),
           ]),
           const SizedBox(height: 14),
           Text('Mulai Tes Diagnostik Presisi',
