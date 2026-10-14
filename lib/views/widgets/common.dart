@@ -16,6 +16,7 @@ export 'app_header.dart';
 export 'brand.dart';
 export 'empty_state.dart';
 export 'eyebrow_label.dart';
+export 'hint_box.dart';
 export 'key_point_list.dart';
 export 'math_box.dart';
 export 'neo_button.dart';

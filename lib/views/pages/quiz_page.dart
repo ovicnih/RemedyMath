@@ -3,12 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../core/app_colors.dart';
+import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../core/formatters.dart';
 import '../../models/models.dart';
 import '../widgets/common.dart';
 
 /// Halaman kuis (diagnostik maupun post-test). Mengembalikan daftar jawaban.
+///
+/// Susunan visual mengikuti `UI-REFERENCE.md` §4.2: blok judul + timer,
+/// kartu progres biru, kartu soal putih, panel petunjuk hijau, empat opsi
+/// jawaban, lalu baris aksi bawah. Fitur yang tidak muncul di mockup
+/// (coretan, ragu-ragu, navigator soal) tetap dipertahankan — lihat §7.
 class QuizPage extends StatefulWidget {
   const QuizPage({
     super.key,
@@ -117,13 +123,18 @@ class _QuizPageState extends State<QuizPage> {
       isScrollControlled: true,
       showDragHandle: true,
       builder: (BuildContext ctx) => Padding(
-        padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+        padding: EdgeInsets.fromLTRB(
+          AppSizes.spaceXl,
+          0,
+          AppSizes.spaceXl,
+          MediaQuery.of(ctx).viewInsets.bottom + AppSizes.spaceXl,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text('Coretan Soal ${_index + 1}', style: AppTextStyles.titleMd),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizes.spaceMd),
             TextField(
               controller: ctrl,
               autofocus: true,
@@ -131,7 +142,7 @@ class _QuizPageState extends State<QuizPage> {
               style: AppTextStyles.mathInline,
               decoration: const InputDecoration(hintText: 'Tulis langkah pengerjaanmu di sini...'),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSizes.spaceMd),
             FilledButton(onPressed: () => Navigator.pop(ctx), child: const Text('Simpan')),
           ],
         ),
@@ -146,7 +157,6 @@ class _QuizPageState extends State<QuizPage> {
     final Question q = widget.questions[_index];
     final int total = widget.questions.length;
     final bool last = _index == total - 1;
-    final bool lowTime = _left.inSeconds <= 60;
 
     return PopScope(
       canPop: false,
@@ -154,109 +164,33 @@ class _QuizPageState extends State<QuizPage> {
         if (!didPop && !_finished) _confirmExit();
       },
       child: Scaffold(
-        appBar: remediAppBar(context, widget.title),
+        appBar: remediAppBar(context, widget.title, showBack: true),
         body: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            padding: const EdgeInsets.fromLTRB(
+              AppSizes.spaceLg,
+              AppSizes.spaceLg,
+              AppSizes.spaceLg,
+              AppSizes.spaceXl,
+            ),
             children: <Widget>[
-              AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        IconButton.filledTonal(
-                          onPressed: _confirmExit,
-                          icon: const Icon(Icons.close),
-                          tooltip: 'Keluar',
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text.rich(TextSpan(children: <TextSpan>[
-                            TextSpan(
-                                text: 'Soal ${_index + 1} ', style: AppTextStyles.titleLg),
-                            TextSpan(text: 'dari $total', style: AppTextStyles.bodyLg),
-                          ])),
-                        ),
-                        Pill(
-                          icon: Icons.timer_outlined,
-                          label: Formatters.duration(_left),
-                          background: lowTime ? AppColors.accentPink : AppColors.accentYellow,
-                          foreground: lowTime ? AppColors.ink : AppColors.ink,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    NeoProgressBar(value: (_index + 1) / total, height: 10),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: <Widget>[
-                        Flexible(child: Pill(icon: Icons.school_outlined, label: widget.badge)),
-                        const SizedBox(width: 8),
-                        const Text('Bobot: 1 Poin', style: AppTextStyles.labelMd),
-                      ],
-                    ),
-                  ],
-                ),
+              _QuizHeading(
+                title: widget.title,
+                badge: widget.badge,
+                time: _left,
               ),
-              const SizedBox(height: 16),
-              AppCard(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Flexible(child: Pill(icon: Icons.psychology_outlined, label: q.category)),
-                        const Spacer(),
-                        TextButton.icon(
-                          onPressed: _openScratch,
-                          icon: const Icon(Icons.edit_note, size: 18),
-                          label: const Text('Coretan'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    Text(q.stem, style: AppTextStyles.bodyLg.copyWith(fontSize: 18)),
-                    if (q.expression.isNotEmpty) ...<Widget>[
-                      const SizedBox(height: 16),
-                      MathBox(q.expression),
-                    ],
-                    if (widget.showHints && q.hint.isNotEmpty) ...<Widget>[
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            const Icon(Icons.lightbulb_outline, color: AppColors.accentBlue),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text('Petunjuk Pengingat:',
-                                      style: AppTextStyles.bodyMd
-                                          .copyWith(color: AppColors.ink, fontWeight: FontWeight.w600)),
-                                  Text(q.hint, style: AppTextStyles.bodyMd),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+              const SizedBox(height: AppSizes.spaceLg),
+              _ProgressCard(index: _index, total: total),
+              const SizedBox(height: AppSizes.spaceLg),
+              _QuestionCard(
+                question: q,
+                showHint: widget.showHints,
+                onScratch: _openScratch,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSizes.spaceLg),
               for (int i = 0; i < q.options.length; i++)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: AppSizes.spaceMd),
                   child: AnswerOption(
                     letter: String.fromCharCode(65 + i),
                     text: q.options[i],
@@ -264,116 +198,312 @@ class _QuizPageState extends State<QuizPage> {
                     onTap: () => setState(() => _answers[_index] = i),
                   ),
                 ),
-              AppCard(
-                child: Row(
-                  children: <Widget>[
-                    const Icon(Icons.verified_outlined, color: AppColors.accentGreen),
-                    const SizedBox(width: 10),
-                    const Expanded(
-                      child: Text('Pilihan dapat diubah kembali sebelum waktu habis.',
-                          style: AppTextStyles.labelMd),
-                    ),
-                    Text(q.moduleLabel,
-                        style: AppTextStyles.mathInline.copyWith(fontSize: 12)),
-                  ],
-                ),
+              const SizedBox(height: AppSizes.spaceXs),
+              _FooterPanel(
+                flagged: _flags[_index],
+                last: last,
+                index: _index,
+                onToggleFlag: () =>
+                    setState(() => _flags[_index] = !_flags[_index]),
+                onNext: last ? _confirmFinish : () => setState(() => _index++),
+                onPrev: () => setState(() => _index--),
               ),
-              const SizedBox(height: 16),
-              AppCard(
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () => setState(() => _flags[_index] = !_flags[_index]),
-                            child: Row(
-                              children: <Widget>[
-                                Checkbox(
-                                  value: _flags[_index],
-                                  onChanged: (v) => setState(() => _flags[_index] = v ?? false),
-                                ),
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const Text('Ragu-ragu', style: AppTextStyles.titleSm),
-                                      Text('Tinjau nanti',
-                                          style: AppTextStyles.labelMd
-                                              .copyWith(color: AppColors.ink)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: NeoButton(
-                            expand: true,
-                            icon: last ? Icons.check : Icons.arrow_forward,
-                            label: last ? 'Selesai' : 'Soal Berikutnya',
-                            onPressed: last
-                                ? _confirmFinish
-                                : () => setState(() => _index++),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (_index > 0)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextButton.icon(
-                          onPressed: () => setState(() => _index--),
-                          icon: const Icon(Icons.arrow_back, size: 18),
-                          label: const Text('Soal sebelumnya'),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: <Widget>[
-                  for (int i = 0; i < total; i++)
-                    InkWell(
-                      borderRadius: BorderRadius.circular(10),
-                      onTap: () => setState(() => _index = i),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: _flags[i]
-                              ? AppColors.accentPink
-                              : _answers[i] != null
-                                  ? AppColors.accentBlue
-                                  : AppColors.surface,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: i == _index ? AppColors.accentBlue : AppColors.ink,
-                            width: i == _index ? 2 : 1,
-                          ),
-                        ),
-                        child: Text(
-                          '${i + 1}',
-                          style: AppTextStyles.titleSm.copyWith(
-                            color: _answers[i] != null && !_flags[i]
-                                ? AppColors.ink
-                                : AppColors.ink,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
+              const SizedBox(height: AppSizes.spaceLg),
+              _QuestionNavigator(
+                total: total,
+                index: _index,
+                answers: _answers,
+                flags: _flags,
+                onSelect: (int i) => setState(() => _index = i),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Blok judul: eyebrow topik, judul besar bertitik pink, dan timer.
+class _QuizHeading extends StatelessWidget {
+  const _QuizHeading({
+    required this.title,
+    required this.badge,
+    required this.time,
+  });
+
+  final String title;
+  final String badge;
+  final Duration time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        EyebrowLabel(label: badge),
+        const SizedBox(height: AppSizes.spaceMd),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    TextSpan(text: title),
+                    const TextSpan(
+                      text: '.',
+                      style: TextStyle(color: AppColors.accentPink),
+                    ),
+                  ],
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.displayLg,
+              ),
+            ),
+            const SizedBox(width: AppSizes.spaceMd),
+            _TimerChip(time: time),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Chip timer: bg hijau, radius 10, border 3 px, bayangan `Offset(4, 4)`.
+/// Berubah pink saat waktu tersisa satu menit atau kurang.
+class _TimerChip extends StatelessWidget {
+  const _TimerChip({required this.time});
+
+  final Duration time;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool lowTime = time.inSeconds <= 60;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.spaceMd,
+        vertical: AppSizes.spaceSm,
+      ),
+      decoration: BoxDecoration(
+        color: lowTime ? AppColors.accentPink : AppColors.accentGreen,
+        borderRadius: AppSizes.radius(AppSizes.radiusCard),
+        border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
+        boxShadow: AppSizes.shadowCard,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Icon(Icons.schedule, size: 18, color: AppColors.ink),
+          const SizedBox(width: AppSizes.spaceXs),
+          Text(
+            Formatters.duration(time),
+            style: AppTextStyles.labelSm.copyWith(fontWeight: FontWeight.w900),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Kartu progres soal: bg biru, "Soal X dari N", persen, progress bar.
+class _ProgressCard extends StatelessWidget {
+  const _ProgressCard({required this.index, required this.total});
+
+  final int index;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final double ratio = total == 0 ? 0 : (index + 1) / total;
+    final TextStyle counter = AppTextStyles.labelStrong.copyWith(fontSize: 16);
+    return NeoCard(
+      color: AppColors.accentBlue,
+      padding: const EdgeInsets.all(AppSizes.spaceXl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text('Soal ${index + 1} dari $total', style: counter),
+              const Spacer(),
+              Text(Formatters.percent(ratio), style: counter),
+            ],
+          ),
+          const SizedBox(height: AppSizes.spaceMd),
+          NeoProgressBar(value: ratio),
+        ],
+      ),
+    );
+  }
+}
+
+/// Kartu soal: eyebrow kategori, stem, kotak rumus, panel petunjuk.
+class _QuestionCard extends StatelessWidget {
+  const _QuestionCard({
+    required this.question,
+    required this.showHint,
+    required this.onScratch,
+  });
+
+  final Question question;
+  final bool showHint;
+  final VoidCallback onScratch;
+
+  @override
+  Widget build(BuildContext context) {
+    return NeoCard(
+      padding: const EdgeInsets.all(AppSizes.spaceXl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Flexible(child: EyebrowLabel(label: question.category)),
+              const Spacer(),
+              TextButton.icon(
+                onPressed: onScratch,
+                icon: const Icon(Icons.edit_note, size: 18),
+                label: const Text('Coretan'),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSizes.spaceMd),
+          Text(question.stem, style: AppTextStyles.titleLg),
+          if (question.expression.isNotEmpty) ...<Widget>[
+            const SizedBox(height: AppSizes.spaceLg),
+            MathBox(question.expression),
+          ],
+          if (showHint && question.hint.isNotEmpty) ...<Widget>[
+            const SizedBox(height: AppSizes.spaceLg),
+            HintBox(question.hint),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Panel aksi bawah: caption, tombol lanjut, ragu-ragu, tombol sebelumnya.
+class _FooterPanel extends StatelessWidget {
+  const _FooterPanel({
+    required this.flagged,
+    required this.last,
+    required this.index,
+    required this.onToggleFlag,
+    required this.onNext,
+    required this.onPrev,
+  });
+
+  final bool flagged;
+  final bool last;
+  final int index;
+  final VoidCallback onToggleFlag;
+  final VoidCallback onNext;
+  final VoidCallback onPrev;
+
+  @override
+  Widget build(BuildContext context) {
+    return NeoCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text(
+            'Jawaban dapat diubah sebelum melanjutkan.',
+            style: AppTextStyles.caption,
+          ),
+          const SizedBox(height: AppSizes.spaceMd),
+          NeoButton(
+            expand: true,
+            icon: last ? Icons.check : Icons.arrow_forward,
+            label: last ? 'Selesai' : 'Soal berikutnya',
+            onPressed: onNext,
+          ),
+          const SizedBox(height: AppSizes.spaceMd),
+          InkWell(
+            borderRadius: AppSizes.radius(AppSizes.radiusChip),
+            onTap: onToggleFlag,
+            child: Row(
+              children: <Widget>[
+                Checkbox(value: flagged, onChanged: (_) => onToggleFlag()),
+                const SizedBox(width: AppSizes.spaceSm),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Ragu-ragu', style: AppTextStyles.titleSm),
+                      Text('Tinjau nanti', style: AppTextStyles.labelMd),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (index > 0)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: onPrev,
+                icon: const Icon(Icons.arrow_back, size: 18),
+                label: const Text('Soal sebelumnya'),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Navigator soal: petak 40×40 per nomor. Hijau = ragu-ragu,
+/// biru = sudah dijawab, putih = kosong; nomor aktif berbingkai biru.
+class _QuestionNavigator extends StatelessWidget {
+  const _QuestionNavigator({
+    required this.total,
+    required this.index,
+    required this.answers,
+    required this.flags,
+    required this.onSelect,
+  });
+
+  final int total;
+  final int index;
+  final List<int?> answers;
+  final List<bool> flags;
+  final ValueChanged<int> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return NeoCard(
+      child: Wrap(
+        spacing: AppSizes.spaceSm,
+        runSpacing: AppSizes.spaceSm,
+        children: <Widget>[
+          for (int i = 0; i < total; i++)
+            InkWell(
+              borderRadius: AppSizes.radius(AppSizes.radiusCard),
+              onTap: () => onSelect(i),
+              child: Container(
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: flags[i]
+                      ? AppColors.accentPink
+                      : answers[i] != null
+                          ? AppColors.accentBlue
+                          : AppColors.surface,
+                  borderRadius: AppSizes.radius(AppSizes.radiusCard),
+                  border: Border.all(
+                    color: i == index ? AppColors.accentBlue : AppColors.ink,
+                    width: i == index
+                        ? AppSizes.borderThin
+                        : AppSizes.borderHairline,
+                  ),
+                ),
+                child: Text('${i + 1}', style: AppTextStyles.titleSm),
+              ),
+            ),
+        ],
       ),
     );
   }

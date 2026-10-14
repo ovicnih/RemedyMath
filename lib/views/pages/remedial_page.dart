@@ -9,8 +9,12 @@ import '../../core/app_text_styles.dart';
 import '../../models/models.dart';
 import '../flows.dart';
 import '../widgets/common.dart';
+import 'diagnosis_result_page.dart';
 
 /// Materi perbaikan: video mikro-learning, poin kunci, dan post-test.
+///
+/// Susunan visual mengikuti `UI-REFERENCE.md` §4.4. Tombol buka YouTube dan
+/// tombol "Saya sudah menonton video ini" tetap dipertahankan (§7).
 class RemedialPage extends StatelessWidget {
   const RemedialPage({super.key, required this.nodeId});
   final String nodeId;
@@ -54,150 +58,244 @@ class RemedialPage extends StatelessWidget {
       appBar: remediAppBar(context, 'Remedial', showBack: true),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+          padding: const EdgeInsets.fromLTRB(
+            AppSizes.spaceLg,
+            AppSizes.spaceLg,
+            AppSizes.spaceLg,
+            AppSizes.spaceXl,
+          ),
           children: <Widget>[
-            EyebrowLabel(
+            _StepHeading(
               label: pos >= 0
-                  ? 'Langkah ${pos + 1} dari ${path.length}: Penguatan Konsep'
-                  : 'Penguatan Konsep',
+                  ? 'Langkah ${pos + 1} dari ${path.length} · Penguatan konsep'
+                  : 'Penguatan konsep',
+              title: n.shortTitle,
+              subtitle: 'Materi perbaikan · ${c.content.topic}',
             ),
-            const SizedBox(height: 4),
-            Text('Materi Perbaikan: ${n.shortTitle}', style: AppTextStyles.titleLg),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSizes.spaceLg),
             VideoPlayerCard(
               formula: n.correctPattern,
               watched: watched,
               onPlay: () => _openVideo(context, n),
             ),
-            const SizedBox(height: 16),
-            AppCard(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Wrap(
-                    spacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: <Widget>[
-                      const Pill(
-                        label: 'Analisis Miskonsepsi',
-                        background: AppColors.accentPink,
-                        foreground: AppColors.ink,
-                      ),
-                      if (pos >= 0)
-                        Text('Prioritas Remedial #${pos + 1}', style: AppTextStyles.labelMd),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(n.videoTitle, style: AppTextStyles.titleLg),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        const CircleAvatar(
-                          backgroundColor: AppColors.surface,
-                          child: Icon(Icons.person, color: AppColors.accentBlue),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(n.instructor, style: AppTextStyles.titleSm),
-                              Text('${n.instructorRole} • Durasi: ${n.videoDurationLabel}',
-                                  style: AppTextStyles.labelMd),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(n.summary,
-                      style: AppTextStyles.bodyLg.copyWith(color: AppColors.ink)),
-                  const SizedBox(height: 12),
-                  OutlinedButton.icon(
-                    onPressed: () => _openVideo(context, n),
-                    icon: const Icon(Icons.smart_display, color: AppColors.accentPink),
-                    label: const Text('Buka di Aplikasi YouTube'),
-                  ),
-                ],
-              ),
+            const SizedBox(height: AppSizes.spaceLg),
+            _MisconceptionCard(
+              node: n,
+              onYouTube: () => _openVideo(context, n),
             ),
-            const SizedBox(height: 16),
-            KeyPointList(
-              points: n.keyPoints,
-              trailing: const Pill(label: 'Penting Diingat'),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        // Tanpa gradien (TASK 2.2). CTA utama warna kuning.
-        color: AppColors.accentYellow,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppSizes.shadowCard,
-      ),
-              child: Row(
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundColor: AppColors.ink.withAlpha(40),
-                    child: const Icon(Icons.psychology_outlined, color: AppColors.ink),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('Siap Uji Pemahaman?',
-                            style: AppTextStyles.titleMd.copyWith(color: AppColors.ink)),
-                        Text(
-                          watched
-                              ? 'Post-test dirancang adaptif $ptCount soal untuk memastikan tidak ada celah konsep yang tertinggal.'
-                              : 'Tonton video terlebih dahulu untuk membuka post-test.',
-                          style: AppTextStyles.bodyMd.copyWith(color: AppColors.ink.withAlpha(220)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            NeoButton(
-              expand: true,
-              color: AppColors.surface,
-              icon: watched ? Icons.arrow_forward : Icons.lock_outline,
-              label: 'Mulai Post-Test Ketuntasan ($ptCount Soal)',
-              onPressed: watched && ptCount > 0
-                  ? () => Flows.startPostTest(context, nodeId)
-                  : null,
+            const SizedBox(height: AppSizes.spaceLg),
+            KeyPointList(points: n.keyPoints),
+            const SizedBox(height: AppSizes.spaceLg),
+            _PostTestCta(
+              watched: watched,
+              count: ptCount,
+              onStart: () => Flows.startPostTest(context, nodeId),
             ),
             if (!watched)
               TextButton(
                 onPressed: () => c.markWatched(nodeId),
                 child: const Text('Saya sudah menonton video ini'),
               ),
-            const SizedBox(height: 6),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.trending_up, size: 16, color: AppColors.accentBlue),
-                SizedBox(width: 6),
-                Flexible(
-                  child: Text('Selesaikan post-test untuk memperbarui Skor Kemampuan IRT kamu',
-                      textAlign: TextAlign.center, style: AppTextStyles.labelMd),
+            const SizedBox(height: AppSizes.spaceSm),
+            const _IrtNote(),
+            const SizedBox(height: AppSizes.spaceSm),
+            Center(
+              child: TextButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const DiagnosisResultPage(),
+                  ),
                 ),
-              ],
+                child: Text(
+                  'Lihat kembali hasil diagnosis',
+                  style: AppTextStyles.bodyMd.copyWith(
+                    fontWeight: FontWeight.w900,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// §4.4 item 1: eyebrow langkah, judul bertitik pink, dan sub materi.
+class _StepHeading extends StatelessWidget {
+  const _StepHeading({
+    required this.label,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String label;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        EyebrowLabel(label: label),
+        const SizedBox(height: AppSizes.spaceMd),
+        Text.rich(
+          TextSpan(
+            children: <InlineSpan>[
+              TextSpan(text: title),
+              const TextSpan(
+                text: '.',
+                style: TextStyle(color: AppColors.accentPink),
+              ),
+            ],
+          ),
+          style: AppTextStyles.displayLg,
+        ),
+        const SizedBox(height: AppSizes.spaceXs),
+        Text(
+          subtitle,
+          style: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ],
+    );
+  }
+}
+
+/// §4.4 item 3 kiri: kartu analisis miskonsepsi putih.
+class _MisconceptionCard extends StatelessWidget {
+  const _MisconceptionCard({required this.node, required this.onYouTube});
+
+  final ConceptNode node;
+  final VoidCallback onYouTube;
+
+  @override
+  Widget build(BuildContext context) {
+    return NeoCard(
+      padding: const EdgeInsets.all(AppSizes.spaceXl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          const EyebrowLabel(
+            label: 'Analisis miskonsepsi',
+            color: AppColors.accentPink,
+          ),
+          const SizedBox(height: AppSizes.spaceMd),
+          Text(node.videoTitle, style: AppTextStyles.titleMd),
+          const SizedBox(height: AppSizes.spaceSm),
+          Text(node.summary, style: AppTextStyles.bodyMd.copyWith(height: 1.74)),
+          const SizedBox(height: AppSizes.spaceLg),
+          _CoachChip(node: node),
+          const SizedBox(height: AppSizes.spaceSm),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: onYouTube,
+              icon: const Icon(Icons.smart_display, size: 18),
+              label: const Text('Buka di YouTube'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Chip pengajar: bg biru, radius 10, border 3 px, teks 14 w700.
+class _CoachChip extends StatelessWidget {
+  const _CoachChip({required this.node});
+
+  final ConceptNode node;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppSizes.spaceMd),
+      decoration: BoxDecoration(
+        color: AppColors.accentBlue,
+        borderRadius: AppSizes.radius(AppSizes.radiusCard),
+        border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
+      ),
+      child: Row(
+        children: <Widget>[
+          const Icon(Icons.person, size: 20, color: AppColors.ink),
+          const SizedBox(width: AppSizes.spaceSm),
+          Expanded(
+            child: Text(
+              '${node.instructor} · ${node.instructorRole} · '
+              '${node.videoDurationLabel}',
+              style: AppTextStyles.labelMd,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// §4.4 item 4: CTA post-test pink.
+class _PostTestCta extends StatelessWidget {
+  const _PostTestCta({
+    required this.watched,
+    required this.count,
+    required this.onStart,
+  });
+
+  final bool watched;
+  final int count;
+  final VoidCallback onStart;
+
+  @override
+  Widget build(BuildContext context) {
+    return NeoCard(
+      color: AppColors.accentPink,
+      padding: const EdgeInsets.all(AppSizes.spaceXl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          const Text('Siap uji pemahaman?', style: AppTextStyles.titleMd),
+          const SizedBox(height: AppSizes.spaceSm),
+          Text(
+            watched
+                ? 'Post-test adaptif $count soal memastikan tidak ada celah '
+                    'konsep yang tertinggal.'
+                : 'Tonton video terlebih dahulu untuk membuka post-test.',
+            style: AppTextStyles.bodyMd,
+          ),
+          const SizedBox(height: AppSizes.spaceLg),
+          NeoButton(
+            expand: true,
+            color: AppColors.surface,
+            icon: watched ? Icons.arrow_forward : Icons.lock_outline,
+            label: 'Mulai post-test',
+            onPressed: watched && count > 0 ? onStart : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Catatan IRT di bawah CTA.
+class _IrtNote extends StatelessWidget {
+  const _IrtNote();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.trending_up, size: 16, color: AppColors.accentBlue),
+        SizedBox(width: AppSizes.spaceSm),
+        Flexible(
+          child: Text(
+            'Selesaikan post-test untuk memperbarui Skor Kemampuan IRT kamu',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.labelMd,
+          ),
+        ),
+      ],
     );
   }
 }
