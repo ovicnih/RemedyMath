@@ -19,7 +19,7 @@ class AppController extends ChangeNotifier {
   DiagnosticResult? latestResult;
   List<RemedialSession> sessions = <RemedialSession>[];
   List<ThetaPoint> history = <ThetaPoint>[];
-  Set<String> watchedVideos = <String>{};
+  Set<String> studiedNodes = <String>{};
   int tabIndex = 0;
 
   Future<void> init() async {
@@ -30,7 +30,7 @@ class AppController extends ChangeNotifier {
     latestResult = _storage.loadLatestResult();
     sessions = _storage.loadSessions();
     history = _storage.loadHistory();
-    watchedVideos = _storage.loadWatched();
+    studiedNodes = _storage.loadStudied();
   }
 
   void setTab(int i) {
@@ -64,11 +64,11 @@ class AppController extends ChangeNotifier {
 
   ConceptNode? get rootCause => graph.node(latestResult?.rootCauseId);
 
-  bool isWatched(String nodeId) => watchedVideos.contains(nodeId);
+  bool isStudied(String nodeId) => studiedNodes.contains(nodeId);
 
-  Future<void> markWatched(String nodeId) async {
-    watchedVideos.add(nodeId);
-    await _storage.saveWatched(watchedVideos);
+  Future<void> markStudied(String nodeId) async {
+    studiedNodes.add(nodeId);
+    await _storage.saveStudied(studiedNodes);
     notifyListeners();
   }
 
@@ -181,7 +181,7 @@ class AppController extends ChangeNotifier {
     latestResult = null;
     sessions = <RemedialSession>[];
     history = <ThetaPoint>[];
-    watchedVideos = <String>{};
+    studiedNodes = <String>{};
     tabIndex = 0;
     notifyListeners();
   }

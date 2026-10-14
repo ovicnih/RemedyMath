@@ -10,13 +10,8 @@
       "misconception": "Kekeliruan muncul saat menjumlahkan atau mengalikan bilangan bertanda berbeda, terutama ketika tanda negatif berada di depan kurung.",
       "wrongPattern": "-5 + 3 = -8",
       "correctPattern": "-5 + 3 = -2",
-      "videoUrl": "https://www.youtube.com/watch?v=V2v4hs9h8H4",
-      "videoTitle": "Menguasai Aturan Tanda pada Bilangan Bulat",
-      "videoDurationLabel": "4 Mnt",
-      "videoDurationMinutes": 4,
-      "instructor": "Bu Nadia, S.Pd",
-      "instructorRole": "Guru Matematika SMA",
-      "summary": "Video ringkas yang mengulang aturan tanda pada penjumlahan, pengurangan, dan perkalian bilangan bulat sebagai fondasi seluruh operasi aljabar.",
+      "lessonTitle": "Menguasai Aturan Tanda pada Bilangan Bulat",
+      "summary": "Ringkasan singkat yang mengulang aturan tanda pada penjumlahan, pengurangan, dan perkalian bilangan bulat sebagai fondasi seluruh operasi aljabar.",
       "keyPoints": [
         {
           "title": "Tanda sama dijumlahkan, tanda beda dikurangkan",
@@ -41,13 +36,8 @@
       "misconception": "Kamu sudah memahami pengelompokan suku sejenis dengan baik! Namun, kekeliruan kerap terjadi pada aturan perkalian tanda minus di dalam kurung.",
       "wrongPattern": "-2(x - 3) → -2x - 6",
       "correctPattern": "-2(x - 3) → -2x + 6",
-      "videoUrl": "https://www.youtube.com/watch?v=PupNgv49_WY",
-      "videoTitle": "Membedah Kesalahan Fatal: Tanda Negatif & Sifat Distributif",
-      "videoDurationLabel": "3 Mnt",
-      "videoDurationMinutes": 3,
-      "instructor": "Pak Rian, M.Pd",
-      "instructorRole": "Guru Matematika SMA",
-      "summary": "Video ringkas berfokus langsung membedah pola kekeliruan umum siswa SMA pada aturan tanda minus dalam kurung dan cara menyelesaikannya secara intuitif.",
+      "lessonTitle": "Membedah Kesalahan Fatal: Tanda Negatif & Sifat Distributif",
+      "summary": "Fokus langsung membedah pola kekeliruan umum siswa SMA pada aturan tanda minus dalam kurung dan cara menyelesaikannya secara intuitif.",
       "keyPoints": [
         {
           "title": "Ingat: (-) dikali (-) menghasilkan (+)",
@@ -72,12 +62,7 @@
       "misconception": "Suku dengan variabel berbeda pangkat sering ikut dijumlahkan, padahal hanya suku sejenis yang boleh digabung.",
       "wrongPattern": "3x + 2x² = 5x³",
       "correctPattern": "3x + 2x² tetap 2x² + 3x",
-      "videoUrl": "https://www.youtube.com/watch?v=lZ_ns6mQLvY",
-      "videoTitle": "Menggabungkan Suku Sejenis dengan Rapi",
-      "videoDurationLabel": "3 Mnt",
-      "videoDurationMinutes": 3,
-      "instructor": "Bu Nadia, S.Pd",
-      "instructorRole": "Guru Matematika SMA",
+      "lessonTitle": "Menggabungkan Suku Sejenis dengan Rapi",
       "summary": "Latihan mengenali suku sejenis berdasarkan variabel dan pangkatnya, lalu menggabungkannya tanpa mengubah derajat.",
       "keyPoints": [
         {
@@ -103,12 +88,7 @@
       "misconception": "Penyederhanaan bentuk aljabar gagal karena distribusi dan penggabungan suku dilakukan sekaligus tanpa langkah antara.",
       "wrongPattern": "3(x + 2) - 2(2x - 1) → -x + 4",
       "correctPattern": "3x + 6 - 4x + 2 → -x + 8",
-      "videoUrl": "https://www.youtube.com/watch?v=WZdZhuUSmpM",
-      "videoTitle": "Menyederhanakan Bentuk Aljabar Langkah demi Langkah",
-      "videoDurationLabel": "5 Mnt",
-      "videoDurationMinutes": 5,
-      "instructor": "Pak Rian, M.Pd",
-      "instructorRole": "Guru Matematika SMA",
+      "lessonTitle": "Menyederhanakan Bentuk Aljabar Langkah demi Langkah",
       "summary": "Menyederhanakan bentuk aljabar dengan dua langkah terpisah: distribusikan dahulu, baru gabungkan suku sejenis.",
       "keyPoints": [
         {
@@ -134,12 +114,7 @@
       "misconception": "Saat memindahkan suku ke ruas lain, tanda sering tidak dibalik sehingga solusi meleset.",
       "wrongPattern": "2x + 5 = 11 → 2x = 11 + 5",
       "correctPattern": "2x + 5 = 11 → 2x = 11 - 5",
-      "videoUrl": "https://www.youtube.com/watch?v=Qyd_v3DGzTM",
-      "videoTitle": "Menyelesaikan Persamaan Linear Satu Variabel",
-      "videoDurationLabel": "4 Mnt",
-      "videoDurationMinutes": 4,
-      "instructor": "Bu Nadia, S.Pd",
-      "instructorRole": "Guru Matematika SMA",
+      "lessonTitle": "Menyelesaikan Persamaan Linear Satu Variabel",
       "summary": "Strategi menjaga keseimbangan kedua ruas persamaan dan membalik tanda saat memindahkan suku.",
       "keyPoints": [
         {
@@ -165,12 +140,7 @@
       "misconception": "Pasangan faktor dipilih hanya dari hasil kali, tanpa memeriksa jumlahnya harus sama dengan koefisien suku tengah.",
       "wrongPattern": "x² + 5x + 6 → (x + 1)(x + 6)",
       "correctPattern": "x² + 5x + 6 → (x + 2)(x + 3)",
-      "videoUrl": "https://www.youtube.com/watch?v=2ZzuZvz33X0",
-      "videoTitle": "Pemfaktoran Bentuk Kuadrat Tanpa Tebak-tebakan",
-      "videoDurationLabel": "5 Mnt",
-      "videoDurationMinutes": 5,
-      "instructor": "Pak Rian, M.Pd",
-      "instructorRole": "Guru Matematika SMA",
+      "lessonTitle": "Pemfaktoran Bentuk Kuadrat Tanpa Tebak-tebakan",
       "summary": "Teknik mencari dua bilangan yang hasil kalinya c dan jumlahnya b untuk memfaktorkan bentuk kuadrat.",
       "keyPoints": [
         {

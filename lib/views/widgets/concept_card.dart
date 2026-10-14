@@ -5,12 +5,14 @@ import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import 'neo_card.dart';
 
-/// Kartu video mikro-belajar, gaya neobrutalism.
+/// Kartu mikro-belajar mandiri, gaya neobrutalism.
 ///
 /// Bentuk dua lapis sesuai desain: kartu luar **biru** `#70B2FF`, di
-/// dalamnya **rangka kuning** `#E2F16D`. Pemisahan warna itu bukan
-/// hiasan — yellow frame menandai area yang bisa diketuk, jadi fingertip
-/// tahu di mana letak target.
+/// dalamnya **rangka kuning** `#E2F16D`. Kartu ini menggantikan
+/// `VideoPlayerCard` lama: fitur video YouTube dilepas agar aplikasi
+/// sepenuhnya offline (lihat `HISTORY.md` v2.4.0), jadi kartu tidak lagi
+/// menjadi target sentuh apa pun — rumus dan poin kunci di bawahnya sudah
+/// menjadi isi pembelajarannya.
 ///
 /// Spesifikasi asal: `UI-REFERENCE.md` §4.4 item 2.
 ///
@@ -21,45 +23,30 @@ import 'neo_card.dart';
 /// melanggar `AGENTS.md` §2. Diganti [AspectRatio] — lebar mengikuti
 /// parent, tinggi ikut lebarnya.
 ///
-/// Rasio 16:9 dipakai karena itu yang sudah berjalan di kode lama dan
-/// tata letak kartu video di Android umumnya 16:9. Lihat `TODO.md`
-/// "Tentukan rasio kartu video".
+/// ## Penandaan "telah dipelajari"
 ///
-/// ## Penandaan "telah ditonton"
-///
-/// [watched] tidak memicu apa pun. Widget ini murni tampilan. Penandaan
-/// tetap milik halaman lewat callback-nya — lihat `TODO.md` "Perbaiki
-/// penandaan video yang terlalu optimistis".
-///
-/// ## Teks hint
-///
-/// Default `Buka di YouTube`, bukan "ketuk untuk melihat ringkasan".
-/// kartu ini tidak punya layar ringkasan; mengetuknya cuma melempar ke
-/// aplikasi YouTube, jadi hint harus menyebut apa yang benar-benar terjadi.
-class VideoPlayerCard extends StatelessWidget {
-  const VideoPlayerCard({
+/// [studied] tidak memicu apa pun. Widget ini murni tampilan; penandaan
+/// milik halaman lewat tombol eksplisitnya.
+class ConceptCard extends StatelessWidget {
+  const ConceptCard({
     super.key,
     required this.formula,
-    required this.onPlay,
-    this.watched = false,
+    this.studied = false,
     this.aspectRatio = 16 / 9,
-    this.hint = 'Buka di YouTube',
+    this.hint = 'Konsep inti · lihat poin kunci',
     this.eyebrow = 'RemedyMath · Mikro-Belajar',
   });
 
   /// Rumus besar di tengah, mis. `−(a − b) = −a + b`.
   final String formula;
 
-  /// Aksi saat kartu diketuk. Biasanya membuka video.
-  final VoidCallback onPlay;
-
-  /// Menampilkan badge "Ditonton".
-  final bool watched;
+  /// Menampilkan badge "Dipahami".
+  final bool studied;
 
   /// Rasio lebar:tinggi. Default 16:9.
   final double aspectRatio;
 
-  /// Teks hint di bawah tombol putar.
+  /// Teks hint di bawah ikon.
   final String hint;
 
   /// Label pill di bagian atas.
@@ -67,14 +54,9 @@ class VideoPlayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Seluruh kartu adalah target sentuh, bukan hanya tombol putar.
-    // `NeoCard` sudah membungkus child-nya dengan `Semantics` + gesture,
-    // jadi tidak ada dua target tumpang tindih yang dilaporkan ke
-    // pembaca layar.
     return NeoCard(
       color: AppColors.accentBlue,
       padding: const EdgeInsets.all(AppSizes.spaceMd),
-      onTap: onPlay,
       child: AspectRatio(
         aspectRatio: aspectRatio,
         child: NeoCard(
@@ -91,9 +73,9 @@ class VideoPlayerCard extends StatelessWidget {
                   Flexible(
                     child: _EyebrowPill(label: eyebrow),
                   ),
-                  if (watched) ...<Widget>[
+                  if (studied) ...<Widget>[
                     const SizedBox(width: AppSizes.spaceSm),
-                    const _WatchedBadge(),
+                    const _StudiedBadge(),
                   ],
                 ],
               ),
@@ -110,7 +92,7 @@ class VideoPlayerCard extends StatelessWidget {
                           ),
                         ),
                       const SizedBox(height: AppSizes.spaceSm),
-                      const _PlayGlyph(),
+                      const _BookGlyph(),
                     ],
                   ),
                 ),
@@ -160,11 +142,11 @@ class _EyebrowPill extends StatelessWidget {
   }
 }
 
-/// Badge hijau "Ditonton". Hijau punya kontras 1.20:1 terhadap putih
+/// Badge hijau "Dipahami". Hijau punya kontras 1.20:1 terhadap putih
 /// (`contrast_test.dart`), jadi teksnya tetap `ink` dan tidak pernah
 /// putih di atas hijau.
-class _WatchedBadge extends StatelessWidget {
-  const _WatchedBadge();
+class _StudiedBadge extends StatelessWidget {
+  const _StudiedBadge();
 
   @override
   Widget build(BuildContext context) {
@@ -178,16 +160,16 @@ class _WatchedBadge extends StatelessWidget {
         borderRadius: AppSizes.radius(AppSizes.radiusChip),
         border: Border.all(color: AppColors.ink, width: AppSizes.borderThin),
       ),
-      child: const Text('Ditonton', style: AppTextStyles.caption),
+      child: const Text('Dipahami', style: AppTextStyles.caption),
     );
   }
 }
 
-/// Tombol putar 44×44: bg putih, radius 10, border 3 px, bayangan
-/// `Offset(4, 4)`, ikon 16 px. Murni visual — gesture ada di kartu
-/// luar supaya tidak ada dua target sentuh yang saling tumpang tindih.
-class _PlayGlyph extends StatelessWidget {
-  const _PlayGlyph();
+/// Glyph buku 44×44: bg putih, radius 10, border 3 px, bayangan
+/// `Offset(4, 4)`, ikon 16 px. Murni visual — kartu tidak lagi jadi
+/// target sentuh karena tidak ada tautan keluar.
+class _BookGlyph extends StatelessWidget {
+  const _BookGlyph();
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +183,7 @@ class _PlayGlyph extends StatelessWidget {
         border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
         boxShadow: AppSizes.shadowCard,
       ),
-      child: const Icon(Icons.play_arrow_rounded, size: 16, color: AppColors.ink),
+      child: const Icon(Icons.menu_book, size: 16, color: AppColors.ink),
     );
   }
 }

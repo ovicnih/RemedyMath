@@ -26,5 +26,5 @@ class AppConstants {
   static const String keyProfile = 'remedimath.profile';
   static const String keySessions = 'remedimath.sessions';
   static const String keyLatestResult = 'remedimath.latest_result';
-  static const String keyWatchedVideos = 'remedimath.watched_videos';
+  static const String keyStudiedNodes = 'remedimath.studied_nodes';
 }

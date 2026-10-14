@@ -174,12 +174,12 @@ class _StudyPlanCard extends StatelessWidget {
   const _StudyPlanCard({
     required this.controller,
     required this.root,
-    required this.watched,
+    required this.studied,
   });
 
   final AppController controller;
   final ConceptNode root;
-  final bool watched;
+  final bool studied;
 
   @override
   Widget build(BuildContext context) {
@@ -195,16 +195,16 @@ class _StudyPlanCard extends StatelessWidget {
             icon: Icons.checklist,
             style: AppTextStyles.titleMd,
             trailing: Text(
-              '${watched ? 2 : 1}/2 Langkah',
+              '${studied ? 2 : 1}/2 Langkah',
               style: AppTextStyles.labelMd,
             ),
           ),
           const SizedBox(height: AppSizes.spaceMd),
           _StepTile(
             marker: 'LANGKAH 01',
-            title: 'Tonton konsep inti',
-            subtitle: 'Video singkat · ${root.videoDurationLabel}',
-            done: watched,
+            title: 'Pelajari konsep inti',
+            subtitle: '${root.keyPoints.length} poin kunci',
+            done: studied,
             enabled: true,
             onTap: () => Flows.openRemedial(context, root.id),
           ),
@@ -212,11 +212,11 @@ class _StudyPlanCard extends StatelessWidget {
           _StepTile(
             marker: 'LANGKAH 02',
             title: 'Kerjakan post-test',
-            subtitle: watched
-                ? '$postCount soal setelah video selesai'
-                : 'Buka setelah video selesai',
+            subtitle: studied
+                ? '$postCount soal setelah konsep dipelajari'
+                : 'Buka setelah konsep dipelajari',
             done: false,
-            enabled: watched,
+            enabled: studied,
             onTap: () => Flows.startPostTest(context, root.id),
           ),
           const SizedBox(height: AppSizes.spaceLg),
@@ -346,26 +346,25 @@ class _RouteCard extends StatelessWidget {
 
 /// Fitur lama yang dipertahankan (§7): kartu penguatan.
 class _EncourageCard extends StatelessWidget {
-  const _EncourageCard({required this.minutes});
-
-  final int minutes;
+  const _EncourageCard();
 
   @override
   Widget build(BuildContext context) {
-    return NeoCard(
+    return const NeoCard(
       child: Row(
         children: <Widget>[
-          const Icon(Icons.psychology_alt_outlined,
+          Icon(Icons.psychology_alt_outlined,
               size: 24, color: AppColors.accentBlue),
-          const SizedBox(width: AppSizes.spaceMd),
+          SizedBox(width: AppSizes.spaceMd),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('Normal & wajar!', style: AppTextStyles.titleSm),
+                Text('Normal & wajar!', style: AppTextStyles.titleSm),
                 Text(
                   'Banyak siswa kelas 10 mengalami kendala serupa di awal '
-                  'semester. Tuntaskan dalam $minutes menit ke depan.',
+                  'semester. Pelajari rumus inti dan poin kuncinya, lalu uji '
+                  'dengan post-test.',
                   style: AppTextStyles.bodyMd,
                 ),
               ],

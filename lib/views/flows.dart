@@ -77,7 +77,7 @@ class Flows {
             Text(
               s.passed
                   ? 'Hebat! Lanjutkan ke materi berikutnya pada rute belajarmu.'
-                  : 'Tonton ulang video dan perhatikan poin kunci, lalu coba lagi.',
+                  : 'Pelajari ulang konsep dan poin kunci, lalu coba lagi.',
               textAlign: TextAlign.center,
               style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
             ),

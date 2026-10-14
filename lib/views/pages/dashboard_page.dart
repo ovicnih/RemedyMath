@@ -63,8 +63,8 @@ class DashboardPage extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSizes.spaceXl),
                   _RecommendationCard(
-                    title: rec.videoTitle,
-                    durationLabel: rec.videoDurationLabel,
+                    title: rec.lessonTitle,
+                    points: rec.keyPoints.length,
                     onOpen: () => Flows.openRemedial(context, rec.id),
                   ),
                   const SizedBox(height: AppSizes.spaceXl),
@@ -329,18 +329,18 @@ class _Meta extends StatelessWidget {
   }
 }
 
-/// Kartu rekomendasi belajar: video berikutnya pada rute belajar.
+/// Kartu rekomendasi belajar: materi berikutnya pada rute belajar.
 ///
 /// Tidak ada di mockup, tapi punya fungsi informasi (`UI-REFERENCE.md` §7).
 class _RecommendationCard extends StatelessWidget {
   const _RecommendationCard({
     required this.title,
-    required this.durationLabel,
+    required this.points,
     required this.onOpen,
   });
 
   final String title;
-  final String durationLabel;
+  final int points;
   final VoidCallback onOpen;
 
   @override
@@ -359,7 +359,7 @@ class _RecommendationCard extends StatelessWidget {
               boxShadow: AppSizes.shadowCard,
             ),
             child: const Icon(
-              Icons.play_circle_fill,
+              Icons.menu_book,
               color: AppColors.ink,
               size: 32,
             ),
@@ -387,7 +387,7 @@ class _RecommendationCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSizes.spaceXs),
                 Text(
-                  '$title ($durationLabel)',
+                  '$title · $points poin kunci',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.bodyMd,

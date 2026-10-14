@@ -55,7 +55,7 @@ class RemedialTabPage extends StatelessWidget {
                     mastery: r.nodeMastery[path[i]],
                     step: i + 1,
                     isRoot: path[i] == r.rootCauseId,
-                    watched: c.isWatched(path[i]),
+                    studied: c.isStudied(path[i]),
                   ),
                 ),
             const SizedBox(height: 16),
@@ -70,7 +70,7 @@ class RemedialTabPage extends StatelessWidget {
                 child: _NodeTile(
                   node: n,
                   mastery: r?.nodeMastery[n.id],
-                  watched: c.isWatched(n.id),
+                  studied: c.isStudied(n.id),
                   prerequisites: n.prerequisites
                       .map((p) => c.graph.node(p)?.shortTitle ?? p)
                       .toList(),
@@ -87,7 +87,7 @@ class _NodeTile extends StatelessWidget {
   const _NodeTile({
     required this.node,
     required this.mastery,
-    required this.watched,
+    required this.studied,
     this.step,
     this.isRoot = false,
     this.prerequisites = const <String>[],
@@ -95,7 +95,7 @@ class _NodeTile extends StatelessWidget {
 
   final ConceptNode node;
   final double? mastery;
-  final bool watched;
+  final bool studied;
   final int? step;
   final bool isRoot;
   final List<String> prerequisites;
@@ -127,8 +127,8 @@ class _NodeTile extends StatelessWidget {
                     Text(
                       <String>[
                         if (isRoot) 'Akar masalah',
-                        '${node.videoDurationLabel} video',
-                        if (watched) 'sudah ditonton',
+                        '${node.keyPoints.length} poin kunci',
+                        if (studied) 'sudah dipelajari',
                         if (prerequisites.isNotEmpty) 'Prasyarat: ${prerequisites.join(', ')}',
                       ].join(' • '),
                       style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),

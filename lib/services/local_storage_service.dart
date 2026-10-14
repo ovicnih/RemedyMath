@@ -47,18 +47,18 @@ class LocalStorageService {
   Future<void> saveHistory(List<ThetaPoint> l) =>
       _p.setString(_keyHistory, jsonEncode(l.map((e) => e.toJson()).toList()));
 
-  Set<String> loadWatched() =>
-      (_p.getStringList(AppConstants.keyWatchedVideos) ?? <String>[]).toSet();
+  Set<String> loadStudied() =>
+      (_p.getStringList(AppConstants.keyStudiedNodes) ?? <String>[]).toSet();
 
-  Future<void> saveWatched(Set<String> s) =>
-      _p.setStringList(AppConstants.keyWatchedVideos, s.toList());
+  Future<void> saveStudied(Set<String> s) =>
+      _p.setStringList(AppConstants.keyStudiedNodes, s.toList());
 
   Future<void> clearAll() async {
     for (final String k in <String>[
       AppConstants.keyProfile,
       AppConstants.keyLatestResult,
       AppConstants.keySessions,
-      AppConstants.keyWatchedVideos,
+      AppConstants.keyStudiedNodes,
       _keyHistory,
     ]) {
       await _p.remove(k);

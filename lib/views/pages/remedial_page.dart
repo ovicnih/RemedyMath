@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
@@ -11,36 +10,14 @@ import '../flows.dart';
 import '../widgets/common.dart';
 import 'diagnosis_result_page.dart';
 
-/// Materi perbaikan: video mikro-learning, poin kunci, dan post-test.
+/// Materi perbaikan: kartu mikro-belajar (rumus + poin kunci) dan post-test.
 ///
-/// Susunan visual mengikuti `UI-REFERENCE.md` §4.4. Tombol buka YouTube dan
-/// tombol "Saya sudah menonton video ini" tetap dipertahankan (§7).
+/// Susunan visual mengikuti `UI-REFERENCE.md` §4.4. Fitur video YouTube
+/// dilepas agar aplikasi sepenuhnya offline (lihat `HISTORY.md` v2.4.0);
+/// penandaan "sudah dipelajari" kini lewat tombol eksplisit.
 class RemedialPage extends StatelessWidget {
   const RemedialPage({super.key, required this.nodeId});
   final String nodeId;
-
-  Future<void> _openVideo(BuildContext context, ConceptNode n) async {
-    final AppController c = context.read<AppController>();
-    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-    final Uri uri = Uri.parse(n.videoUrl);
-    bool ok = false;
-    try {
-      ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (_) {
-      ok = false;
-    }
-    // Hanya tandai ditonton kalau video benar-benar terbuka. Versi lama
-    // menandainya tanpa syarat, sehingga post-test tetap terbuka walau
-    // YouTube tidak pernah dibuka — lihat `TODO.md` "Perbaiki penandaan
-    // video yang terlalu optimistis".
-    if (ok) {
-      await c.markWatched(n.id);
-      return;
-    }
-    messenger.showSnackBar(const SnackBar(
-      content: Text('Tidak dapat membuka YouTube. Periksa koneksi internet.'),
-    ));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +28,7 @@ class RemedialPage extends StatelessWidget {
     }
     final List<String> path = c.latestResult?.learningPath ?? <String>[];
     final int pos = path.indexOf(nodeId);
-    final bool watched = c.isWatched(nodeId);
+    final bool studied = c.isStudied(nodeId);
     final int ptCount = c.content.postTests[nodeId]?.length ?? 0;
 
     return Scaffold(
@@ -73,29 +50,29 @@ class RemedialPage extends StatelessWidget {
               subtitle: 'Materi perbaikan · ${c.content.topic}',
             ),
             const SizedBox(height: AppSizes.spaceLg),
-            VideoPlayerCard(
+            ConceptCard(
               formula: n.correctPattern,
-              watched: watched,
-              onPlay: () => _openVideo(context, n),
+              studied: studied,
             ),
             const SizedBox(height: AppSizes.spaceLg),
-            _MisconceptionCard(
-              node: n,
-              onYouTube: () => _openVideo(context, n),
-            ),
+            _MisconceptionCard(node: n),
             const SizedBox(height: AppSizes.spaceLg),
             KeyPointList(points: n.keyPoints),
             const SizedBox(height: AppSizes.spaceLg),
+            if (!studied) ...<Widget>[
+              NeoButton(
+                expand: true,
+                icon: Icons.check_circle_outline,
+                label: 'Tandai sudah dipelajari',
+                onPressed: () => c.markStudied(nodeId),
+              ),
+              const SizedBox(height: AppSizes.spaceLg),
+            ],
             _PostTestCta(
-              watched: watched,
+              studied: studied,
               count: ptCount,
               onStart: () => Flows.startPostTest(context, nodeId),
             ),
-            if (!watched)
-              TextButton(
-                onPressed: () => c.markWatched(nodeId),
-                child: const Text('Saya sudah menonton video ini'),
-              ),
             const SizedBox(height: AppSizes.spaceSm),
             const _IrtNote(),
             const SizedBox(height: AppSizes.spaceSm),
@@ -165,10 +142,9 @@ class _StepHeading extends StatelessWidget {
 
 /// §4.4 item 3 kiri: kartu analisis miskonsepsi putih.
 class _MisconceptionCard extends StatelessWidget {
-  const _MisconceptionCard({required this.node, required this.onYouTube});
+  const _MisconceptionCard({required this.node});
 
   final ConceptNode node;
-  final VoidCallback onYouTube;
 
   @override
   Widget build(BuildContext context) {
@@ -182,52 +158,9 @@ class _MisconceptionCard extends StatelessWidget {
             color: AppColors.accentPink,
           ),
           const SizedBox(height: AppSizes.spaceMd),
-          Text(node.videoTitle, style: AppTextStyles.titleMd),
+          Text(node.lessonTitle, style: AppTextStyles.titleMd),
           const SizedBox(height: AppSizes.spaceSm),
           Text(node.summary, style: AppTextStyles.bodyMd.copyWith(height: 1.74)),
-          const SizedBox(height: AppSizes.spaceLg),
-          _CoachChip(node: node),
-          const SizedBox(height: AppSizes.spaceSm),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              onPressed: onYouTube,
-              icon: const Icon(Icons.smart_display, size: 18),
-              label: const Text('Buka di YouTube'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Chip pengajar: bg biru, radius 10, border 3 px, teks 14 w700.
-class _CoachChip extends StatelessWidget {
-  const _CoachChip({required this.node});
-
-  final ConceptNode node;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSizes.spaceMd),
-      decoration: BoxDecoration(
-        color: AppColors.accentBlue,
-        borderRadius: AppSizes.radius(AppSizes.radiusCard),
-        border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
-      ),
-      child: Row(
-        children: <Widget>[
-          const Icon(Icons.person, size: 20, color: AppColors.ink),
-          const SizedBox(width: AppSizes.spaceSm),
-          Expanded(
-            child: Text(
-              '${node.instructor} · ${node.instructorRole} · '
-              '${node.videoDurationLabel}',
-              style: AppTextStyles.labelMd,
-            ),
-          ),
         ],
       ),
     );
@@ -237,12 +170,12 @@ class _CoachChip extends StatelessWidget {
 /// §4.4 item 4: CTA post-test pink.
 class _PostTestCta extends StatelessWidget {
   const _PostTestCta({
-    required this.watched,
+    required this.studied,
     required this.count,
     required this.onStart,
   });
 
-  final bool watched;
+  final bool studied;
   final int count;
   final VoidCallback onStart;
 
@@ -257,19 +190,19 @@ class _PostTestCta extends StatelessWidget {
           const Text('Siap uji pemahaman?', style: AppTextStyles.titleMd),
           const SizedBox(height: AppSizes.spaceSm),
           Text(
-            watched
+            studied
                 ? 'Post-test adaptif $count soal memastikan tidak ada celah '
                     'konsep yang tertinggal.'
-                : 'Tonton video terlebih dahulu untuk membuka post-test.',
+                : 'Pelajari konsep inti terlebih dahulu untuk membuka post-test.',
             style: AppTextStyles.bodyMd,
           ),
           const SizedBox(height: AppSizes.spaceLg),
           NeoButton(
             expand: true,
             color: AppColors.surface,
-            icon: watched ? Icons.arrow_forward : Icons.lock_outline,
+            icon: studied ? Icons.arrow_forward : Icons.lock_outline,
             label: 'Mulai post-test',
-            onPressed: watched && count > 0 ? onStart : null,
+            onPressed: studied && count > 0 ? onStart : null,
           ),
         ],
       ),

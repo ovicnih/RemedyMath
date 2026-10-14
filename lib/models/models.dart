@@ -65,12 +65,7 @@ class ConceptNode {
     required this.misconception,
     required this.wrongPattern,
     required this.correctPattern,
-    required this.videoUrl,
-    required this.videoTitle,
-    required this.videoDurationLabel,
-    required this.videoDurationMinutes,
-    required this.instructor,
-    required this.instructorRole,
+    required this.lessonTitle,
     required this.summary,
     required this.keyPoints,
   });
@@ -83,12 +78,7 @@ class ConceptNode {
   final String misconception;
   final String wrongPattern;
   final String correctPattern;
-  final String videoUrl;
-  final String videoTitle;
-  final String videoDurationLabel;
-  final int videoDurationMinutes;
-  final String instructor;
-  final String instructorRole;
+  final String lessonTitle;
   final String summary;
   final List<KeyPoint> keyPoints;
 
@@ -103,12 +93,7 @@ class ConceptNode {
         misconception: (j['misconception'] ?? '') as String,
         wrongPattern: (j['wrongPattern'] ?? '') as String,
         correctPattern: (j['correctPattern'] ?? '') as String,
-        videoUrl: (j['videoUrl'] ?? '') as String,
-        videoTitle: (j['videoTitle'] ?? '') as String,
-        videoDurationLabel: (j['videoDurationLabel'] ?? '') as String,
-        videoDurationMinutes: ((j['videoDurationMinutes'] ?? 0) as num).toInt(),
-        instructor: (j['instructor'] ?? '') as String,
-        instructorRole: (j['instructorRole'] ?? '') as String,
+        lessonTitle: (j['lessonTitle'] ?? '') as String,
         summary: (j['summary'] ?? '') as String,
         keyPoints: ((j['keyPoints'] ?? <dynamic>[]) as List<dynamic>)
             .map((e) => KeyPoint.fromJson(e as Map<String, dynamic>))

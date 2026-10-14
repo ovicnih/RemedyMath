@@ -42,7 +42,7 @@ class DiagnosisResultPage extends StatelessWidget {
       );
     }
     final ConceptNode? root = c.rootCause;
-    final bool watched = root != null && c.isWatched(root.id);
+    final bool studied = root != null && c.isStudied(root.id);
 
     return Scaffold(
       appBar: remediAppBar(context, 'Hasil Diagnosis', showBack: true),
@@ -71,13 +71,13 @@ class DiagnosisResultPage extends StatelessWidget {
             else ...<Widget>[
               _RootCauseCard(controller: c, root: root),
               const SizedBox(height: AppSizes.spaceLg),
-              _StudyPlanCard(controller: c, root: root, watched: watched),
+              _StudyPlanCard(controller: c, root: root, studied: studied),
               if (r.learningPath.length > 1) ...<Widget>[
                 const SizedBox(height: AppSizes.spaceLg),
                 _RouteCard(controller: c, result: r, root: root),
               ],
               const SizedBox(height: AppSizes.spaceLg),
-              _EncourageCard(minutes: root.videoDurationMinutes),
+              const _EncourageCard(),
             ],
             const SizedBox(height: AppSizes.spaceLg),
             NeoButton(

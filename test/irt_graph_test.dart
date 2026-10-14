@@ -12,12 +12,7 @@ ConceptNode _n(String id, int level, List<String> pre) => ConceptNode(
       misconception: '',
       wrongPattern: '',
       correctPattern: '',
-      videoUrl: '',
-      videoTitle: '',
-      videoDurationLabel: '',
-      videoDurationMinutes: 0,
-      instructor: '',
-      instructorRole: '',
+      lessonTitle: '',
       summary: '',
       keyPoints: const <KeyPoint>[],
     );
