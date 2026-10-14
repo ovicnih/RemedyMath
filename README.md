@@ -30,14 +30,10 @@ berani) dengan tipografi Inter.
 | Beranda | Diagnostik |
 |---|---|
 | ![Tampilan Beranda RemedyMath](screenshots/beranda.png) | ![Tampilan halaman Diagnostik](screenshots/Diagnostik.png) |
-
-| Kuis | Remedial |
-|---|---|
+| **Kuis** | **Remedial** |
 | ![Tampilan pengerjaan soal kuis](screenshots/Soal.png) | ![Tampilan halaman Remedial](screenshots/Remedial.png) |
-
-| Progres |
-|---|
-| ![Tampilan halaman Progres](screenshots/Progress.png) |
+| **Progres** | *(tampilan setelah riwayat terisi)* |
+| ![Tampilan halaman Progres](screenshots/Progress.png) | |
 
 ## Langkah Menjalankan Proyek
 
