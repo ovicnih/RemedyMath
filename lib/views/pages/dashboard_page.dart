@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../core/formatters.dart';
 import '../../models/models.dart';
@@ -67,6 +68,7 @@ class DashboardPage extends StatelessWidget {
                       // Tanpa gradien (TASK 2.2).
                       color: AppColors.accentYellow,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: AppSizes.shadowCard,
                     ),
                     child: const Icon(Icons.play_circle_fill, color: AppColors.ink, size: 32),
                   ),
@@ -75,14 +77,13 @@ class DashboardPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(children: <Widget>[
-                          const Icon(Icons.tips_and_updates_outlined,
+                        const Row(children: <Widget>[
+                          Icon(Icons.tips_and_updates_outlined,
                               size: 18, color: AppColors.accentBlue),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                           Expanded(
                             child: Text('Rekomendasi Belajar Hari Ini',
-                                style: AppTextStyles.titleSm
-                                    .copyWith(color: AppColors.accentBlue)),
+                                style: AppTextStyles.titleSm),
                           ),
                         ]),
                         const SizedBox(height: 4),
@@ -213,7 +214,7 @@ class _MetricCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(r == null ? '–' : Formatters.percent(pct),
-                            style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue)),
+                            style: AppTextStyles.titleMd),
                         Text('Relatif Kelas', style: AppTextStyles.labelMd.copyWith(fontSize: 9)),
                       ],
                     ),
@@ -267,7 +268,7 @@ class _MetricCard extends StatelessWidget {
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text('Σ', style: AppTextStyles.titleLg.copyWith(color: AppColors.accentBlue)),
+                      child: const Text('Σ', style: AppTextStyles.titleLg),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -298,27 +299,26 @@ class _MetricCard extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: StatTile(
-                  icon: Icons.check_circle_outline,
+                child: StatCard(
+                  color: AppColors.accentGreen,
                   value: '${controller.masteredCount}',
-                  label: 'Topik Tuntas',
+                  label: 'Topik tuntas',
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSizes.spaceLg),
               Expanded(
-                child: StatTile(
-                  icon: Icons.sync_problem,
-                  iconColor: AppColors.accentPink,
+                child: StatCard(
+                  color: AppColors.accentPink,
                   value: '${controller.remedialCount}',
-                  label: 'Perlu Remedial',
+                  label: 'Perlu remedial',
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSizes.spaceLg),
               Expanded(
-                child: StatTile(
-                  icon: Icons.trending_up,
+                child: StatCard(
+                  color: AppColors.surface,
                   value: Formatters.percent(controller.averageAccuracy),
-                  label: 'Akurasi Rerata',
+                  label: 'Akurasi rata-rata',
                 ),
               ),
             ],
@@ -343,6 +343,7 @@ class _HeroCta extends StatelessWidget {
         // Tanpa gradien (TASK 2.2). Hero memakai warna solid aksen.
         color: AppColors.accentBlue,
         borderRadius: BorderRadius.circular(18),
+        boxShadow: AppSizes.shadowCard,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,15 +391,10 @@ class _HeroCta extends StatelessWidget {
                   ],
                 ),
               ),
-              FilledButton.icon(
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size(110, 50),
-                  backgroundColor: AppColors.accentYellow,
-                  foregroundColor: AppColors.ink,
-                ),
+              NeoButton(
+                icon: Icons.arrow_forward,
+                label: 'Mulai',
                 onPressed: onStart,
-                icon: const Icon(Icons.arrow_forward),
-                label: const Text('Mulai'),
               ),
             ],
           ),

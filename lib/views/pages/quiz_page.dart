@@ -174,8 +174,7 @@ class _QuizPageState extends State<QuizPage> {
                         Expanded(
                           child: Text.rich(TextSpan(children: <TextSpan>[
                             TextSpan(
-                                text: 'Soal ${_index + 1} ',
-                                style: AppTextStyles.titleLg.copyWith(color: AppColors.accentBlue)),
+                                text: 'Soal ${_index + 1} ', style: AppTextStyles.titleLg),
                             TextSpan(text: 'dari $total', style: AppTextStyles.bodyLg),
                           ])),
                         ),
@@ -188,15 +187,7 @@ class _QuizPageState extends State<QuizPage> {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(999),
-                      child: LinearProgressIndicator(
-                        value: (_index + 1) / total,
-                        minHeight: 10,
-                        backgroundColor: AppColors.surface,
-                        color: AppColors.accentBlue,
-                      ),
-                    ),
+                    NeoProgressBar(value: (_index + 1) / total, height: 10),
                     const SizedBox(height: 12),
                     Row(
                       children: <Widget>[
@@ -266,7 +257,7 @@ class _QuizPageState extends State<QuizPage> {
               for (int i = 0; i < q.options.length; i++)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: _OptionTile(
+                  child: AnswerOption(
                     letter: String.fromCharCode(65 + i),
                     text: q.options[i],
                     selected: _answers[_index] == i,
@@ -283,8 +274,7 @@ class _QuizPageState extends State<QuizPage> {
                           style: AppTextStyles.labelMd),
                     ),
                     Text(q.moduleLabel,
-                        style: AppTextStyles.mathInline
-                            .copyWith(fontSize: 12, color: AppColors.accentBlue)),
+                        style: AppTextStyles.mathInline.copyWith(fontSize: 12)),
                   ],
                 ),
               ),
@@ -321,20 +311,13 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: FilledButton(
+                          child: NeoButton(
+                            expand: true,
+                            icon: last ? Icons.check : Icons.arrow_forward,
+                            label: last ? 'Selesai' : 'Soal Berikutnya',
                             onPressed: last
                                 ? _confirmFinish
                                 : () => setState(() => _index++),
-                            child: FittedBox(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(last ? 'Selesai' : 'Soal Selanjutnya'),
-                                  const SizedBox(width: 6),
-                                  Icon(last ? Icons.check : Icons.arrow_forward),
-                                ],
-                              ),
-                            ),
                           ),
                         ),
                       ],
@@ -391,46 +374,6 @@ class _QuizPageState extends State<QuizPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _OptionTile extends StatelessWidget {
-  const _OptionTile({
-    required this.letter,
-    required this.text,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String letter;
-  final String text;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      onTap: onTap,
-      color: selected ? AppColors.surface : AppColors.surface,
-      border: Border.all(color: selected ? AppColors.accentBlue : AppColors.surface, width: 1.5),
-      child: Row(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: selected ? AppColors.ink : AppColors.surface,
-            child: Text(letter,
-                style: AppTextStyles.titleMd
-                    .copyWith(color: selected ? AppColors.ink : AppColors.ink)),
-          ),
-          const SizedBox(width: 16),
-          Expanded(child: Text(text, style: AppTextStyles.mathInline.copyWith(fontSize: 17))),
-          Icon(
-            selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-            color: selected ? AppColors.ink : AppColors.ink,
-          ),
-        ],
       ),
     );
   }

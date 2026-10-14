@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../core/formatters.dart';
 import '../../models/models.dart';
@@ -39,24 +40,27 @@ class DiagnosticPage extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: StatTile(
-                            icon: Icons.format_list_numbered,
-                            value: '${c.content.diagnosticQuestions.length}',
-                            label: 'Soal'),
+                        child: StatCard(
+                          color: AppColors.surface,
+                          value: '${c.content.diagnosticQuestions.length}',
+                          label: 'Soal',
+                        ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSizes.spaceLg),
                       Expanded(
-                        child: StatTile(
-                            icon: Icons.schedule,
-                            value: '${c.content.durationMinutes}',
-                            label: 'Menit'),
+                        child: StatCard(
+                          color: AppColors.surface,
+                          value: '${c.content.durationMinutes}',
+                          label: 'Menit',
+                        ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSizes.spaceLg),
                       Expanded(
-                        child: StatTile(
-                            icon: Icons.hub_outlined,
-                            value: '${c.graph.nodes.length}',
-                            label: 'Sub-konsep'),
+                        child: StatCard(
+                          color: AppColors.surface,
+                          value: '${c.graph.nodes.length}',
+                          label: 'Sub-konsep',
+                        ),
                       ),
                     ],
                   ),
@@ -79,10 +83,11 @@ class DiagnosticPage extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(height: 8),
-                  FilledButton.icon(
+                  NeoButton(
+                    expand: true,
+                    icon: Icons.play_arrow,
+                    label: r == null ? 'Mulai Tes Diagnostik' : 'Ulangi Tes Diagnostik',
                     onPressed: () => Flows.startDiagnostic(context),
-                    icon: const Icon(Icons.play_arrow),
-                    label: Text(r == null ? 'Mulai Tes Diagnostik' : 'Ulangi Tes Diagnostik'),
                   ),
                 ],
               ),

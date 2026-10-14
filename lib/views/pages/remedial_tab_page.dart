@@ -33,9 +33,11 @@ class RemedialTabPage extends StatelessWidget {
                 icon: Icons.assignment_outlined,
                 title: 'Belum ada rute belajar',
                 message: 'Kerjakan tes diagnostik agar RemedyMath dapat menyusun rute remedialmu.',
-                action: FilledButton(
+                action: NeoButton(
+                  expand: true,
+                  icon: Icons.play_arrow,
+                  label: 'Mulai Tes Diagnostik',
                   onPressed: () => Flows.startDiagnostic(context),
-                  child: const Text('Mulai Tes Diagnostik'),
                 ),
               )
             else if (path.isEmpty)
@@ -112,11 +114,8 @@ class _NodeTile extends StatelessWidget {
                 radius: 18,
                 backgroundColor: isRoot ? AppColors.accentPink : AppColors.surface,
                 child: step != null
-                    ? Text('$step',
-                        style: AppTextStyles.titleSm.copyWith(
-                            color: isRoot ? AppColors.ink : AppColors.accentBlue))
-                    : Text('L${node.level}',
-                        style: AppTextStyles.labelMd.copyWith(color: AppColors.accentBlue)),
+                    ? Text('$step', style: AppTextStyles.titleSm)
+                    : Text('L${node.level}', style: AppTextStyles.labelMd),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -145,14 +144,10 @@ class _NodeTile extends StatelessWidget {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(999),
-                    child: LinearProgressIndicator(
-                      value: mastery,
-                      minHeight: 8,
-                      backgroundColor: AppColors.surface,
-                      color: ok ? AppColors.accentGreen : AppColors.accentPink,
-                    ),
+                  child: NeoProgressBar(
+                    value: mastery,
+                    height: 8,
+                    color: ok ? AppColors.accentGreen : AppColors.accentPink,
                   ),
                 ),
                 const SizedBox(width: 10),

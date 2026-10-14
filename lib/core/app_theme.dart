@@ -32,6 +32,11 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
+      // Font default untuk seluruh subtree, termasuk widget Material yang
+      // tidak diberi style eksplisit. Token di `AppTextStyles` sudah
+      // menyebut family-nya sendiri, tapi baris ini menutup sisanya.
+      fontFamily: AppTextStyles.sans,
+      fontFamilyFallback: AppTextStyles.fallback,
       scaffoldBackgroundColor: AppColors.background,
       splashFactory: InkSparkle.splashFactory,
       appBarTheme: const AppBarTheme(
@@ -139,7 +144,13 @@ class AppTheme {
                   : AppColors.surface,
         ),
         checkColor: const WidgetStatePropertyAll<Color>(AppColors.ink),
-        side: const BorderSide(color: AppColors.ink, width: 1.4),
+        // `AppSizes.borderThick` (3) terlalu berat untuk kotak kecil
+        // CHECKBox, dan `borderHairline` (1) terlalu tipis di DPI 3. 2 px
+        // adalah token terdekat yang tetap bulat di semua densitas.
+        side: const BorderSide(
+          color: AppColors.ink,
+          width: AppSizes.borderThin,
+        ),
       ),
       // Token `radioBorder` tidak bisa dipasang lewat RadioThemeData
       // karena `RadioThemeData` tidak punya parameter `side`. Border-nya

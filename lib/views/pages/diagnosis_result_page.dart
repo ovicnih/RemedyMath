@@ -92,14 +92,14 @@ class DiagnosisResultPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Text(Formatters.theta(r.theta),
-                              style: AppTextStyles.statValue.copyWith(color: AppColors.accentBlue)),
+                              style: AppTextStyles.statValue),
                           Text(c.irt.levelLabel(r.theta), style: AppTextStyles.labelMd),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 18),
-                  ThetaScale(theta: r.theta, masteryTheta: AppConstants.masteryTheta),
+                  _ThetaBar(theta: r.theta),
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -111,10 +111,7 @@ class DiagnosisResultPage extends StatelessWidget {
                       children: <Widget>[
                         _stat('Materi', c.content.topic),
                         _stat('Selesai', '${r.diagnosticTotal} Soal'),
-                        _stat('Akurasi', Formatters.percent(r.accuracy),
-                            color: r.accuracy >= AppConstants.masteryRatio
-                                ? AppColors.accentGreen
-                                : AppColors.accentPink),
+                        _stat('Akurasi', Formatters.percent(r.accuracy)),
                       ],
                     ),
                   ),
@@ -139,7 +136,7 @@ class DiagnosisResultPage extends StatelessWidget {
                       'Rencana Belajar Cepat Menuju Tuntas',
                       icon: Icons.checklist,
                       trailing: Text('${watched ? 2 : 1}/2 Langkah',
-                          style: AppTextStyles.labelMd.copyWith(color: AppColors.accentBlue)),
+                          style: AppTextStyles.labelMd),
                     ),
                     const SizedBox(height: 12),
                     _StepTile(
@@ -204,8 +201,7 @@ class DiagnosisResultPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Normal & Wajar!',
-                              style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue)),
+                          const Text('Normal & Wajar!', style: AppTextStyles.titleMd),
                           Text(
                             'Banyak siswa kelas 10 mengalami kendala serupa di awal semester. Tuntaskan dalam ${root.videoDurationMinutes} menit ke depan.',
                             style: AppTextStyles.bodyMd,
@@ -217,18 +213,21 @@ class DiagnosisResultPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              FilledButton.icon(
+              NeoButton(
+                expand: true,
+                icon: Icons.play_arrow,
+                label: 'Tonton Video Penjelasan (${root.videoDurationLabel})',
                 onPressed: () => Flows.openRemedial(context, root.id),
-                icon: const Icon(Icons.play_arrow),
-                label: Text('Tonton Video Penjelasan (${root.videoDurationLabel})'),
               ),
             ],
             const SizedBox(height: 10),
-            OutlinedButton.icon(
+            NeoButton(
+              expand: true,
+              color: AppColors.surface,
+              icon: Icons.fact_check_outlined,
+              label: 'Lihat Pembahasan Lengkap Soal',
               onPressed: () => Navigator.of(context)
                   .push(MaterialPageRoute<void>(builder: (_) => const ReviewPage())),
-              icon: const Icon(Icons.fact_check_outlined),
-              label: const Text('Lihat Pembahasan Lengkap Soal'),
             ),
           ],
         ),
@@ -236,15 +235,17 @@ class DiagnosisResultPage extends StatelessWidget {
     );
   }
 
-  Widget _stat(String label, String value, {Color? color}) => Expanded(
+  Widget _stat(String label, String value) => Expanded(
         child: Column(
           children: <Widget>[
             Text(label, style: AppTextStyles.labelMd),
             const SizedBox(height: 2),
-            Text(value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.titleMd.copyWith(color: color)),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.titleMd,
+            ),
           ],
         ),
       );
@@ -258,8 +259,8 @@ class _RootCauseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<ConceptNode> chain = controller.graph.chainTo(root.id);
-    return AppCard(
-      border: const Border(top: BorderSide(color: AppColors.accentPink, width: 5)),
+    return NeoCard(
+      borderColor: AppColors.accentPink,
       padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -279,7 +280,7 @@ class _RootCauseCard extends StatelessWidget {
                     style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
                 const SizedBox(height: 6),
                 Text(root.title,
-                    style: AppTextStyles.titleMd.copyWith(color: AppColors.accentBlue, fontSize: 18)),
+                    style: AppTextStyles.titleMd.copyWith(fontSize: 18)),
                 const SizedBox(height: 10),
                 Wrap(
                   spacing: 6,
@@ -348,8 +349,7 @@ class _RootCauseCard extends StatelessWidget {
               const SizedBox(width: 4),
               Flexible(
                 child: Text(correct ? 'SOLUSI TEPAT' : 'POLA KELIRUMU',
-                    style: AppTextStyles.labelMd
-                        .copyWith(color: correct ? AppColors.accentGreen : AppColors.accentPink)),
+                    style: AppTextStyles.labelMd),
               ),
             ]),
             const SizedBox(height: 6),
@@ -422,6 +422,60 @@ class _StepTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Bar kemampuan theta — ganti `ThetaScale` (Tahap 3.5).
+///
+/// `ThetaScale` lama memakai `Stack` + `Positioned` untuk menggambar
+/// knob dan penanda batas tuntas. `AGENTS.md` §2 melarangnya untuk tata
+/// letak, dan bentuknya tidak sama dengan desain: desain §4.3 item 3
+/// hanya meminta progress bar biasa dengan dua label skala di bawahnya.
+///
+/// Batas tuntas tidak hilang — angka_theta batasnya tetap ditulis pada
+/// label tengah, jadi informasinya utuh tanpa perlu `Positioned`.
+class _ThetaBar extends StatelessWidget {
+  const _ThetaBar({required this.theta});
+
+  /// Skor theta saat ini.
+  final double theta;
+
+  /// Theta dinormalisasi ke rentang -3..+3, sama seperti `ThetaScale` lama.
+  double get _fraction => ((theta + 3) / 6).clamp(0.0, 1.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        NeoProgressBar(value: _fraction, height: 20),
+        const SizedBox(height: 6),
+        Row(
+          children: <Widget>[
+            const Expanded(
+              child: Text(
+                'Perlu pendampingan',
+                style: AppTextStyles.caption,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                'Batas tuntas (θ ≥ ${AppConstants.masteryTheta.toStringAsFixed(1)})',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.caption,
+              ),
+            ),
+            const Expanded(
+              child: Text(
+                'Mandiri',
+                textAlign: TextAlign.end,
+                style: AppTextStyles.caption,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

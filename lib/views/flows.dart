@@ -66,9 +66,7 @@ class Flows {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Text('Skor post-test', style: AppTextStyles.bodyMd),
-            Text('${s.score}/100',
-                style: AppTextStyles.statValue.copyWith(
-                    color: s.passed ? AppColors.accentGreen : AppColors.accentPink)),
+            Text('${s.score}/100', style: AppTextStyles.statValue),
             const SizedBox(height: 8),
             Text(
               'Skor Kemampuan IRT terbaru: θ = ${c.latestResult?.theta.toStringAsFixed(2) ?? '-'}',

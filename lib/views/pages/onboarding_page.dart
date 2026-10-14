@@ -52,9 +52,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: <Widget>[
                     const Center(child: AppLogo(size: 72)),
                     const SizedBox(height: 20),
-                    Text('RemedyMath',
+                    const Text('RemedyMath',
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.displayLg.copyWith(color: AppColors.accentBlue)),
+                        style: AppTextStyles.displayLg),
                     const SizedBox(height: 8),
                     Text(
                       'Asisten remediasi matematika SMA berbasis Item Response Theory & Knowledge Graph.',
@@ -93,10 +93,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       ),
                     ),
                     const SizedBox(height: 28),
-                    FilledButton.icon(
+                    NeoButton(
+                      expand: true,
+                      icon: Icons.arrow_forward,
+                      label: 'Mulai Belajar',
                       onPressed: _submit,
-                      icon: const Icon(Icons.arrow_forward),
-                      label: const Text('Mulai Belajar'),
                     ),
                     const SizedBox(height: 12),
                     Text(

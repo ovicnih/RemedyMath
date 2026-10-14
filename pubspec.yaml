@@ -40,3 +40,22 @@ flutter:
 
   assets:
     - assets/data/
+
+  # Font Inter (SIL Open Font License 1.1) — di-bundle supaya rendering
+  # sama persis di semua perangkat, termasuk Android yang stock tidak punya
+  # Inter dan akan jatuh ke Roboto bila font tidak di-bundle.
+  #
+  # Hanya empat weight yang perlu: Regular sebagai jaring pengaman untuk
+  # weight bawaan Material, lalu 500/700/900 sesuai token neobrutalism.
+  # Tidak ada italic karena tidak dipakai di desain.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-Black.ttf
+          weight: 900

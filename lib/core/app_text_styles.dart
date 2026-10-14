@@ -4,32 +4,33 @@ import 'app_colors.dart';
 
 /// Skala tipografi RemedyMath — gaya neobrutalism.
 ///
-/// Font **Arial** dengan fallback berurutan `Helvetica Neue` lalu
-/// `sans-serif`. Hanya tiga weight yang dipakai: **w900** (display,
-/// judul, tombol, angka), **w700** (label, caption, meta), dan
-/// **w500** (paragraf). Neobrutalism tidak memakai font tipis.
+/// Font **Inter**, di-bundle sebagai aset (lihat `pubspec.yaml`).
+///
+/// Kenapa Inter dan bukan Arial: keempat berkas desain di `1-Bahan/`
+/// memakai `fontFamily: 'Inter'` di seluruh 145 pemakaian, dan Inter
+/// berlisensi SIL Open Font License 1.1 sehingga bebas di-bundle.
+/// Arial milik Microsoft dan tidak boleh ikut redistribute di dalam APK.
+///
+/// Android stock tidak punya Inter, jadi tanpa bundling aplikasi akan
+/// jatuh ke Roboto dan tampilan tidak akan sama persis dengan desain.
+/// Karena itu Inter dikirim sebagai aset.
+///
+/// Hanya tiga weight yang dipakai: **w900** (display, judul, tombol,
+/// angka), **w700** (label, caption, meta), dan **w500** (paragraf).
+/// Neobrutalism tidak memakai font tipis.
 ///
 /// Rumus matematika memakai **font yang sama dengan weight 700**, bukan
 /// font monospace terpisah — lihat PLANNING.md §7.
-///
-/// ## Peringatan: Arial tidak ada di Android stock
-///
-/// Android stock memakai Roboto. Kalau `fontFamily: 'Arial'` tidak
-/// di-bundle, Android akan berjalan ke fallback pertama yang tersedia.
-/// Aplikasi tetap terbaca, hanya tampilannya bukan Arial.
-///
-/// Keputusan penanganan font ada di [TODO.md](TODO.md) — font Android
-/// belum diputuskan. Lihat PLANNING.md §7 untuk detail.
 class AppTextStyles {
   const AppTextStyles._();
 
-  /// Font utama. Di Android tanpa bundling, ini jatuh ke fallback.
-  static const String sans = 'Arial';
+  /// Nama keluarga font. Harus sama dengan `family:` di `pubspec.yaml`.
+  static const String sans = 'Inter';
 
-  /// Fallback berurutan. Dicoba satu per satu, per-glyph, sesuai
-  /// perilaku `TextStyle.fontFamilyFallback` di Flutter.
+  /// Fallback kalau Inter gagal dimuat. Di Android stock, `Roboto`
+  /// selalu ada dan paling dekat dengan Inter.
   static const List<String> fallback = <String>[
-    'Helvetica Neue',
+    'Roboto',
     'sans-serif',
   ];
 

@@ -10,6 +10,13 @@ import '../../models/models.dart';
 import '../flows.dart';
 import '../widgets/common.dart';
 
+/// Theta dinormalisasi ke rentang -3..+3 agar bisa dipakai langsung
+/// sebagai `value` [NeoProgressBar].
+///
+/// Fungsi ini menggantikan perhitungan inline di `ThetaScale` lama, yang
+/// dihapus pada Tahap 3.5 karena memakai `Stack` + `Positioned`.
+double _thetaFraction(double theta) => ((theta + 3) / 6).clamp(0.0, 1.0);
+
 /// Tab Progres: perkembangan θ, penguasaan materi, riwayat sesi, profil.
 class ProgressPage extends StatelessWidget {
   const ProgressPage({super.key});
@@ -55,7 +62,32 @@ class ProgressPage extends StatelessWidget {
                     const Text('Belum ada data. Kerjakan tes diagnostik terlebih dahulu.',
                         style: AppTextStyles.bodyMd)
                   else ...<Widget>[
-                    ThetaScale(theta: r.theta, masteryTheta: AppConstants.masteryTheta),
+                    NeoProgressBar(value: _thetaFraction(r.theta), height: 20),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: <Widget>[
+                        const Expanded(
+                          child: Text(
+                            'Perlu pendampingan',
+                            style: AppTextStyles.caption,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Batas tuntas (θ ≥ ${AppConstants.masteryTheta.toStringAsFixed(1)})',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.caption,
+                          ),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'Mandiri',
+                            textAlign: TextAlign.end,
+                            style: AppTextStyles.caption,
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 140,
@@ -123,16 +155,13 @@ class ProgressPage extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 4),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(999),
-                                child: LinearProgressIndicator(
-                                  value: r.nodeMastery[n.id],
-                                  minHeight: 8,
-                                  backgroundColor: AppColors.surface,
-                                  color: r.nodeMastery[n.id]! >= AppConstants.masteryRatio
-                                      ? AppColors.accentGreen
-                                      : AppColors.accentPink,
-                                ),
+                              NeoProgressBar(
+                                value: r.nodeMastery[n.id],
+                                height: 8,
+                                color: r.nodeMastery[n.id]! >=
+                                        AppConstants.masteryRatio
+                                    ? AppColors.accentGreen
+                                    : AppColors.accentPink,
                               ),
                             ],
                           ),
@@ -166,7 +195,7 @@ class ProgressPage extends StatelessWidget {
             AppCard(
               child: Row(
                 children: <Widget>[
-                  const ProfileAvatar(radius: 24),
+                  const ProfileAvatar(size: 48),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(

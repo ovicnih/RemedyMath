@@ -34,10 +34,8 @@ class ReviewPage extends StatelessWidget {
             final Question q = qs[i];
             final int? a = byId[q.id];
             final bool ok = q.isCorrect(a);
-            return AppCard(
-              border: Border(
-                left: BorderSide(color: ok ? AppColors.accentGreen : AppColors.accentPink, width: 4),
-              ),
+            return NeoCard(
+              borderColor: ok ? AppColors.accentGreen : AppColors.accentPink,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -60,8 +58,7 @@ class ReviewPage extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     'Jawabanmu: ${a == null ? '(kosong)' : '${String.fromCharCode(65 + a)}. ${q.options[a]}'}',
-                    style: AppTextStyles.mathInline
-                        .copyWith(color: ok ? AppColors.accentGreen : AppColors.accentPink),
+                    style: AppTextStyles.mathInline,
                   ),
                   Text(
                     'Kunci: ${String.fromCharCode(65 + q.answerIndex)}. ${q.options[q.answerIndex]}',

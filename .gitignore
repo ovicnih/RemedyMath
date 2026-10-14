@@ -53,6 +53,7 @@ app.*.map.json
 
 # Internal project documentation, planning, and testing notes
 /docs/
+/Save/
 
 # Local backup of the default Flutter template
 /_backup_default/
