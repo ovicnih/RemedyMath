@@ -25,7 +25,7 @@ class DiagnosticPage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
           children: <Widget>[
-            AppCard(
+            NeoCard(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,7 +94,7 @@ class DiagnosticPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             if (r != null)
-              AppCard(
+              NeoCard(
                 onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: (_) => const DiagnosisResultPage())),
                 child: Row(

@@ -51,7 +51,7 @@ class ProgressPage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
           children: <Widget>[
-            AppCard(
+            NeoCard(
               padding: const EdgeInsets.all(18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -133,7 +133,7 @@ class ProgressPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             if (r != null)
-              AppCard(
+              NeoCard(
                 padding: const EdgeInsets.all(18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -192,7 +192,7 @@ class ProgressPage extends StatelessWidget {
                   ),
                 ),
             const SizedBox(height: 16),
-            AppCard(
+            NeoCard(
               child: Row(
                 children: <Widget>[
                   const ProfileAvatar(size: 48),

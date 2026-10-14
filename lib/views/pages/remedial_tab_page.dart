@@ -103,7 +103,7 @@ class _NodeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool ok = mastery != null && mastery! >= AppConstants.masteryRatio;
-    return AppCard(
+    return NeoCard(
       onTap: () => Flows.openRemedial(context, node.id),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
