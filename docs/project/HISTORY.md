@@ -5,6 +5,67 @@ dan apa yang diverifikasi.
 
 ---
 
+## v2.5.0 - 2026-10-23 — Tahap 7 Penyempurnaan Pasca-UTS (TASK 7.1–7.2)
+
+### Konteks
+
+Menyelesaikan 8 tugas Tahap 7: perbaikan Hasil Diagnosis & Pembahasan,
+pemutaran video YouTube di dalam aplikasi, dan halaman Pengaturan (Profil &
+Logout). Aplikasi tidak lagi 100% offline karena memerlukan internet untuk
+streaming video YouTube.
+
+### 1. Hasil Diagnosis & Pembahasan (7.1.1–7.1.2)
+
+- `diagnosis_result_page.dart`: tombol "Lihat pembahasan lengkap soal"
+  dipindah ke bawah kartu θ (`_ThetaCard`), duplikat di bawah dihapus.
+- `review_page.dart`: baris "Kunci: ..." dihapus; diganti dua panel
+  "Yang salah" (pink, `wrongPattern`) dan "Yang benar" (hijau,
+  `correctPattern`) menggunakan `_PatternPanel` mirip diagnosis.
+
+### 2. Video YouTube di dalam aplikasi (7.1.3–7.1.4)
+
+- `pubspec.yaml`: `youtube_player_iframe ^5.2.2` sudah ada, digunakan untuk
+  pemutaran embedded.
+- `assets/data/knowledge_graph.json`: 6 simpul mendapat `videoId` dari
+  link pengguna:
+  - `n_operasi_bilangan`: `kal6qv98pMU`
+  - `n_tanda_negatif`: `PfSAn1CjXlk`
+  - `n_suku_sejenis`: `JeLYZ4IsBL0`
+  - `n_operasi_aljabar`: `kjBd97SKcU0`
+  - `n_persamaan_linear`: `S6ed5AjU-pw`
+  - `n_pemfaktoran`: `NFaVv42yRUE`
+- `models.dart`: `ConceptNode` tambah field `videoId?`.
+- `content_repository.dart`: parsing `videoId` dari JSON.
+- `diagnosis_result_sections.dart`: `_StudyPlanCard` diganti
+  `_VideoLessonCard` (stateful) dengan `YoutubePlayerController` +
+  `YoutubePlayer`; menampilkan video, judul pelajaran, ringkasan, dan CTA
+  post-test. Jika `videoId` kosong, tampilkan placeholder.
+
+### 3. Halaman Pengaturan (7.2.1–7.2.4)
+
+- `settings_page.dart` (baru): form profil (nama wajib, kelas, sekolah) +
+  tombol ganti foto via `image_picker` + Logout dengan dialog konfirmasi.
+- `models.dart`: `UserProfile` tambah `photoPath?`; `toJson`/`fromJson`
+  diperbarui.
+- `brand.dart`: `ProfileAvatar` menerima `photoPath` (tampil `Image.file`
+  dengan fallback inisial) dan `onTap` (buka SettingsPage).
+- `app_header.dart`: avatar diketuk → `Navigator.push(SettingsPage)`.
+- `AppController.resetAll()`: sudah ada, dipakai saat logout untuk
+  hapus semua data lokal lalu `pushAndRemoveUntil(OnboardingPage)`.
+
+### 4. Verifikasi
+
+| Yang dicek | Hasil |
+|---|---|
+| `flutter analyze` | `No issues found!` |
+| `flutter test` | 26/26 lulus |
+| `flutter build apk --debug` | sukses (`app-debug.apk`) |
+| `flutter build web` | sukses |
+
+`TASK.md` total `82/102`.
+
+---
+
 ## v2.4.1 - 2026-10-14 — README root: ringkasan, tangkapan layar, langkah menjalankan (TASK 6.1)
 
 ### Konteks

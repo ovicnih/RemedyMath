@@ -66,4 +66,8 @@ app.*.map.json
 
 # Temporary diagnostic harness, pending replacement by test/layout_test.dart
 /test/_diag_test.dart
-/Save/
+
+# Temporary local diagnostic scripts (disk-space investigation)
+/check_disk.ps1
+/check_ovic.ps1
+/check_users.ps1

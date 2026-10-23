@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
@@ -21,9 +24,14 @@ part 'diagnosis_result_sections.dart';
 ///
 /// Seksi berat dipisah ke `diagnosis_result_sections.dart` supaya tiap
 /// berkas tetap di bawah batas 500 baris (`AGENTS.md` §5).
-class DiagnosisResultPage extends StatelessWidget {
+class DiagnosisResultPage extends StatefulWidget {
   const DiagnosisResultPage({super.key});
 
+  @override
+  State<DiagnosisResultPage> createState() => _DiagnosisResultPageState();
+}
+
+class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
   @override
   Widget build(BuildContext context) {
     final AppController c = context.watch<AppController>();
@@ -59,6 +67,16 @@ class DiagnosisResultPage extends StatelessWidget {
             const SizedBox(height: AppSizes.spaceLg),
             _ThetaCard(controller: c, result: r),
             const SizedBox(height: AppSizes.spaceLg),
+            NeoButton(
+              expand: true,
+              color: AppColors.surface,
+              icon: Icons.fact_check_outlined,
+              label: 'Lihat pembahasan lengkap soal',
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const ReviewPage()),
+              ),
+            ),
+            const SizedBox(height: AppSizes.spaceLg),
             _StatsRow(result: r),
             const SizedBox(height: AppSizes.spaceLg),
             if (root == null)
@@ -71,7 +89,12 @@ class DiagnosisResultPage extends StatelessWidget {
             else ...<Widget>[
               _RootCauseCard(controller: c, root: root),
               const SizedBox(height: AppSizes.spaceLg),
-              _StudyPlanCard(controller: c, root: root, studied: studied),
+              _VideoLessonCard(
+                controller: c,
+                root: root,
+                studied: studied,
+                onVideoCompleted: () => setState(() {}),
+              ),
               if (r.learningPath.length > 1) ...<Widget>[
                 const SizedBox(height: AppSizes.spaceLg),
                 _RouteCard(controller: c, result: r, root: root),
@@ -79,16 +102,6 @@ class DiagnosisResultPage extends StatelessWidget {
               const SizedBox(height: AppSizes.spaceLg),
               const _EncourageCard(),
             ],
-            const SizedBox(height: AppSizes.spaceLg),
-            NeoButton(
-              expand: true,
-              color: AppColors.surface,
-              icon: Icons.fact_check_outlined,
-              label: 'Lihat pembahasan lengkap soal',
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => const ReviewPage()),
-              ),
-            ),
           ],
         ),
       ),

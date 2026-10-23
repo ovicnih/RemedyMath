@@ -68,6 +68,7 @@ class ConceptNode {
     required this.lessonTitle,
     required this.summary,
     required this.keyPoints,
+    this.videoId,
   });
 
   final String id;
@@ -81,6 +82,7 @@ class ConceptNode {
   final String lessonTitle;
   final String summary;
   final List<KeyPoint> keyPoints;
+  final String? videoId;
 
   factory ConceptNode.fromJson(Map<String, dynamic> j) => ConceptNode(
         id: j['id'] as String,
@@ -95,6 +97,7 @@ class ConceptNode {
         correctPattern: (j['correctPattern'] ?? '') as String,
         lessonTitle: (j['lessonTitle'] ?? '') as String,
         summary: (j['summary'] ?? '') as String,
+        videoId: j['videoId'] as String?,
         keyPoints: ((j['keyPoints'] ?? <dynamic>[]) as List<dynamic>)
             .map((e) => KeyPoint.fromJson(e as Map<String, dynamic>))
             .toList(),
@@ -106,11 +109,13 @@ class UserProfile {
     required this.name,
     required this.className,
     required this.school,
+    this.photoPath,
   });
 
   final String name;
   final String className;
   final String school;
+  final String? photoPath;
 
   String get initials {
     final List<String> parts =
@@ -126,12 +131,18 @@ class UserProfile {
   }
 
   Map<String, dynamic> toJson() =>
-      <String, dynamic>{'name': name, 'className': className, 'school': school};
+      <String, dynamic>{
+        'name': name,
+        'className': className,
+        'school': school,
+        'photoPath': photoPath,
+      };
 
   factory UserProfile.fromJson(Map<String, dynamic> j) => UserProfile(
         name: (j['name'] ?? '') as String,
         className: (j['className'] ?? 'SMA Kelas 10') as String,
         school: (j['school'] ?? '') as String,
+        photoPath: j['photoPath'] as String?,
       );
 }
 

@@ -33,7 +33,8 @@ tugas, semuanya `[ ]`.
 | 4 — Redesign halaman | 30 | 30 |
 | 5 — Verifikasi akhir | 4 | 9 |
 | 6 — Penyerahan | 2 | 3 |
-| **Total** | **74** | **94** |
+| 7 — Penyempurnaan | 8 | 8 |
+| **Total** | **82** | **102** |
 
 ---
 
@@ -65,9 +66,12 @@ Tahap 2 Part 3  ✅  Design Audit     → 3A.1 sudah diputuskan       (9 dari 9)
               │
               ▼
         Tahap 5  Verifikasi akhir              (2 dari 9 selesai)
-              │
-              ▼
+               │
+               ▼
         Tahap 6  Penyerahan
+               │
+               ▼
+        Tahap 7  Penyempurnaan pasca-UTS       (8 dari 8) ✅
 ```
 
 **Tahap 2 Part 3 Penuh.** Keenam pertanyaan terbuka di `DESIGN-AUDIT.md` §6
@@ -354,6 +358,42 @@ Rincian tiap baris ada di [UI-REFERENCE.md](UI-REFERENCE.md) §4.
 
 ---
 
+## Tahap 7 — Penyempurnaan Pasca-UTS
+
+Dua pekerjaan baru setelah penyerahan UTS. Semua status `[ ]` sampai fitur
+benar-benar berjalan dan terverifikasi.
+
+> **Catatan video.** Fitur video kembali lewat 7.1.3–7.1.4, tetapi kali ini
+> video diputar **di dalam aplikasi**. Ini menambah kebutuhan koneksi internet
+> dan satu paket pemutar; status "100% offline" pada `README.md` tidak lagi
+> berlaku setelah 7.1.3 dikerjakan. Link video per konsep disediakan pengguna.
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 7.1 | ✅ | Perbaikan Hasil Diagnosis, Pembahasan & Video | Lihat sub-tugas 7.1.1–7.1.4 |
+| 7.1.1 | ✅ | Pindahkan tombol "Lihat pembahasan lengkap soal" ke bawah kartu skor θ | Tombol tampil tepat setelah `_ThetaCard` di `diagnosis_result_page.dart`; tombol lama di bagian bawah dihapus |
+| 7.1.2 | ✅ | Sembunyikan kunci jawaban di halaman Pembahasan | Baris `Kunci: ...` di `review_page.dart` dihapus; diganti panel "Yang salah" (`wrongPattern`) vs "Yang benar" (`correctPattern`) dari konsep |
+| 7.1.3 | ✅ | Ganti "Rencana belajar" menjadi pemutar video YouTube | `_StudyPlanCard` di `diagnosis_result_sections.dart` diganti `_VideoLessonCard`; video diputar di dalam aplikasi via `youtube_player_iframe` |
+| 7.1.4 | ✅ | Pasang video YouTube per konsep | Enam konsep punya `videoId` di `knowledge_graph.json`; `ConceptNode.videoId` ditambahkan; `ContentRepository` mem-parse field baru |
+| 7.2 | ✅ | Menu Pengaturan (Profil & Logout) | Lihat sub-tugas 7.2.1–7.2.4 |
+| 7.2.1 | ✅ | Buat halaman `settings_page.dart` | Berisi entri Profil dan Logout; dibuka dengan mengetuk avatar di header |
+| 7.2.2 | ✅ | Profil dapat dilihat dan diubah | Form memakai `UserProfile`; validasi nama wajib diisi |
+| 7.2.3 | ✅ | Profil dapat mengunggah foto profil | `UserProfile` punya `photoPath`; tombol pilih gambar lewat `image_picker`; foto tampil di `ProfileAvatar` (header dan halaman Pengaturan) dengan fallback inisial bila kosong |
+| 7.2.4 | ✅ | Logout menghapus semua data | Dialog konfirmasi, lalu `resetAll()`, lalu kembali ke `OnboardingPage` |
+
+### Urutan kerja Tahap 7
+
+| Urut | Status | Task | Alasan urutan |
+|---|---|---|---|
+| 1 | ✅ | 7.1.1 Pindahkan tombol pembahasan | Perubahan satu blok di `diagnosis_result_page.dart`, tidak bergantung apa pun |
+| 2 | ✅ | 7.1.2 Sembunyikan kunci jawaban | Berdiri sendiri di `review_page.dart`; data `wrongPattern`/`correctPattern` sudah ada |
+| 3 | ✅ | 7.2 Menu Pengaturan | Tidak bergantung pada video; `resetAll()` sudah tersedia |
+| 4 | ✅ | 7.2.3 Unggah foto profil | Butuh `image_picker` + `photoPath`; tidak bergantung pada video |
+| 5 | ✅ | 7.1.3 Kartu video | Butuh 7.1.4 siap agar kartu punya sumber video |
+| 6 | ✅ | 7.1.4 Video per konsep | Link video dari pengguna sudah disediakan; paket pemutar terverifikasi |
+
+---
+
 ## Antrean Kerja — urutan trabajo berikutnya
 
 Antrean 1-8 sudah tuntas. Sisa antrean mulai dari Tahap 3.
@@ -373,6 +413,8 @@ Antrean 1-8 sudah tuntas. Sisa antrean mulai dari Tahap 3.
 | 11 | ✅ | **Tahap 4** 4.1–4.30 | Selesai: Beranda, Kuis, Hasil Diagnosis, Remedial, lepas fitur video |
 | 12 | `[ ]` | **Tahap 5** 5.3–5.9 | Verifikasi, termasuk `flutter build apk --debug` |
 | 13 | `[ ]` | **Tahap 6** 6.2 | Integrasi logo — `AppLogo` masih glyph teks `'Σ'` |
+| 14 | `[ ]` | **7.1** Hasil Diagnosis, Pembahasan & Video | Menunggu link video dari pengguna untuk 7.1.4 |
+| 15 | `[ ]` | **7.2** Menu Pengaturan | Profil (termasuk unggah foto) + Logout; tidak bergantung pada 7.1 |
 
 ---
 

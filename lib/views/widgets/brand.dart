@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -73,8 +77,15 @@ class AppLogo extends StatelessWidget {
 /// Default diameter 36 sesuai desain. Inisial diambil dari
 /// [AppController] supaya pemanggil tidak perlu mengirimnya; [initials]
 /// bisa dipakai untuk override di preview atau test.
+/// Mendukung [photoPath] untuk menampilkan foto profil dari galeri.
 class ProfileAvatar extends StatelessWidget {
-  const ProfileAvatar({super.key, this.initials, this.size = 36});
+  const ProfileAvatar({
+    super.key,
+    this.initials,
+    this.size = 36,
+    this.photoPath,
+    this.onTap,
+  });
 
   /// Inisial profil. Kalau `null`, dibaca dari [AppController].
   final String? initials;
@@ -82,27 +93,80 @@ class ProfileAvatar extends StatelessWidget {
   /// Diameter lingkaran. Default 36 sesuai desain.
   final double size;
 
+  /// Path foto profil lokal (dari image_picker). Kalau null, tampilkan inisial.
+  final String? photoPath;
+
+  /// Callback saat avatar diketuk (mis. buka halaman Pengaturan).
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     final String resolved = initials ??
         context.select<AppController, String>(
           (AppController c) => c.profile?.initials ?? '?',
         );
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.accentPink,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
-      ),
-      child: Text(
-        resolved,
-        style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w900),
+
+    Widget child;
+    if (photoPath != null && photoPath!.isNotEmpty) {
+      if (kIsWeb) {
+        child = _buildWebImage(resolved);
+      } else {
+        child = ClipOval(
+          child: Image.file(
+            File(photoPath!),
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => _initialsWidget(resolved),
+          ),
+        );
+      }
+    } else {
+      child = _initialsWidget(resolved);
+    }
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(size / 2),
+      child: Container(
+        width: size,
+        height: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.accentPink,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
+        ),
+        child: child,
       ),
     );
   }
+
+  Widget _buildWebImage(String fallback) {
+    // photoPath is base64 on web
+    if (photoPath == null || photoPath!.isEmpty) {
+      return _initialsWidget(fallback);
+    }
+    try {
+      final bytes = base64Decode(photoPath!);
+      return ClipOval(
+        child: Image.memory(
+          bytes,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => _initialsWidget(fallback),
+        ),
+      );
+    } catch (_) {
+      return _initialsWidget(fallback);
+    }
+  }
+
+  Widget _initialsWidget(String text) => Text(
+        text,
+        style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w900),
+      );
 }
 
 /// AppBar standar.

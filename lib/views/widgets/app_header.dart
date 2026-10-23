@@ -5,6 +5,7 @@ import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
+import '../../views/pages/settings_page.dart';
 import 'brand.dart';
 
 /// Header aplikasi: logo + wordmark + badge kelas + avatar.
@@ -45,7 +46,7 @@ class AppHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: AppColors.surface,
-      // `foregroundDecoration` dipakai supaya border tidak ikut ter-*paint*
+      // `foregroundDecoration` dipakai supaya border tidak ikut ter-*paint`
       // di atas isi. `Container` akan menolak `decoration` dan
       // `foregroundDecoration` bersama-sama.
       foregroundDecoration: showBorder
@@ -57,17 +58,21 @@ class AppHeader extends StatelessWidget {
         horizontal: AppSizes.spaceLg,
         vertical: AppSizes.spaceMd,
       ),
-      child: const SafeArea(
+      child: SafeArea(
         bottom: false,
         child: Row(
           children: <Widget>[
-            AppLogo(),
-            SizedBox(width: AppSizes.spaceMd),
-            Expanded(child: _Wordmark()),
-            SizedBox(width: AppSizes.spaceSm),
-            ClassBadge(),
-            SizedBox(width: AppSizes.spaceSm),
-            ProfileAvatar(),
+            const AppLogo(),
+            const SizedBox(width: AppSizes.spaceMd),
+            Expanded(child: const _Wordmark()),
+            const SizedBox(width: AppSizes.spaceSm),
+            const ClassBadge(),
+            const SizedBox(width: AppSizes.spaceSm),
+            ProfileAvatar(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const SettingsPage()),
+              ),
+            ),
           ],
         ),
       ),
