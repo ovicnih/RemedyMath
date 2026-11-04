@@ -71,3 +71,5 @@ app.*.map.json
 /check_disk.ps1
 /check_ovic.ps1
 /check_users.ps1
+docs/project/HISTORY.md
+docs/project/TASK.md
