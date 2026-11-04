@@ -1,49 +1,5 @@
 part of 'diagnosis_result_page.dart';
 
-/// §4.3 item 4: tiga stat card kuning/pink/hijau.
-class _StatsRow extends StatelessWidget {
-  const _StatsRow({required this.result});
-
-  final DiagnosticResult result;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: StatCard(
-            color: AppColors.accentYellow,
-            value: '${result.diagnosticTotal}',
-            label: 'Soal selesai',
-            valueStyle: AppTextStyles.statValue,
-            labelStyle: AppTextStyles.labelMd,
-          ),
-        ),
-        const SizedBox(width: AppSizes.spaceLg),
-        Expanded(
-          child: StatCard(
-            color: AppColors.accentPink,
-            value: Formatters.percent(result.accuracy),
-            label: 'Akurasi',
-            valueStyle: AppTextStyles.statValue,
-            labelStyle: AppTextStyles.labelMd,
-          ),
-        ),
-        const SizedBox(width: AppSizes.spaceLg),
-        Expanded(
-          child: StatCard(
-            color: AppColors.accentGreen,
-            value: Formatters.theta(result.theta),
-            label: 'Skor theta',
-            valueStyle: AppTextStyles.statValue,
-            labelStyle: AppTextStyles.labelMd,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 /// §4.3 item 5: kartu akar masalah, callout konsep, dan dua pola.
 class _RootCauseCard extends StatelessWidget {
   const _RootCauseCard({required this.controller, required this.root});
@@ -169,202 +125,11 @@ class _PatternPanel extends StatelessWidget {
   }
 }
 
-/// §4.3 item 6: kartu video pembelajaran (menggantikan rencana belajar).
-class _VideoLessonCard extends StatefulWidget {
-  const _VideoLessonCard({
-    required this.controller,
-    required this.root,
-    required this.studied,
-    required this.onVideoCompleted,
-  });
-
-  final AppController controller;
-  final ConceptNode root;
-  final bool studied;
-  final VoidCallback onVideoCompleted;
-
-  @override
-  State<_VideoLessonCard> createState() => _VideoLessonCardState();
-}
-
-class _VideoLessonCardState extends State<_VideoLessonCard> {
-  late final YoutubePlayerController _videoController;
-  bool _videoCompleted = false;
-  Timer? _stateCheckTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    final String? videoId = widget.root.videoId;
-    _videoController = YoutubePlayerController(
-      params: const YoutubePlayerParams(
-        showControls: true,
-        showFullscreenButton: true,
-      ),
-    );
-    if (videoId != null && videoId.isNotEmpty) {
-      _videoController.loadVideoById(videoId: videoId);
-    }
-    _startStateChecking();
-  }
-
-  void _startStateChecking() {
-    _stateCheckTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!_videoCompleted &&
-          _videoController.value.playerState == PlayerState.ended) {
-        timer.cancel();
-        setState(() => _videoCompleted = true);
-        // Mark as studied when video ends
-        widget.controller.markStudied(widget.root.id);
-        // Notify parent to rebuild
-        widget.onVideoCompleted();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _stateCheckTimer?.cancel();
-    _videoController.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final int postCount = widget.controller.content.postTests[widget.root.id]?.length ?? 5;
-    final String? videoId = widget.root.videoId;
-    final bool isStudied = widget.studied || _videoCompleted;
-
-    return NeoCard(
-      color: AppColors.accentYellow,
-      padding: const EdgeInsets.all(AppSizes.spaceXl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          SectionTitle(
-            'Video pembelajaran',
-            icon: Icons.play_circle_outline,
-            style: AppTextStyles.titleMd,
-            trailing: videoId != null
-                ? const _VideoBadge()
-                : Text(
-                    'Video belum tersedia',
-                    style: AppTextStyles.labelMd.copyWith(color: AppColors.ink.withValues(alpha: 0.6)),
-                  ),
-          ),
-          const SizedBox(height: AppSizes.spaceMd),
-          if (videoId != null) ...<Widget>[
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: ClipRRect(
-                borderRadius: AppSizes.radius(AppSizes.radiusCard),
-                child: YoutubePlayer(
-                  controller: _videoController,
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSizes.spaceMd),
-            Text(
-              widget.root.lessonTitle,
-              style: AppTextStyles.titleSm,
-            ),
-            const SizedBox(height: AppSizes.spaceXs),
-            Text(
-              widget.root.summary,
-              style: AppTextStyles.bodyMd,
-            ),
-            if (_videoCompleted) ...<Widget>[
-              const SizedBox(height: AppSizes.spaceMd),
-              const Text(
-                '✓ Video selesai ditonton! Post-test sudah bisa dibuka.',
-                style: AppTextStyles.labelMd,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ] else ...<Widget>[
-            Container(
-              height: 180,
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: AppSizes.radius(AppSizes.radiusCard),
-                border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
-              ),
-              child: const Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.video_library_outlined, size: 48, color: AppColors.ink),
-                    SizedBox(height: 8),
-                    Text('Video belum ditautkan untuk konsep ini', style: AppTextStyles.bodyMd),
-                  ],
-                ),
-              ),
-            ),
-          ],
-          const SizedBox(height: AppSizes.spaceLg),
-          // CTA Post-test
-          NeoCard(
-            color: AppColors.accentPink,
-            padding: const EdgeInsets.all(AppSizes.spaceXl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const Text('Siap uji pemahaman?', style: AppTextStyles.titleMd),
-                const SizedBox(height: AppSizes.spaceSm),
-                Text(
-                  isStudied
-                      ? 'Post-test adaptif $postCount soal memastikan tidak ada celah konsep yang tertinggal.'
-                      : 'Tonton video sampai selesai untuk membuka post-test.',
-                  style: AppTextStyles.bodyMd,
-                ),
-                const SizedBox(height: AppSizes.spaceLg),
-                NeoButton(
-                  expand: true,
-                  color: AppColors.surface,
-                  icon: isStudied ? Icons.arrow_forward : Icons.lock_outline,
-                  label: 'Mulai post-test',
-                  onPressed: isStudied && postCount > 0
-                      ? () => Flows.startPostTest(context, widget.root.id)
-                      : null,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Badge kecil "Video" di sebelah judul.
-class _VideoBadge extends StatelessWidget {
-  const _VideoBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.spaceSm,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.accentBlue,
-        borderRadius: AppSizes.radius(AppSizes.radiusChip),
-        border: Border.all(color: AppColors.ink, width: AppSizes.borderThin),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const Icon(Icons.play_arrow, size: 12, color: AppColors.ink),
-          const SizedBox(width: AppSizes.spaceXs),
-          Text('Video', style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w900)),
-        ],
-      ),
-    );
-  }
-}
-
-/// Fitur lama yang dipertahankan (§7): rute belajar lengkap.
+/// Rute Belajar Lengkap (audit §5–§7): satu bagian utama, tanpa kartu
+/// video terpisah. Item menunjukkan status urutan (terkunki · belum
+/// dimulai · video selesai · tuntas) dan sumber persentase (§7):
+/// hasil post-test bila pernah dikerjakan, else penguasaan awal
+/// (diagnostik), else "Belum dinilai".
 class _RouteCard extends StatelessWidget {
   const _RouteCard({
     required this.controller,
@@ -389,25 +154,122 @@ class _RouteCard extends StatelessWidget {
             style: AppTextStyles.titleMd,
           ),
           const SizedBox(height: AppSizes.spaceSm),
-          for (final String id in result.learningPath)
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(
-                id == root.id ? Icons.flag : Icons.circle_outlined,
-                color: id == root.id ? AppColors.accentPink : AppColors.ink,
-              ),
-              title: Text(
-                controller.graph.node(id)?.title ?? id,
-                style: AppTextStyles.bodyMd,
-              ),
-              subtitle: Text(
-                'Penguasaan ${Formatters.percent(result.nodeMastery[id] ?? 0)}',
-                style: AppTextStyles.labelMd,
-              ),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => Flows.openRemedial(context, id),
+          for (int i = 0; i < result.learningPath.length; i++)
+            _RouteItem(
+              controller: controller,
+              result: result,
+              nodeId: result.learningPath[i],
+              step: i + 1,
+              isRoot: result.learningPath[i] == root.id,
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// Satu baris rute: status urutan + sumber persentase + tindakan.
+class _RouteItem extends StatelessWidget {
+  const _RouteItem({
+    required this.controller,
+    required this.result,
+    required this.nodeId,
+    required this.step,
+    required this.isRoot,
+  });
+
+  final AppController controller;
+  final DiagnosticResult result;
+  final String nodeId;
+  final int step;
+  final bool isRoot;
+
+  @override
+  Widget build(BuildContext context) {
+    final ConceptNode? node = controller.graph.node(nodeId);
+    final bool studied = controller.isStudied(nodeId);
+    final RemedialSession? session = controller.sessionFor(nodeId);
+    final bool finished = controller.isFinished(nodeId);
+    final bool locked = !controller.isRouteUnlocked(nodeId);
+
+    // (§7) Sumber persentase: hasil post-test > penguasaan awal
+    // (diagnostik) > belum dinilai. 0% tetap tampil sebagai 0%.
+    final String masteryLine;
+    final double? barValue;
+    if (session != null) {
+      barValue = session.score / 100;
+      masteryLine = 'Hasil post-test: ${session.score}% · '
+          '${session.passed ? 'lulus' : 'belum lulus'}';
+    } else if (result.nodeMastery[nodeId] != null) {
+      barValue = result.nodeMastery[nodeId];
+      masteryLine = 'Penguasaan awal: ${Formatters.percent(barValue!)}';
+    } else {
+      barValue = null;
+      masteryLine = 'Belum dinilai';
+    }
+
+    final String statusLine;
+    final IconData statusIcon;
+    if (!studied) {
+      statusLine = 'Belum dimulai';
+      statusIcon = Icons.circle_outlined;
+    } else if (finished) {
+      statusLine = 'Tuntas';
+      statusIcon = Icons.check_circle;
+    } else {
+      statusLine = 'Video selesai · menunggu post-test';
+      statusIcon = Icons.hourglass_top;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSizes.spaceMd),
+      child: NeoCard(
+        padding: const EdgeInsets.all(AppSizes.spaceLg),
+        onTap: () => Flows.openRemedial(context, nodeId),
+        child: Row(
+          children: <Widget>[
+            CircleAvatar(
+              radius: 16,
+              backgroundColor:
+                  locked ? AppColors.surface : AppColors.accentYellow,
+              child: locked
+                  ? const Icon(Icons.lock, size: 14, color: AppColors.ink)
+                  : Text('$step', style: AppTextStyles.caption),
+            ),
+            const SizedBox(width: AppSizes.spaceMd),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    node?.title ?? nodeId,
+                    style: AppTextStyles.bodyMd
+                        .copyWith(fontWeight: FontWeight.w900),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: AppSizes.spaceXs),
+                  Text(statusLine, style: AppTextStyles.labelMd),
+                  Text(
+                    isRoot ? 'Akar masalah · $masteryLine' : masteryLine,
+                    style: AppTextStyles.labelMd,
+                  ),
+                  if (barValue != null) ...<Widget>[
+                    const SizedBox(height: AppSizes.spaceXs),
+                    NeoProgressBar(
+                      value: barValue,
+                      height: 6,
+                      color: barValue >= AppConstants.masteryRatio
+                          ? AppColors.accentGreen
+                          : AppColors.accentPink,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            Icon(statusIcon, size: 20, color: AppColors.ink),
+          ],
+        ),
       ),
     );
   }

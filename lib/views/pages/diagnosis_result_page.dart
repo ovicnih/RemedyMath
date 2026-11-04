@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_constants.dart';
 import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../core/formatters.dart';
@@ -50,7 +48,6 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
       );
     }
     final ConceptNode? root = c.rootCause;
-    final bool studied = root != null && c.isStudied(root.id);
 
     return Scaffold(
       appBar: remediAppBar(context, 'Hasil Diagnosis', showBack: true),
@@ -65,7 +62,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
           children: <Widget>[
             const _Heading(),
             const SizedBox(height: AppSizes.spaceLg),
-            _ThetaCard(controller: c, result: r),
+            _ScoreCard(controller: c, result: r),
             const SizedBox(height: AppSizes.spaceLg),
             NeoButton(
               expand: true,
@@ -77,7 +74,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
               ),
             ),
             const SizedBox(height: AppSizes.spaceLg),
-            _StatsRow(result: r),
+            _ThetaNoteCard(controller: c, result: r),
             const SizedBox(height: AppSizes.spaceLg),
             if (root == null)
               const EmptyState(
@@ -89,16 +86,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
             else ...<Widget>[
               _RootCauseCard(controller: c, root: root),
               const SizedBox(height: AppSizes.spaceLg),
-              _VideoLessonCard(
-                controller: c,
-                root: root,
-                studied: studied,
-                onVideoCompleted: () => setState(() {}),
-              ),
-              if (r.learningPath.length > 1) ...<Widget>[
-                const SizedBox(height: AppSizes.spaceLg),
-                _RouteCard(controller: c, result: r, root: root),
-              ],
+              _RouteCard(controller: c, result: r, root: root),
               const SizedBox(height: AppSizes.spaceLg),
               const _EncourageCard(),
             ],
@@ -137,9 +125,79 @@ class _Heading extends StatelessWidget {
   }
 }
 
-/// §4.3 item 3: kartu theta biru.
-class _ThetaCard extends StatelessWidget {
-  const _ThetaCard({required this.controller, required this.result});
+/// §4.3 item 3: kartu skor diagnostik (audit §8).
+///
+/// Hierarki (audit §8): skor diagnostik `x/100`, jumlah benar, kesimpulan
+/// sederhana. Skor = `(benar / total) × 100` dibulatkan — rumus tetap
+/// [DiagnosticResult.accuracy], tidak dicampur dengan theta.
+class _ScoreCard extends StatelessWidget {
+  const _ScoreCard({required this.controller, required this.result});
+
+  final AppController controller;
+  final DiagnosticResult result;
+
+  @override
+  Widget build(BuildContext context) {
+    final int score = Formatters.score(result.accuracy);
+    final bool strong = controller.irt.isMastered(result.theta);
+    return NeoCard(
+      color: AppColors.accentBlue,
+      padding: const EdgeInsets.all(AppSizes.spaceXl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              const Expanded(
+                child: Text(
+                  'Skor diagnostik',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.titleLg,
+                ),
+              ),
+              Text('$score/100', style: AppTextStyles.displayNum),
+            ],
+          ),
+          const SizedBox(height: AppSizes.spaceXs),
+          Text(
+            '${result.diagnosticCorrect} dari '
+            '${result.diagnosticTotal} soal benar',
+            style: AppTextStyles.labelMd,
+          ),
+          const SizedBox(height: AppSizes.spaceMd),
+          NeoProgressBar(value: result.accuracy, height: 12),
+          const SizedBox(height: AppSizes.spaceMd),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.spaceMd,
+              vertical: AppSizes.spaceXs,
+            ),
+            decoration: BoxDecoration(
+              color: strong ? AppColors.accentGreen : AppColors.accentPink,
+              borderRadius: AppSizes.radius(AppSizes.radiusChip),
+              border: Border.all(
+                  color: AppColors.ink, width: AppSizes.borderThin),
+            ),
+            child: Text(
+              strong
+                  ? 'Konsep dasar sudah kuat'
+                  : 'Perlu penguatan konsep dasar',
+              style:
+                  AppTextStyles.labelMd.copyWith(fontWeight: FontWeight.w900),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Informasi tambahan θ (audit §8): tetap akurat, disertai penjelasan
+/// singkat, tidak lagi menjadi kartu utama.
+class _ThetaNoteCard extends StatelessWidget {
+  const _ThetaNoteCard({required this.controller, required this.result});
 
   final AppController controller;
   final DiagnosticResult result;
@@ -150,91 +208,31 @@ class _ThetaCard extends StatelessWidget {
     final TextStyle scale =
         AppTextStyles.caption.copyWith(fontWeight: FontWeight.w900);
     return NeoCard(
-      color: AppColors.accentBlue,
       padding: const EdgeInsets.all(AppSizes.spaceXl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _StatusChip(mastered: controller.irt.isMastered(result.theta)),
-          const SizedBox(height: AppSizes.spaceMd),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text('Skor kemampuan (θ)',
-                        style: AppTextStyles.titleLg),
-                    const SizedBox(height: AppSizes.spaceXs),
-                    Text(
-                      '${controller.content.topic} · '
-                      '${result.diagnosticTotal} soal selesai',
-                      style: AppTextStyles.labelMd,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppSizes.spaceMd),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(Formatters.theta(result.theta),
-                      style: AppTextStyles.displayNum),
-                  Text(controller.irt.levelLabel(result.theta),
-                      style: AppTextStyles.labelMd),
-                ],
-              ),
-            ],
+          Text(
+            'θ = ${Formatters.theta(result.theta)} · '
+            '${controller.irt.levelLabel(result.theta)}',
+            style: AppTextStyles.labelMd.copyWith(fontWeight: FontWeight.w900),
           ),
-          const SizedBox(height: AppSizes.spaceLg),
-          NeoProgressBar(value: fraction, height: 20),
+          const SizedBox(height: AppSizes.spaceXs),
+          const Text(
+            'Theta adalah estimasi kemampuan berdasarkan model IRT. '
+            'Nilai negatif bukan berarti poinmu dikurangi.',
+            style: AppTextStyles.labelMd,
+          ),
+          const SizedBox(height: AppSizes.spaceSm),
+          NeoProgressBar(value: fraction, height: 10),
           const SizedBox(height: AppSizes.spaceSm),
           Row(
             children: <Widget>[
               Expanded(child: Text('Perlu pendampingan', style: scale)),
               Expanded(
-                child: Text('Mandiri',
-                    textAlign: TextAlign.end, style: scale),
+                child: Text('Mandiri', textAlign: TextAlign.end, style: scale),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Chip status di dalam kartu theta.
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.mastered});
-
-  final bool mastered;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.spaceMd,
-        vertical: AppSizes.spaceXs,
-      ),
-      decoration: BoxDecoration(
-        color: mastered ? AppColors.accentGreen : AppColors.accentPink,
-        borderRadius: AppSizes.radius(AppSizes.radiusChip),
-        border: Border.all(color: AppColors.ink, width: AppSizes.borderThin),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(
-            mastered ? Icons.check_circle_outline : Icons.tune,
-            size: 16,
-            color: AppColors.ink,
-          ),
-          const SizedBox(width: AppSizes.spaceXs),
-          Text(
-            mastered ? 'Tuntas' : 'Perlu penguatan',
-            style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w900),
           ),
         ],
       ),

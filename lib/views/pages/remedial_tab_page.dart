@@ -56,6 +56,8 @@ class RemedialTabPage extends StatelessWidget {
                     step: i + 1,
                     isRoot: path[i] == r.rootCauseId,
                     studied: c.isStudied(path[i]),
+                    session: c.sessionFor(path[i]),
+                    locked: !c.isRouteUnlocked(path[i]),
                   ),
                 ),
             const SizedBox(height: 16),
@@ -71,6 +73,8 @@ class RemedialTabPage extends StatelessWidget {
                   node: n,
                   mastery: r?.nodeMastery[n.id],
                   studied: c.isStudied(n.id),
+                  session: c.sessionFor(n.id),
+                  locked: !c.isRouteUnlocked(n.id),
                   prerequisites: n.prerequisites
                       .map((p) => c.graph.node(p)?.shortTitle ?? p)
                       .toList(),
@@ -88,21 +92,29 @@ class _NodeTile extends StatelessWidget {
     required this.node,
     required this.mastery,
     required this.studied,
+    this.session,
     this.step,
     this.isRoot = false,
     this.prerequisites = const <String>[],
+    this.locked = false,
   });
 
   final ConceptNode node;
   final double? mastery;
   final bool studied;
+  final RemedialSession? session;
   final int? step;
   final bool isRoot;
   final List<String> prerequisites;
+  final bool locked;
 
   @override
   Widget build(BuildContext context) {
-    final bool ok = mastery != null && mastery! >= AppConstants.masteryRatio;
+    // (§7) Sumber persentase pada tile: hasil post-test bila sudah pernah
+    // dikerjakan, selain itu penguasaan awal dari diagnostik.
+    final RemedialSession? sess = session;
+    final double? barValue = sess != null ? sess.score / 100 : mastery;
+    final bool ok = barValue != null && barValue >= AppConstants.masteryRatio;
     return NeoCard(
       onTap: () => Flows.openRemedial(context, node.id),
       child: Column(
@@ -112,10 +124,13 @@ class _NodeTile extends StatelessWidget {
             children: <Widget>[
               CircleAvatar(
                 radius: 18,
-                backgroundColor: isRoot ? AppColors.accentPink : AppColors.surface,
-                child: step != null
-                    ? Text('$step', style: AppTextStyles.titleSm)
-                    : Text('L${node.level}', style: AppTextStyles.labelMd),
+                backgroundColor:
+                    locked ? AppColors.surface : (isRoot ? AppColors.accentPink : AppColors.surface),
+                child: locked
+                    ? const Icon(Icons.lock, size: 16, color: AppColors.ink)
+                    : step != null
+                        ? Text('$step', style: AppTextStyles.titleSm)
+                        : Text('L${node.level}', style: AppTextStyles.labelMd),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -126,34 +141,47 @@ class _NodeTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       <String>[
+                        if (locked) 'terkunci',
                         if (isRoot) 'Akar masalah',
                         '${node.keyPoints.length} poin kunci',
-                        if (studied) 'sudah dipelajari',
-                        if (prerequisites.isNotEmpty) 'Prasyarat: ${prerequisites.join(', ')}',
+                        if (!studied && !locked) 'belum dimulai',
+                        if (studied && sess == null)
+                          'video selesai · menunggu post-test',
+                        if (sess != null && !sess.passed) 'belum tuntas',
+                        if (sess != null && sess.passed) 'tuntas',
+                        if (prerequisites.isNotEmpty)
+                          'Prasyarat: ${prerequisites.join(', ')}',
                       ].join(' • '),
                       style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right),
+              Icon(locked ? Icons.lock_outline : Icons.chevron_right),
             ],
           ),
-          if (mastery != null) ...<Widget>[
+          if (barValue != null) ...<Widget>[
             const SizedBox(height: 10),
             Row(
               children: <Widget>[
                 Expanded(
                   child: NeoProgressBar(
-                    value: mastery,
+                    value: barValue,
                     height: 8,
                     color: ok ? AppColors.accentGreen : AppColors.accentPink,
                   ),
                 ),
                 const SizedBox(width: 10),
-                Text(Formatters.percent(mastery!), style: AppTextStyles.labelMd),
+                Text(
+                  sess != null ? '${sess.score}%' : Formatters.percent(barValue),
+                  style: AppTextStyles.labelMd,
+                ),
               ],
             ),
+          ] else ...<Widget>[
+            const SizedBox(height: 10),
+            Text('Belum dinilai',
+                style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
           ],
         ],
       ),

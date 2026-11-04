@@ -10,8 +10,11 @@ import '../services/local_storage_service.dart';
 
 /// State global aplikasi.
 class AppController extends ChangeNotifier {
+  AppController({LocalStorageService? storage})
+      : _storage = storage ?? LocalStorageService();
+
   final IrtService irt = const IrtService();
-  final LocalStorageService _storage = LocalStorageService();
+  final LocalStorageService _storage;
   late ContentRepository content;
   late KnowledgeGraphService graph;
 
@@ -70,6 +73,65 @@ class AppController extends ChangeNotifier {
     studiedNodes.add(nodeId);
     await _storage.saveStudied(studiedNodes);
     notifyListeners();
+  }
+
+  /// ---- Status rute berurutan (audit §6) ----
+  ///
+  /// Setiap node punya state: terkunci · belum dimulai · video selesai
+  /// (menunggu post-test) · tuntas. `studied` = video selesai, `passed` =
+  /// post-test terakhir lulus (ambang [AppConstants.masteryRatio] = 60%).
+
+  /// Sesi post-test TERAKHIR untuk node (daftar [sessions] newest-first).
+  RemedialSession? sessionFor(String nodeId) {
+    for (final RemedialSession s in sessions) {
+      if (s.nodeId == nodeId) return s;
+    }
+    return null;
+  }
+
+  /// Post-test terakhir node lulus. Tanpa sesi berarti belum lulus.
+  bool isPassed(String nodeId) => sessionFor(nodeId)?.passed ?? false;
+
+  /// Materi tuntas hanya jika video selesai dan post-test lulus
+  /// (audit §6: video selesai saja tidak otomatis tuntas).
+  bool isFinished(String nodeId) => isStudied(nodeId) && isPassed(nodeId);
+
+  /// Apakah materi boleh dibuka menurut urutan rute (audit §6).
+  ///
+  /// Node pada rute: terbuka hanya jika semua langkah sebelumnya tuntas.
+  /// Node di luar rute (peta materi): terbuka saat sudah pernah dipelajari
+  /// atau seluruh prasyaratnya tuntas, agar penguncian tetap berlaku.
+  bool isRouteUnlocked(String nodeId) {
+    final List<String> path = latestResult?.learningPath ?? const <String>[];
+    final int idx = path.indexOf(nodeId);
+    if (idx < 0) {
+      final ConceptNode? n = graph.node(nodeId);
+      return isStudied(nodeId) ||
+          (n?.prerequisites ?? const <String>[]).every(isFinished);
+    }
+    for (int i = 0; i < idx; i++) {
+      if (!isFinished(path[i])) return false;
+    }
+    return true;
+  }
+
+  /// Judul materi penghalang untuk pesan penguncian.
+  String routeBlockerTitle(String nodeId) {
+    final List<String> path = latestResult?.learningPath ?? const <String>[];
+    final int idx = path.indexOf(nodeId);
+    if (idx >= 0) {
+      for (int i = 0; i < idx; i++) {
+        if (!isFinished(path[i])) {
+          return graph.node(path[i])?.shortTitle ?? path[i];
+        }
+      }
+      return '';
+    }
+    final ConceptNode? n = graph.node(nodeId);
+    for (final String p in n?.prerequisites ?? const <String>[]) {
+      if (!isFinished(p)) return graph.node(p)?.shortTitle ?? p;
+    }
+    return '';
   }
 
   List<ItemResponse> _responses(List<String> ids, List<int?> answers) {

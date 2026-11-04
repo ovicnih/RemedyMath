@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
-import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../models/models.dart';
 import '../widgets/common.dart';
@@ -34,9 +33,8 @@ class ReviewPage extends StatelessWidget {
           itemBuilder: (BuildContext context, int i) {
             final Question q = qs[i];
             final int? a = byId[q.id];
-            final bool ok = q.isCorrect(a);
+            // 8P.1: kartu netral — tidak ada penilaian berwarna merah/hijau.
             return NeoCard(
-              borderColor: ok ? AppColors.accentGreen : AppColors.accentPink,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -45,9 +43,6 @@ class ReviewPage extends StatelessWidget {
                       Text('Soal ${i + 1}', style: AppTextStyles.titleMd),
                       const SizedBox(width: 8),
                       Flexible(child: Pill(label: q.category)),
-                      const Spacer(),
-                      Icon(ok ? Icons.check_circle : Icons.cancel,
-                          color: ok ? AppColors.accentGreen : AppColors.accentPink),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -60,25 +55,6 @@ class ReviewPage extends StatelessWidget {
                   Text(
                     'Jawabanmu: ${a == null ? '(kosong)' : '${String.fromCharCode(65 + a)}. ${q.options[a]}'}',
                     style: AppTextStyles.mathInline,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: _PatternPanel(
-                          correct: false,
-                          text: c.graph.node(q.nodeId)?.wrongPattern ?? '',
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _PatternPanel(
-                          correct: true,
-                          text: c.graph.node(q.nodeId)?.correctPattern ?? '',
-                        ),
-                      ),
-                    ],
                   ),
                   if (q.hint.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
@@ -102,51 +78,6 @@ class ReviewPage extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-/// Panel pola keliru (pink) dan solusi tepat (hijau) — mirip _PatternPanel di diagnosis_result_sections.dart.
-class _PatternPanel extends StatelessWidget {
-  const _PatternPanel({required this.correct, required this.text});
-
-  final bool correct;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSizes.spaceLg),
-      decoration: BoxDecoration(
-        color: correct ? AppColors.accentGreen : AppColors.accentPink,
-        borderRadius: AppSizes.radius(AppSizes.radiusCard),
-        border: Border.all(color: AppColors.ink, width: AppSizes.borderThick),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(correct ? Icons.check : Icons.close,
-                  size: 18, color: AppColors.ink),
-              const SizedBox(width: AppSizes.spaceXs),
-              Flexible(
-                child: Text(
-                  correct ? 'Yang benar' : 'Yang salah',
-                  style: AppTextStyles.labelMd,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSizes.spaceSm),
-          Text(
-            text,
-            style: AppTextStyles.mathInline.copyWith(
-              decoration: correct ? null : TextDecoration.lineThrough,
-            ),
-          ),
-        ],
       ),
     );
   }

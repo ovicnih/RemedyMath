@@ -44,6 +44,15 @@ class _QuizPageState extends State<QuizPage> {
   Timer? _timer;
   bool _finished = false;
 
+  int get _unansweredCount => _answers.where((a) => a == null).length;
+
+  int _firstUnansweredIndex() {
+    for (var i = 0; i < _answers.length; i++) {
+      if (_answers[i] == null) return i;
+    }
+    return _answers.length - 1;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +65,21 @@ class _QuizPageState extends State<QuizPage> {
       setState(() => _left -= const Duration(seconds: 1));
       if (_left <= Duration.zero) {
         _timer?.cancel();
+        if (_unansweredCount > 0) {
+          if (mounted) {
+            showDialog<void>(
+              context: context,
+              builder: (BuildContext ctx) => AlertDialog(
+                title: const Text("Waktu habis"),
+                content: Text("Masih $_unansweredCount soal belum dijawab. Lengkapi sebelum mengumpulkan."),
+                actions: <Widget>[
+                  TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Lanjut")),
+                ],
+              ),
+            );
+          }
+          return;
+        }
         _finish();
       }
     });
@@ -69,21 +93,36 @@ class _QuizPageState extends State<QuizPage> {
 
   void _finish() {
     if (_finished) return;
+    if (_unansweredCount > 0) {
+      return;
+    }
     _finished = true;
     _timer?.cancel();
     Navigator.of(context).pop<List<int?>>(_answers);
   }
 
   Future<void> _confirmFinish() async {
-    final int unanswered = _answers.where((a) => a == null).length;
+    final int unanswered = _unansweredCount;
     final int flagged = _flags.where((f) => f).length;
+    if (unanswered > 0) {
+      // Audit §1: pesan eksplisit + arahkan ke soal pertama yang kosong.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Masih ada $unanswered soal yang belum dijawab. Lengkapi '
+            'semua jawaban sebelum mengumpulkan tes.',
+          ),
+        ),
+      );
+      setState(() => _index = _firstUnansweredIndex());
+      return;
+    }
     final bool? ok = await showDialog<bool>(
       context: context,
       builder: (BuildContext ctx) => AlertDialog(
         title: const Text('Kumpulkan jawaban?'),
         content: Text(
           <String>[
-            if (unanswered > 0) '$unanswered soal belum dijawab.',
             if (flagged > 0) '$flagged soal ditandai ragu-ragu.',
             'Jawaban akan dianalisis dengan metode IRT.',
           ].join('\n'),
@@ -164,7 +203,8 @@ class _QuizPageState extends State<QuizPage> {
         if (!didPop && !_finished) _confirmExit();
       },
       child: Scaffold(
-        appBar: remediAppBar(context, widget.title, showBack: true),
+        appBar: remediAppBar(context, widget.title,
+            showBack: true, profileLocked: true),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(

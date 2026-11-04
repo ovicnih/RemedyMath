@@ -30,10 +30,41 @@ class Flows {
     await nav.push(MaterialPageRoute<void>(builder: (_) => const DiagnosisResultPage()));
   }
 
-  static Future<void> openRemedial(BuildContext context, String nodeId) =>
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => RemedialPage(nodeId: nodeId)),
+  /// Membuka halaman materi node.
+  ///
+  /// Penguncian rute berurutan diberlakukan DI SINI (audit §6) sehingga
+  /// semua jalur masuk — kartu rute, tab Remedial, riwayat sesi — memakai
+  /// satu mekanisme yang sama, bukan hanya kartu yang tampak abu-abu.
+  static Future<void> openRemedial(BuildContext context, String nodeId) async {
+    final AppController c = context.read<AppController>();
+    final NavigatorState nav = Navigator.of(context);
+    if (!c.isRouteUnlocked(nodeId)) {
+      final String blocker = c.routeBlockerTitle(nodeId);
+      await showDialog<void>(
+        context: nav.context,
+        builder: (BuildContext ctx) => AlertDialog(
+          icon: const Icon(Icons.lock_outline, color: AppColors.accentPink),
+          title: const Text('Materi masih terkunci'),
+          content: Text(
+            blocker.isEmpty
+                ? 'Selesaikan materi-langkah sebelumnya untuk membuka materi ini.'
+                : 'Tuntaskan "$blocker" lebih dahulu — tonton video sampai '
+                    'selesai dan lulus post-testnya — untuk membuka materi ini.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Mengerti'),
+            ),
+          ],
+        ),
       );
+      return;
+    }
+    await nav.push(
+      MaterialPageRoute<void>(builder: (_) => RemedialPage(nodeId: nodeId)),
+    );
+  }
 
   static Future<void> startPostTest(BuildContext context, String nodeId) async {
     final AppController c = context.read<AppController>();

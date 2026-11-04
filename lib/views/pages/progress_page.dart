@@ -195,7 +195,10 @@ class ProgressPage extends StatelessWidget {
             NeoCard(
               child: Row(
                 children: <Widget>[
-                  const ProfileAvatar(size: 48),
+                  ProfileAvatar(
+                    size: 48,
+                    photoPath: c.profile?.photoPath,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(

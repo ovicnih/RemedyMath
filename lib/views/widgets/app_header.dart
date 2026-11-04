@@ -43,6 +43,9 @@ class AppHeader extends StatelessWidget {
       color: AppColors.ink,
       width: AppSizes.borderThick,
     );
+    final String? photoPath = context.select<AppController, String?>(
+      (AppController c) => c.profile?.photoPath,
+    );
     return Container(
       width: double.infinity,
       color: AppColors.surface,
@@ -64,11 +67,12 @@ class AppHeader extends StatelessWidget {
           children: <Widget>[
             const AppLogo(),
             const SizedBox(width: AppSizes.spaceMd),
-            Expanded(child: const _Wordmark()),
+            const Expanded(child: _Wordmark()),
             const SizedBox(width: AppSizes.spaceSm),
             const ClassBadge(),
             const SizedBox(width: AppSizes.spaceSm),
             ProfileAvatar(
+              photoPath: photoPath,
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (_) => const SettingsPage()),
               ),

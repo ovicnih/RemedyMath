@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io' show File;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -10,8 +12,9 @@ import '../../core/app_colors.dart';
 import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../models/models.dart';
+import '../../services/profile_image_service.dart';
+import 'crop_page.dart';
 import '../widgets/common.dart';
-import 'onboarding_page.dart';
 
 /// Halaman Pengaturan: Profil dan Logout.
 class SettingsPage extends StatelessWidget {
@@ -110,10 +113,12 @@ class SettingsPage extends StatelessWidget {
     if (confirmed == true && context.mounted) {
       await c.resetAll();
       if (context.mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute<void>(builder: (_) => const OnboardingPage()),
-          (Route<dynamic> r) => false,
-        );
+        // Audit §9: `resetAll()` membuat `profile == null`, sehingga `home` di
+        // `main.dart` berganti ke Onboarding otomatis via `notifyListeners`.
+        // Cukup bersihkan halaman yang ditumpuk di atasnya (Pengaturan,
+        // kuis, dsb.) — JANGAN mendorong Onboarding baru agar tidak
+        // tertumpuk dan navigasi tidak berjalan dua kali.
+        Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
       }
     }
   }
@@ -159,15 +164,48 @@ class _ProfileFormState extends State<_ProfileForm> {
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
-      maxWidth: 512,
-      maxHeight: 512,
-      imageQuality: 80,
+      // Pra-skala native kecil agar layar crop dan decode lokal ringan;
+      // hasil akhir tetap 512x512, cukup untuk avatar tajam.
+      maxWidth: 2048,
+      maxHeight: 2048,
+      imageQuality: 90,
     );
-    if (image != null && mounted) {
+    if (image == null || !mounted) return;
+    final List<int> raw = await image.readAsBytes();
+    if (!mounted) return;
+    Uint8List? result;
+    try {
+      // 8R.2: layar crop interaktif — pengguna memilih area 1:1.
+      result = await Navigator.of(context).push<Uint8List>(
+        MaterialPageRoute<Uint8List>(
+          builder: (_) => CropPage(rawBytes: raw),
+        ),
+      );
+    } on ArgumentError {
+      // Format tak dikenali → layar crop gagal; jatuh ke gambar mentah.
+      result = null;
+    }
+    if (!mounted) return;
+    try {
+      final Uint8List square =
+          result ?? ProfileImageService.cropSquare(raw);
       if (kIsWeb) {
-        // On web, read as bytes and store as base64
-        final bytes = await image.readAsBytes();
-        setState(() => _photoPath = base64Encode(bytes));
+        setState(() => _photoPath = base64Encode(square));
+      } else {
+        final String outPath = ProfileImageService.croppedFilePath(image.path);
+        final File outFile = File(outPath);
+        await outFile.writeAsBytes(square);
+        try {
+          await FileImage(outFile).evict();
+        } catch (_) {}
+        setState(() => _photoPath = outPath);
+      }
+    } on ArgumentError {
+      // Format gambar tidak dikenali: pakai hasil picker apa adanya agar
+      // pilihan pengguna tidak hilang.
+      if (!mounted) return;
+      if (kIsWeb) {
+        setState(() => _photoPath = base64Encode(raw));
       } else {
         setState(() => _photoPath = image.path);
       }
@@ -184,6 +222,12 @@ class _ProfileFormState extends State<_ProfileForm> {
       school: _schoolController.text.trim(),
       photoPath: _photoPath,
     );
+
+    if (_photoPath != null && !kIsWeb) {
+      try {
+        await FileImage(File(_photoPath!)).evict();
+      } catch (_) {}
+    }
 
     await c.saveProfile(updated);
 
