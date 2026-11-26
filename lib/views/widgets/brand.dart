@@ -59,31 +59,36 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final int cacheWidth =
+        (size * MediaQuery.devicePixelRatioOf(context)).round();
+    return SizedBox(
       width: size,
       height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.accentYellow,
-        borderRadius: AppSizes.radius(AppSizes.radiusCard),
-        border: bordered
-            ? Border.all(color: AppColors.ink, width: AppSizes.borderThick)
-            : null,
-        boxShadow: shadowed ? AppSizes.shadowLogoOffset : null,
-      ),
-      // Logo karya pengguna mengisi kotak dengan sedikit napas; bila
-      // asset gagal dimuat, jatuh kembali ke glif sigma (AGENTS.md §4).
-      child: ClipRRect(
-        borderRadius: AppSizes.radius(AppSizes.radiusCard - 4),
-        child: Image.asset(
-          logoPath,
-          width: size - (bordered ? 12 : 0),
-          height: size - (bordered ? 12 : 0),
-          fit: BoxFit.contain,
-          // 8R.3: logo aplikasi warna putih. Pikselnya sudah ditulis ulang
-          // putih ke file aset (lihat tool/whiten_logo.dart), jadi tidak
-          // perlu blend mode di sini. Fallback glyph 'Σ' saat asset gagal.
-          errorBuilder: (_, __, ___) => Text(
+      // 8S.1: logo baru (lime #E2F16D + charcoal #1A1A1A) sudah punya bingkai
+      // rounded-square sendiri, jadi dirender penuh tanpa border ganda.
+      // Bila aset gagal dimuat, jatuh kembali ke kotak kuning berglif 'Σ'.
+      child: Image.asset(
+        logoPath,
+        width: size,
+        height: size,
+        fit: BoxFit.contain,
+        cacheWidth: cacheWidth,
+        errorBuilder: (_, __, ___) => Container(
+          width: size,
+          height: size,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: AppColors.accentYellow,
+            borderRadius: AppSizes.radius(AppSizes.radiusCard),
+            border: bordered
+                ? Border.all(
+                    color: AppColors.ink,
+                    width: AppSizes.borderThick,
+                  )
+                : null,
+            boxShadow: shadowed ? AppSizes.shadowLogoOffset : null,
+          ),
+          child: Text(
             'Σ',
             style: AppTextStyles.mathDisplay.copyWith(
               fontSize: size * 0.55,
@@ -136,11 +141,13 @@ class ProfileAvatar extends StatelessWidget {
     // 8P.4: latar pink hanya untuk inisial. Saat foto ditampilkan, latar
     // harus transparan agar tidak tampak cincin pink di belakang foto.
     final bool hasPhoto = resolvedPhoto != null && resolvedPhoto.isNotEmpty;
+    final int cacheWidth =
+        (size * MediaQuery.devicePixelRatioOf(context)).round();
 
     Widget child;
     if (hasPhoto) {
       if (kIsWeb) {
-        child = _buildWebImage(resolved, resolvedPhoto);
+        child = _buildWebImage(resolved, resolvedPhoto, cacheWidth);
       } else {
         child = ClipOval(
           child: Image.file(
@@ -148,9 +155,10 @@ class ProfileAvatar extends StatelessWidget {
             width: size,
             height: size,
             fit: BoxFit.cover,
+            cacheWidth: cacheWidth,
             errorBuilder: (_, __, ___) {
               // Bila bukan berkas lokal yang valid (mis. mock/base64), coba decode memory
-              return _buildWebImage(resolved, resolvedPhoto);
+              return _buildWebImage(resolved, resolvedPhoto, cacheWidth);
             },
           ),
         );
@@ -176,7 +184,7 @@ class ProfileAvatar extends StatelessWidget {
     );
   }
 
-  Widget _buildWebImage(String fallback, String path) {
+  Widget _buildWebImage(String fallback, String path, int cacheWidth) {
     if (path.isEmpty) {
       return _initialsWidget(fallback);
     }
@@ -189,6 +197,7 @@ class ProfileAvatar extends StatelessWidget {
           width: size,
           height: size,
           fit: BoxFit.cover,
+          cacheWidth: cacheWidth,
           errorBuilder: (_, __, ___) => _initialsWidget(fallback),
         ),
       );

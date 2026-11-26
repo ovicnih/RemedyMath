@@ -19,11 +19,12 @@ peta kemampuan per konsep, akar masalah, dan rute belajar personal berupa
 modul mikro-belajar (konsep inti + poin kunci) yang ditutup **post-test
 ketuntasan**.
 
-Seluruh alur berjalan **sepenuhnya offline** — tidak ada server, tidak ada
-*dependency* eksternal untuk membuka tautan, dan seluruh progres
-disimpan di perangkat lewat `shared_preferences`. Tampilan memakai gaya
-**neobrutalism** (border tebal, bayangan ter-*offset*, warna aksen
-berani) dengan tipografi Inter.
+Inti alur belajar (profil lokal, tes diagnostik IRT, penelusuran *knowledge
+graph*, post-test, dan penyimpanan progres lewat `shared_preferences`) berjalan
+**offline-first** tanpa server backend, sementara pemutar video pembelajaran
+remedial YouTube (`youtube_player_iframe`) memerlukan koneksi internet.
+Tampilan memakai gaya **neobrutalism** (border tebal, bayangan ter-*offset*,
+warna aksen berani) dengan tipografi Inter.
 
 ## Tangkapan Layar Antarmuka
 

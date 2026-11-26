@@ -2,9 +2,9 @@
 class AppAssets {
   const AppAssets._();
 
-  /// Logo aplikasi karya pengguna (512x512, transparen).
+  /// Logo aplikasi RemedyMath (lime yellow `#E2F16D` + charcoal `#1A1A1A`,
+  /// rounded square dengan huruf R dan tanda plus, latar transparan).
   ///
-  /// Sumber asli: `Save/Logo.png` (1254x1254) dioptimasi saat Tahap 8
-  /// Part 3 — lihat HISTORY.md entri v2.8.0.
+  /// Sumber vektor: `Save/remedymath_logo.svg` → `assets/logo/logo.png` (8S.1).
   static const String logo = 'assets/logo/logo.png';
 }

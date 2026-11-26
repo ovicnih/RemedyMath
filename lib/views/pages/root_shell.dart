@@ -56,13 +56,15 @@ class RootShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppController c = context.watch<AppController>();
+    final int tabIndex = context.select<AppController, int>(
+      (AppController c) => c.tabIndex,
+    );
     return Scaffold(
-      body: IndexedStack(index: c.tabIndex, children: _pages),
+      body: IndexedStack(index: tabIndex, children: _pages),
       bottomNavigationBar: AppBottomNav(
-        currentIndex: c.tabIndex,
+        currentIndex: tabIndex,
         destinations: _destinations,
-        onSelect: c.setTab,
+        onSelect: context.read<AppController>().setTab,
       ),
     );
   }

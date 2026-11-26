@@ -383,6 +383,16 @@ class _CropMask extends CustomPainter {
 
   final Rect frame;
 
+  static final Paint _dimPaint = Paint()
+    ..color = Colors.black.withValues(alpha: 0.5);
+  static final Paint _borderPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = AppSizes.borderThick * 2
+    ..color = Colors.white;
+  static final Paint _guidePaint = Paint()
+    ..color = Colors.white.withValues(alpha: 0.4)
+    ..strokeWidth = 1;
+
   @override
   void paint(Canvas canvas, Size size) {
     final Rect area = Offset.zero & size;
@@ -392,30 +402,21 @@ class _CropMask extends CustomPainter {
       ..fillType = PathFillType.evenOdd
       ..addRect(area)
       ..addRect(frame);
-    canvas.drawPath(dim, Paint()..color = Colors.black.withValues(alpha: 0.5));
+    canvas.drawPath(dim, _dimPaint);
 
     // Border bingkai hasil crop.
-    canvas.drawRect(
-      frame,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = AppSizes.borderThick * 2
-        ..color = Colors.white,
-    );
+    canvas.drawRect(frame, _borderPaint);
 
     // Garis bantu tengah vertikal & horizontal.
-    final Paint guide = Paint()
-      ..color = Colors.white.withValues(alpha: 0.4)
-      ..strokeWidth = 1;
     canvas.drawLine(
       Offset(frame.center.dx, frame.top),
       Offset(frame.center.dx, frame.bottom),
-      guide,
+      _guidePaint,
     );
     canvas.drawLine(
       Offset(frame.left, frame.center.dy),
       Offset(frame.right, frame.center.dy),
-      guide,
+      _guidePaint,
     );
   }
 

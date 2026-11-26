@@ -50,6 +50,8 @@ app.*.map.json
 
 # Internal agent instructions / workflow rules
 /AGENTS.md
+/.agents/
+/skills-lock.json
 
 # Internal project documentation, planning, and testing notes
 /docs/

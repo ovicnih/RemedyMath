@@ -40,7 +40,7 @@ class _QuizPageState extends State<QuizPage> {
   late List<bool> _flags;
   late List<String> _notes;
   int _index = 0;
-  late Duration _left;
+  late final ValueNotifier<Duration> _left;
   Timer? _timer;
   bool _finished = false;
 
@@ -59,11 +59,12 @@ class _QuizPageState extends State<QuizPage> {
     _answers = List<int?>.filled(widget.questions.length, null);
     _flags = List<bool>.filled(widget.questions.length, false);
     _notes = List<String>.filled(widget.questions.length, '');
-    _left = widget.duration;
+    _left = ValueNotifier<Duration>(widget.duration);
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
-      setState(() => _left -= const Duration(seconds: 1));
-      if (_left <= Duration.zero) {
+      final Duration next = _left.value - const Duration(seconds: 1);
+      _left.value = next < Duration.zero ? Duration.zero : next;
+      if (_left.value <= Duration.zero) {
         _timer?.cancel();
         if (_unansweredCount > 0) {
           if (mounted) {
@@ -88,6 +89,7 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void dispose() {
     _timer?.cancel();
+    _left.dispose();
     super.dispose();
   }
 
@@ -217,7 +219,7 @@ class _QuizPageState extends State<QuizPage> {
               _QuizHeading(
                 title: widget.title,
                 badge: widget.badge,
-                time: _left,
+                timeListenable: _left,
               ),
               const SizedBox(height: AppSizes.spaceLg),
               _ProgressCard(index: _index, total: total),
@@ -269,12 +271,12 @@ class _QuizHeading extends StatelessWidget {
   const _QuizHeading({
     required this.title,
     required this.badge,
-    required this.time,
+    required this.timeListenable,
   });
 
   final String title;
   final String badge;
-  final Duration time;
+  final ValueNotifier<Duration> timeListenable;
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +304,10 @@ class _QuizHeading extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSizes.spaceMd),
-            _TimerChip(time: time),
+            ValueListenableBuilder<Duration>(
+              valueListenable: timeListenable,
+              builder: (_, Duration time, __) => _TimerChip(time: time),
+            ),
           ],
         ),
       ],

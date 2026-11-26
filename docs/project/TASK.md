@@ -31,10 +31,15 @@ tugas, semuanya `[ ]`.
 | 2 Part 3 — Design Audit | 9 | 9 |
 | 3 — Komponen dasar | 11 | 13 |
 | 4 — Redesign halaman | 30 | 30 |
-| 5 — Verifikasi akhir | 4 | 9 |
-| 6 — Penyerahan | 2 | 3 |
+| 5 — Verifikasi akhir | 5 | 9 |
+| 6 — Penyerahan | 3 | 3 |
 | 7 — Penyempurnaan | 8 | 8 |
-| **Total** | **82** | **102** |
+| 8 - Perbaikan Audit | 12 | 12 |
+| 8 Part 2 - Perbaikan Lanjutan | 6 | 6 |
+| 8 Part 3 - Umpan Balik Vol.2 (rencana) | 5 | 5 |
+| 8 Part 4 - Perbaikan Lanjutan Vol.3 | 4 | 4 |
+| 9 — Polish UI/UX, Performa & Penuntasan v3.0.0 | 7 | 7 |
+| **Total** | **118** | **136** |
 
 ---
 
@@ -343,7 +348,7 @@ Rincian tiap baris ada di [UI-REFERENCE.md](UI-REFERENCE.md) §4.
 | 5.5 | `[ ]` | `flutter build web` | `build/web` ada tapi bertanggal **29 Sep 2026** — sebelum redesign neobrutalism (3 Okt). Itu build versi Material 3 lama |
 | 5.6 | `[ ]` | `flutter run -d edge` | Tidak ada catatan run |
 | 5.7 | `[ ]` | Cek kontras neobrutalism | Helper `contrastRatio()` sudah ada di `test/contrast_test.dart` (3A.9) dan 9 test-nya hijau. Sisa: angka kontras belum dihitung ulang di `DESIGN-AUDIT.md` dan belum dicek di perangkat |
-| 5.8 | `[ ]` | Cek responsif | Belum. 360×640 dan 412×915 |
+| 5.8 | ✅ Selesai | Cek responsif | Terverifikasi lewat `test/responsive_layout_test.dart` pada 360×640 dan 412×915 (0 overflow pada 7 halaman utama) |
 | 5.9 | ✅ | Perbarui dokumentasi | `HISTORY.md` terkini v2.4.0 (entri Tahap 3 v1.8.0, Tahap 4 v1.9.0–v2.4.0). Ringkasan `TASK.md` sudah sinkron (Total 73/94) |
 
 ---
@@ -353,7 +358,7 @@ Rincian tiap baris ada di [UI-REFERENCE.md](UI-REFERENCE.md) §4.
 | # | Status | Tugas | Bukti / Sisa |
 |---|---|---|---|
 | 6.1 | ✅ | Perbarui `README.md` root | Ditulis ulang sesuai struktur dosen: Ringkasan Aplikasi, Tangkapan Layar, Langkah Menjalankan Proyek. 5 screenshot disalin `Save/ScreenShot/` → `screenshots/` (folder ter-track). Isi disesuaikan: 100% offline, fitur video dihapus (v2.4.0) |
-| 6.2 | `[ ]` | Integrasi logo buatan pengguna | **`AppLogo` masih memakai glyph teks `'Σ'`** (`common.dart:220`), bukan `Image.asset`. Tidak ada berkas logo di `assets/` |
+| 6.2 | `✅` | Integrasi logo buatan pengguna | Dituntaskan lewat 8R.5 (Tahap 8 Part 3): `assets/logo/logo.png` terdaftar di pubspec dan `AppLogo` memuatnya via `Image.asset` + fallback glyph. Lihat HISTORY.md v2.8.0 |
 | 6.3 | ✅ | Bersihkan berkas sementara | `test/_diag_test.dart` dihapus, `build/` ada di `.gitignore` |
 
 ---
@@ -394,6 +399,112 @@ benar-benar berjalan dan terverifikasi.
 
 ---
 
+## Tahap 8 - Perbaikan Berdasarkan Audit
+
+Sumber: Save/Audit/1_Audit, Perbaikan Bug, dan Penyempurnaan Alur Pembelajaran RemediMath.md.
+
+Tiga bidang kerja. Semua status ✅.
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 8.1 | ✅ | Validasi penyelesaian kuis | Semua soal wajib dijawab sebelum tes diagnostik dan post-test dikumpulkan. Submit berulang ditolak. Timer habis dan ada soal kosong: peringatan, bukan hitung kosong sebagai salah |
+| 8.2 | ✅ | Pembahasan per soal | Tampil teks soal, jawaban siswa, status Benar dan Salah. Kunci jawaban tidak tampil. wrongPattern dan correctPattern cuma info pola konsep |
+| 8.3 | ✅ | Aktifkan tombol post-test | Setelah video selesai dan bank post-test tersedia, tombol aktif. Gating jelas |
+| 8.4 | ✅ | Konsistensi akses profil | Profil konsisten di Beranda, Diagnostik, Remedial, dan Progres. Saat kuis aktif, batasi. Tidak hentikan timer atau jawaban |
+| 8.5 | ✅ | Gabungkan video ke rute belajar | Hapus kartu video terpisah. Satu bagian Rute Belajar Lengkap. Item tarik ke materi yang benar |
+| 8.6 | ✅ | Penguncian rute berurutan | State: terkunci, belum dimulai, video selesai, menunggu post-test, tuntas. Post-test gagal berarti belum tuntas |
+| 8.7 | ✅ | Persentase penguasaan jelas | Sebelum remediasi tampil penguasaan awal. Setelah post-test tampil hasil. Tanpa data tampilkan Belum dinilai |
+| 8.8 | ✅ | Sederhanakan hasil diagnostik | Skor 0-100, jumlah benar, kesimpulan, rekomendasi. Theta info tambahan. Hapus duplikat kartu akurasi dan skor diagnostik |
+| 8.9 | ✅ | Logout dan profil baru | Logout hapus data lalu onboarding. Profil baru langsung masuk Beranda tanpa refresh |
+| 8.10 | ✅ | Audit tambahan alur dan data | Back stack, timer, video state, learningPath, status halaman. Perbaiki di controller atau navigasi bila penyebab di luar widget |
+| 8.11 | ✅ | Kriteria pengujian audit | flutter analyze, flutter test, all-answered, pembahasan, post-test gating, lockout, skor diagnostik, profil logout |
+| 8.12 | ✅ | Format laporan akhir | Daftar file, akar penyebab, sebelum dan sesudah, aturan akhir, hasil test, emulator, belum selesai |
+
+---
+
+## 8 Part 2 - Perbaikan Lanjutan (Umpan Balik Pengguna)
+
+Sumber: umpan balik pengguna setelah seluruh Tahap 8 tuntas (2026-11-01).
+Tiga bidang kerja: pembahasan soal, video ke post-test, dan foto profil.
+
+Semua status [ ].
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 8P.1 | ✅ | Pembahasan tanpa kotak dua warna | Hapus panel "Yang salah" (merah) dan "Yang benar" (hijau) di page pembahasan soal. Border kartu dan ikon status jadi netral tinta. Soal, jawabanmu, hint, dan materi tetap tampil |
+| 8P.2 | ✅ | Video selesai walaupun di-skip | Deteksi selesai saat PlayerState.ended ATAU posisi >= durasi - 2 detik. markStudied terpanggil walau pengguna lompat ke ujung video. Tombol Mulai post-test aktif segera setelah itu |
+| 8P.3 | ✅ | Crop foto profil saat upload | Setelah image_picker, gambar dibuka di crop persegi sebelum disimpan. Ukuran hasil seragam. Cek pubspec dulu: image_cropper atau crop manual via package image — dipilih package `image` (pure Dart, tanpa config native): `ProfileImageService.cropSquare` 512x512 + `_crop.jpg`; fallback foto asli bila format tak dikenali |
+| 8P.4 | ✅ | Avatar latar transparan | Lingkaran avatar memakai ClipOval dan BoxFit.cover dengan background transparan. Tidak ada ruang kosong berwarna di belakang foto — `ProfileAvatar`: bg pink hanya untuk inisial, transparan saat foto ada |
+| 8P.5 | ✅ | Avatar header menampilkan foto upload | ProfileAvatar di kanan atas terpasang photoPath profil. Rebuild otomatis setelah saveProfile tanpa restart. Fallback inisial saat kosong — `remediAppBar` memilih `c.profile?.photoPath` via `context.select` |
+| 8P.6 | ✅ | Verifikasi 8 Part 2 | flutter analyze bersih (No issues found). flutter test lulus 53/53. Test baru: `review_page_test.dart` (bebas kotak warna), `post_test_gate_test.dart` (gating post-test pasca video), `profile_avatar_test.dart` (avatar foto + latar transparan + appbar photoPath) |
+
+Catatan urutan: 8P.1 dan 8P.2 boleh langsung dikerjakan. 8P.3-8P.5 menyentuh
+jalur yang sama (settings, avatar, profil), jadi disarankan berurutan agar
+hasil crop sesuai bentuk file yang ditampilkan avatar. Tidak ada
+ketergantungan kode keras di antara nomor manapun.
+
+---
+
+## 8 Part 3 - Perbaikan Lanjutan Vol.2 (Revisi Plan)
+
+Sumber: umpan balik pengguna pasca v2.8.0 (2026-11-01): (1) logo jadi warna
+putih saja, (2) crop foto profil jadi border geser gaya PC (bukan cubit 2
+jari), (3) video di rute belajar tidak hilang setelah selesai — hanya
+ditandai dan post-test tetap terbuka sambil video masih bisa diulang.
+
+Catatan: 8R.1-8R.5 dari versi sebelumnya dicabut dan diganti rencana di
+bawah karena pendekatan crop dan perilaku video berubah.
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 8R.1 | ✅ | Hapus kartu mikro-belajar di rute belajar | `ConceptCard` dihapus dari halaman materi; `concept_card.dart` + export dihapus. Poin kunci, video, CTA post-test tetap (terverifikasi 59/59 sebelum revisi). |
+| 8R.2 | ✅ | Crop foto profil: border geser gaya PC | `crop_page.dart` ditulis ulang: gambar cover penuh viewport, border persegi 1:1 dengan 8 handle geser (4 sudut + 4 tepi) dan geser seluruh border (interior) dengan clamp ke batas gambar; assist snap ke tengah layar (44 px) untuk rata kanan-kiri/atas-bawah otomatis (gaya Canva); `CustomPaint` melipat di luar border + panduan tengah. Simpan memotong area border via `ProfileImageService.cropRect` → JPEG 512x512; Batal → null. Test baru: `crop_page_test.dart` (baseline) + `crop_page_drag_test.dart` (drag tepi → putih). Suite 63/63 |
+| 8R.3 | ✅ | Logo aplikasi warna putih saja | `AppLogo` (brand.dart) menampilkan `assets/logo/logo.png` dengan `Image.asset(AppAssets.logo)` murni tanpa blend mode (file logo ditulis ulang jadi siluet putih, 7.4 KB); fallback glyph 'Σ' saat asset gagal. Test `app_logo_test.dart` 2 kasus (render + fallback). Semua pemakai tak berubah |
+| 8R.4 | ✅ | Video rute belajar tetap tampil setelah selesai | `video_lesson.dart`: pemutar tidak lagi disembunyikan setelah `completed` — `YoutubePlayer` tetap ditampilkan dan dapat diulang kapan saja; tombol "Ulangi video" muncul saat pemutar belum ada, `markStudied` tetap dipanggil sekali saat selesai (idempoten). Test `video_replay_test.dart`: pemutar, teks selesai, dan tombol ulang terpasang |
+| 8R.5 | ✅ | Verifikasi 8 Part 3 | `flutter analyze` No issues; `flutter test` lulus 63/63 (baseline + test baru: border crop gaya PC, logo putih, video tetap tampil + ulang); seluruh 8R.1-8R.5 tercentang; HISTORY.md entri v2.9.0 |
+
+Catatan urutan: 8R.1 sudah selesai. 8R.2 dan 8R.3 mandiri satu sama
+lain. 8R.4 menyentuh `video_lesson.dart`/`remedial_page.dart` (logika
+`_completedNotified` dari 8P.2 tetap, hanya jangan sembunyikan video).
+8R.5 terakhir setelah 8R.2-8R.4 selesai.
+
+---
+
+## 8 Part 4 - Perbaikan Lanjutan Vol.3 (Logo SVG + Crop Foto Ulang)
+
+Sumber: rancangan `RENCANA_PERBAIKAN_FITUR_CROP_FOTO_PROFIL.md` + file logo SVG baru (1024×1024, lime yellow `#E2F16D` + charcoal `#1A1A1A`, bentangan rounded square dengan huruf R dan tanda plus).
+
+Catatan: Flutter tidak merender SVG secara native, jadi logo SVG dikonversi ke PNG (atau dipasang paket `flutter_svg`) sebelum dimuat `Image.asset`.
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 8S.1 | ✅ Selesai | Ganti logo aplikasi dengan SVG baru | `Save/Logo.svg` dikonversi ke PNG (resolusi cukup, transparansi utuh) di `assets/logo/logo.png`, daftarkan di `pubspec.yaml`; `AppLogo` (brand.dart) menampilkan `Image.asset(AppAssets.logo)` — warna lime yellow + charcoal terlihat, fallback glyph 'Σ' saat asset gagal. Semua pemakai (onboarding, appbar) tak berubah. |
+| 8S.2 | ✅ Selesai | Tulis ulang crop foto: bingkai tetap tengah, foto pan+zoom | `crop_page.dart` ditulis ulang sesuai rancangan: bingkai crop persegi 1:1 tetap di tengah layar, foto di belakang bisa digeser (satu jari) dan diperbesar/perkecil (pinch dua jari) tanpa meregang proporsi; overlay gelap di luar bingkai + garis bantu tengah. Tombol bantuan: *Sesuaikan* (isi bingkai), *Pusatkan* (kembali tengah), *Reset* (awal). Batas gerakan/zoom agar tidak ada ruang kosong di bingkai. Simpan memotong area bingkai via `ProfileImageService.cropRect` → JPEG 512×512 (`_crop.jpg`/base64 web); pratinjau dan hasil simpan harus identik (posisi, skala, area). Tanpa dependensi baru. |
+| 8S.3 | ✅ Selesai | Test crop ulang | `crop_page_test.dart` baru: foto portrait/landscape/persegi tampil normal (bukan thumbnail kecil), sentuh tidak membuat pratinjau putih, geser + pinch berfungsi, Simpan menghasilkan JPEG 512×512 sesuai pratinjau (piksel tepi sesuai area bingkai). |
+| 8S.4 | ✅ Selesai | Verifikasi 8 Part 4 | `flutter analyze` No issues; `flutter test` lulus semua (67/67); seluruh 8S.1–8S.3 tercentang terverifikasi; HISTORY.md entri v3.0.0. |
+
+Catatan urutan: 8S.1 mandiri. 8S.2 → 8S.3 → 8S.4 berurutan. Tidak mengubah logika data/controller — murni tampilan dan alur pilih gambar.
+
+---
+
+## Tahap 9 — Polish UI/UX, Performa & Penuntasan v3.0.0
+
+Sumber: rencana implementasi `v3.0.0` dengan prinsip Ponytail + skill lokal (`ui-ux-pro-max`, `flutter-performance`, `flutter-build-responsive-layout`).
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 9.1 | ✅ Selesai | Perbaiki `AppLogo` tanpa double border (8S.1) | `AppLogo` (`brand.dart`) menampilkan `assets/logo/logo.png` penuh tanpa border/padding ganda + `cacheWidth`; fallback kotak kuning `'Σ'` tetap bekerja; komentar `app_assets.dart` dan `app_logo_test.dart` diperbarui. |
+| 9.2 | ✅ Selesai | Redesain halaman Login/Onboarding (`onboarding_page.dart`) | Hero branding + 3 `Pill` keunggulan, form dibungkus `NeoCard` + `EyebrowLabel`, keyboard flow (`next`/`done` + `onFieldSubmitted`), `AutovalidateMode` pasca-submit pertama, in-flight `_submitting` guard, dan catatan privasi berikon gembok. |
+| 9.3 | ✅ Selesai | Optimasi performa timer `QuizPage` (`quiz_page.dart`) | Ganti `Duration _left` → `ValueNotifier<Duration>` (di-dispose di `dispose()`) dan bungkus hanya `_TimerChip` dengan `ValueListenableBuilder<Duration>` agar timer tidak me-rebuild seluruh halaman kuis tiap detik. |
+| 9.4 | ✅ Selesai | Optimasi performa `RootShell`, `ProfileAvatar` & `_CropMask` | `RootShell` memakai `context.select` khusus `tabIndex`; `ProfileAvatar` memakai `cacheWidth` sesuai `devicePixelRatioOf`; `_CropMask` memakai `static final Paint` agar zero-allocation saat `paint()`. |
+| 9.5 | ✅ Selesai | Verifikasi layout responsif 360×640 & 412×915 (5.8) | Tambah `test/responsive_layout_test.dart` untuk halaman utama (`OnboardingPage`, `DashboardPage`, `DiagnosticPage`, `RemedialTabPage`, `ProgressPage`, `SettingsPage`, `CropPage`) pada 360×640 & 412×915; 0 overflow, perbaiki bila ada yang gagal. |
+| 9.6 | ✅ Selesai | Kebersihan repo & klarifikasi `README.md` | Tambah `.agents/` dan `skills-lock.json` ke `.gitignore`; klarifikasi klaim "sepenuhnya offline" di `README.md` menjadi offline-first untuk inti aplikasi + butuh internet untuk video YouTube. |
+| 9.7 | ✅ Selesai | Verifikasi akhir Tahap 9 & 8 Part 4 (8S.4) | `flutter analyze` (`No issues found!`) dan `flutter test` lulus 100% (67/67); tandai `8S.1`, `8S.4`, `5.8`, dan `9.1`–`9.7` `✅ Selesai`; catat entri `v3.0.0` di `HISTORY.md`. |
+
+Catatan urutan: `9.1`–`9.4` dan `9.6` dapat dikerjakan berurutan atau paralel; `9.5` dijalankan setelah perubahan UI (`9.1`, `9.2`); `9.7` terakhir setelah seluruh verifikasi lulus.
+
+---
+
 ## Antrean Kerja — urutan trabajo berikutnya
 
 Antrean 1-8 sudah tuntas. Sisa antrean mulai dari Tahap 3.
@@ -412,7 +523,7 @@ Antrean 1-8 sudah tuntas. Sisa antrean mulai dari Tahap 3.
 | 10 | ✅ | **Tahap 3** 3.3–3.11 | 9 komponen neobrutalism tersisa — **semua selesai** |
 | 11 | ✅ | **Tahap 4** 4.1–4.30 | Selesai: Beranda, Kuis, Hasil Diagnosis, Remedial, lepas fitur video |
 | 12 | `[ ]` | **Tahap 5** 5.3–5.9 | Verifikasi, termasuk `flutter build apk --debug` |
-| 13 | `[ ]` | **Tahap 6** 6.2 | Integrasi logo — `AppLogo` masih glyph teks `'Σ'` |
+| 13 | ✅ | **Tahap 6** 6.2 | Integrasi logo — `AppLogo` sekarang memakai `assets/logo/logo.png` via `Image.asset` (8R.5, Tahap 8 Part 3) |
 | 14 | `[ ]` | **7.1** Hasil Diagnosis, Pembahasan & Video | Menunggu link video dari pengguna untuk 7.1.4 |
 | 15 | `[ ]` | **7.2** Menu Pengaturan | Profil (termasuk unggah foto) + Logout; tidak bergantung pada 7.1 |
 
