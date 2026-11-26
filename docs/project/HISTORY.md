@@ -6,6 +6,61 @@ dan apa yang diverifikasi.
 
 ---
 
+## v3.1.0 - 2026-11-26 - Tahap 10 Redesign UI/UX Hybrid (Swiss Grid × Playful Bento)
+
+### Konteks
+
+Menjalankan redesign bertahap (Tahap 0–5) sesuai `PROMPT_REDESIGN_UI_UX_REMEDYMATH.md`
+dengan arah *Hybrid Swiss Grid × Playful Bento Neo-Brutalism* tanpa mengubah
+logika bisnis IRT/Knowledge Graph dan tanpa dependensi baru.
+
+### 10.1–10.2 Audit, Design System & Komponen Bersama
+
+- `docs/REDESIGN_UI_UX_REMEDYMATH.md` (baru): audit 13 halaman & 19 widget,
+  inventaris token/aset/navigasi, dan laporan akhir format A–E.
+- `lib/core/app_theme.dart`: menambah `dialogTheme` neobrutalism (border 3 px
+  tinta, radius kartu) serta `errorBorder`/`focusedErrorBorder`.
+- `lib/views/widgets/neo_card.dart` & `pill.dart`: menambah `borderWidth`
+  (hierarki 3 px utama vs 2 px sekunder/terkunci) dan `bordered: true` pada `Pill`.
+- `neo_button.dart`, `neo_card.dart`, `app_bottom_nav.dart`,
+  `neo_progress_bar.dart`, `answer_option.dart`, `root_shell.dart`, `flows.dart`:
+  animasi mikro tactile native (`NeoCard` push-down `85ms`, `RootShell`
+  cross-fade `140ms` yang tetap menjaga state `IndexedStack`, dan *pop-in* ikon
+  hasil Post-Test `320ms`) + haptic feedback yang mematuhi
+  `MediaQuery.disableAnimationsOf`.
+
+### 10.3 Redesign Halaman Inti & Batas 500 Baris
+
+- `lib/views/pages/diagnostic_page.dart`: ikon centang kontras tinggi (`ink` di
+  atas kotak hijau berborder), prioritas `Skor X/100` pada kartu hasil terakhir,
+  dan konsolidasi token `AppSizes.space*`.
+- `lib/views/pages/remedial_tab_page.dart`: mengganti `CircleAvatar` polos
+  dengan badge berborder tinta, membedakan visual kartu terkunci (`elevated: false`,
+  latar `background`, `borderThin`), dan menampilkan status lewat `Pill(bordered: true)`.
+- `lib/views/pages/review_page.dart`: panel hint netral berborder tipis + token
+  spacing (tetap bebas kotak penilaian warna).
+- `lib/views/pages/quiz_page.dart` + `quiz_sections.dart` (baru): ekstrak 6
+  sub-widget agar seluruh file halaman ≤ 500 baris (`AGENTS.md §5`) +
+  `AnimatedSwitcher` transisi soal.
+- `lib/views/pages/dashboard_page.dart` + `dashboard_sections.dart` (baru):
+  rombak penuh ke Hybrid Swiss Grid × 2×2 Playful Bento (1 Hero CTA Lime adaptif
+  tanpa tombol duplikat + 4 kartu bento semantik tappable + riwayat sesi).
+- `lib/views/pages/diagnosis_result_page.dart`: Hero Score Card Lime (`0 → score`
+  count-up) + 2-Kolom Bento Ringkasan (`Jawaban Benar` & `Skor IRT θ`).
+- `lib/views/pages/progress_page.dart`: 2-Kolom Bento Hero (`Skor θ Terbaru` &
+  `Ketuntasan`) di atas grafik θ.
+- `lib/views/pages/settings_page.dart`: Lime Bento Profile Banner + Form Card
+  bersih (`borderThin`) + kartu Logout tegas (alur `crop_page.dart` utuh).
+
+### 10.4–10.5 Verifikasi Akhir
+
+| Yang dicek | Hasil |
+|---|---|
+| `flutter analyze` | `No issues found!` |
+| `flutter test` | **69/69 lulus** (termasuk `360×640`, `360×800`, `412×915`, dan landscape `640×360`) |
+
+---
+
 ## v3.0.0 - 2026-11-26 - Tahap 8 Part 4 & Tahap 9 (Polish UI/UX, Performa & Penuntasan)
 
 ### Konteks

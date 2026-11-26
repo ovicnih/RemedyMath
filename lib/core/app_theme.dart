@@ -133,8 +133,36 @@ class AppTheme {
             width: AppSizes.borderThick,
           ),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          borderSide: const BorderSide(
+            color: AppColors.accentPink,
+            width: AppSizes.borderThin,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          borderSide: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThick,
+          ),
+        ),
+        errorStyle: AppTextStyles.labelMd.copyWith(fontWeight: FontWeight.w700),
         labelStyle: AppTextStyles.bodyMd,
         hintStyle: AppTextStyles.labelMd,
+      ),
+      dialogTheme: DialogTheme(
+        backgroundColor: AppColors.surface,
+        elevation: 0,
+        titleTextStyle: AppTextStyles.titleLg,
+        contentTextStyle: AppTextStyles.bodyMd,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+          side: const BorderSide(
+            color: AppColors.ink,
+            width: AppSizes.borderThick,
+          ),
+        ),
       ),
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.resolveWith<Color>(

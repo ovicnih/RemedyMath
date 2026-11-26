@@ -12,12 +12,16 @@ class Pill extends StatelessWidget {
     this.background = AppColors.accentYellow,
     this.foreground = AppColors.ink,
     this.icon,
+    this.bordered = false,
   });
 
   final String label;
   final Color background;
   final Color foreground;
   final IconData? icon;
+
+  /// Tambah outline tinta tipis (2 px) untuk status chip bergaya neobrutalism.
+  final bool bordered;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +30,9 @@ class Pill extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(AppSizes.radiusPill),
+        border: bordered
+            ? Border.all(color: AppColors.ink, width: AppSizes.borderThin)
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

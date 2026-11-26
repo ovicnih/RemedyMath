@@ -87,10 +87,21 @@ class Flows {
     await showDialog<void>(
       context: nav.context,
       builder: (BuildContext ctx) => AlertDialog(
-        icon: Icon(
-          s.passed ? Icons.verified : Icons.replay_circle_filled_outlined,
-          size: 48,
-          color: s.passed ? AppColors.accentGreen : AppColors.accentPink,
+        icon: TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0.6, end: 1.0),
+          duration: MediaQuery.disableAnimationsOf(ctx)
+              ? Duration.zero
+              : const Duration(milliseconds: 320),
+          curve: Curves.easeOutBack,
+          child: Icon(
+            s.passed ? Icons.verified : Icons.replay_circle_filled_outlined,
+            size: 48,
+            color: s.passed ? AppColors.accentGreen : AppColors.accentPink,
+          ),
+          builder: (_, double scale, Widget? child) => Transform.scale(
+            scale: scale,
+            child: child,
+          ),
         ),
         title: Text(s.passed ? 'Konsep Tuntas!' : 'Belum Tuntas'),
         content: Column(

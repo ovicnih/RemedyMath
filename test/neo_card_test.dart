@@ -136,11 +136,16 @@ void main() {
       expect(padding.padding, const EdgeInsets.all(AppSizes.spaceLg));
     });
 
-    testWidgets('onTap dipanggil saat kartu ditekan', (WidgetTester tester) async {
+    testWidgets('onTap dipanggil sekali pada sentuhan pertama meski animasi jalan',
+        (WidgetTester tester) async {
       int tapped = 0;
       await pump(tester, onTap: () => tapped++);
-      await tester.tap(find.byType(NeoCard));
-      await tester.pump();
+      final TestGesture gesture = await tester.startGesture(
+        tester.getCenter(find.byType(NeoCard)),
+      );
+      await tester.pump(const Duration(milliseconds: 50));
+      await gesture.up();
+      await tester.pumpAndSettle();
       expect(tapped, 1);
     });
 

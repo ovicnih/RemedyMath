@@ -59,8 +59,23 @@ class RootShell extends StatelessWidget {
     final int tabIndex = context.select<AppController, int>(
       (AppController c) => c.tabIndex,
     );
+    final Duration fadeDuration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 140);
+
     return Scaffold(
-      body: IndexedStack(index: tabIndex, children: _pages),
+      body: IndexedStack(
+        index: tabIndex,
+        children: <Widget>[
+          for (int i = 0; i < _pages.length; i++)
+            AnimatedOpacity(
+              opacity: i == tabIndex ? 1.0 : 0.0,
+              duration: fadeDuration,
+              curve: Curves.easeOut,
+              child: _pages[i],
+            ),
+        ],
+      ),
       bottomNavigationBar: AppBottomNav(
         currentIndex: tabIndex,
         destinations: _destinations,

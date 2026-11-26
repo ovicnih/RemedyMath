@@ -39,7 +39,8 @@ tugas, semuanya `[ ]`.
 | 8 Part 3 - Umpan Balik Vol.2 (rencana) | 5 | 5 |
 | 8 Part 4 - Perbaikan Lanjutan Vol.3 | 4 | 4 |
 | 9 — Polish UI/UX, Performa & Penuntasan v3.0.0 | 7 | 7 |
-| **Total** | **118** | **136** |
+| 10 — Redesign UI/UX Hybrid (Swiss Grid × Playful Bento) | 5 | 5 |
+| **Total** | **123** | **141** |
 
 ---
 
@@ -502,6 +503,20 @@ Sumber: rencana implementasi `v3.0.0` dengan prinsip Ponytail + skill lokal (`ui
 | 9.7 | ✅ Selesai | Verifikasi akhir Tahap 9 & 8 Part 4 (8S.4) | `flutter analyze` (`No issues found!`) dan `flutter test` lulus 100% (67/67); tandai `8S.1`, `8S.4`, `5.8`, dan `9.1`–`9.7` `✅ Selesai`; catat entri `v3.0.0` di `HISTORY.md`. |
 
 Catatan urutan: `9.1`–`9.4` dan `9.6` dapat dikerjakan berurutan atau paralel; `9.5` dijalankan setelah perubahan UI (`9.1`, `9.2`); `9.7` terakhir setelah seluruh verifikasi lulus.
+
+---
+
+## Tahap 10 — Redesign UI/UX Hybrid (Swiss Grid × Playful Bento Neo-Brutalism)
+
+Sumber: `PROMPT_REDESIGN_UI_UX_REMEDYMATH.md` dan laporan audit `docs/REDESIGN_UI_UX_REMEDYMATH.md`.
+
+| # | Status | Tugas | Kriteria selesai |
+|---|---|---|---|
+| 10.1 | ✅ Selesai | Audit UI/UX & dokumen `docs/REDESIGN_UI_UX_REMEDYMATH.md` (Tahap 0) | Audit 13 halaman & 19 widget via MCP `codebase-memory`, inventaris token/aset/navigasi, dan laporan akhir A–E tercatat lengkap. |
+| 10.2 | ✅ Selesai | Konsolidasi Design System & komponen bersama (Tahap 1–2) | `AppTheme` menambah `dialogTheme` neobrutalism + `errorBorder`; `NeoCard` menambah `borderWidth`; `Pill` menambah `bordered`; animasi mikro tactile pada `NeoButton`, `NeoProgressBar`, `AnswerOption`, dan `AppBottomNav`. |
+| 10.3 | ✅ Selesai | Redesign halaman inti & batas 500 baris (Tahap 3) | Perbaikan kontras & hierarki skor di `DiagnosticPage`, visual locked state + status `Pill` di `RemedialTabPage`, panel hint netral di `ReviewPage`, transisi `QuizPage` + ekstrak `quiz_sections.dart` (semua halaman ≤ 500 baris), dan count-up skor di `DiagnosisResultPage`. |
+| 10.4 | ✅ Selesai | Uji responsif 4 viewport & regresi (Tahap 4) | `test/responsive_layout_test.dart` menguji `360×640`, `360×800`, `412×915`, dan landscape `640×360` — 0 overflow. |
+| 10.5 | ✅ Selesai | Verifikasi akhir & dokumentasi (Tahap 5) | `flutter analyze` (`No issues found!`) dan `flutter test` lulus 100% (69/69); laporan A–E, `TASK.md`, dan `HISTORY.md` v3.1.0 sinkron. |
 
 ---
 

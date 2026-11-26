@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../models/models.dart';
 import '../widgets/common.dart';
@@ -27,9 +28,9 @@ class ReviewPage extends StatelessWidget {
       appBar: remediAppBar(context, 'Pembahasan Soal', showBack: true),
       body: SafeArea(
         child: ListView.separated(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSizes.spaceLg),
           itemCount: qs.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
+          separatorBuilder: (_, __) => const SizedBox(height: AppSizes.spaceMd),
           itemBuilder: (BuildContext context, int i) {
             final Question q = qs[i];
             final int? a = byId[q.id];
@@ -41,38 +42,60 @@ class ReviewPage extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text('Soal ${i + 1}', style: AppTextStyles.titleMd),
-                      const SizedBox(width: 8),
-                      Flexible(child: Pill(label: q.category)),
+                      const SizedBox(width: AppSizes.spaceSm),
+                      Flexible(
+                        child: Pill(label: q.category, bordered: true),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSizes.spaceSm),
                   Text(q.stem, style: AppTextStyles.bodyMd),
                   if (q.expression.isNotEmpty) ...<Widget>[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSizes.spaceSm),
                     MathBox(q.expression),
                   ],
-                  const SizedBox(height: 10),
+                  const SizedBox(height: AppSizes.spaceMd),
                   Text(
                     'Jawabanmu: ${a == null ? '(kosong)' : '${String.fromCharCode(65 + a)}. ${q.options[a]}'}',
                     style: AppTextStyles.mathInline,
                   ),
                   if (q.hint.isNotEmpty) ...<Widget>[
-                    const SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Icon(Icons.lightbulb_outline, size: 18, color: AppColors.accentBlue),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(q.hint,
-                              style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
+                    const SizedBox(height: AppSizes.spaceSm),
+                    Container(
+                      padding: const EdgeInsets.all(AppSizes.spaceSm),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: AppSizes.radius(AppSizes.radiusChip),
+                        border: Border.all(
+                          color: AppColors.ink,
+                          width: AppSizes.borderHairline,
                         ),
-                      ],
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.lightbulb_outline,
+                            size: 16,
+                            color: AppColors.ink,
+                          ),
+                          const SizedBox(width: AppSizes.spaceSm),
+                          Expanded(
+                            child: Text(
+                              q.hint,
+                              style: AppTextStyles.labelMd
+                                  .copyWith(color: AppColors.ink),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                  const SizedBox(height: 4),
-                  Text('Materi: ${c.graph.node(q.nodeId)?.shortTitle ?? q.nodeId} • b = ${q.difficulty.toStringAsFixed(1)}',
-                      style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
+                  const SizedBox(height: AppSizes.spaceSm),
+                  Text(
+                    'Materi: ${c.graph.node(q.nodeId)?.shortTitle ?? q.nodeId} • b = ${q.difficulty.toStringAsFixed(1)}',
+                    style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
+                  ),
                 ],
               ),
             );

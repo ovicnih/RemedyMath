@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_constants.dart';
+import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../core/formatters.dart';
 import '../../models/models.dart';
@@ -44,20 +45,92 @@ class ProgressPage extends StatelessWidget {
     final List<ThetaPoint> hist = c.history.length > 8
         ? c.history.sublist(c.history.length - 8)
         : c.history;
+    final int totalNodes = c.graph.ordered.length;
+    final int passedCount =
+        c.graph.ordered.where((ConceptNode n) => c.isPassed(n.id)).length;
+    final double passedRatio = totalNodes == 0 ? 0 : passedCount / totalNodes;
 
     return Scaffold(
       appBar: remediAppBar(context, 'Progres'),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+          padding: const EdgeInsets.fromLTRB(
+            AppSizes.spaceLg,
+            AppSizes.spaceXs,
+            AppSizes.spaceLg,
+            AppSizes.spaceXl,
+          ),
           children: <Widget>[
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: NeoCard(
+                      color: AppColors.accentBlue,
+                      padding: const EdgeInsets.all(AppSizes.spaceLg),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text('SKOR θ TERBARU',
+                              style: AppTextStyles.eyebrow),
+                          const SizedBox(height: AppSizes.spaceSm),
+                          Text(
+                            r == null ? '–' : Formatters.theta(r.theta),
+                            style: AppTextStyles.displayNum,
+                          ),
+                          const Spacer(),
+                          const SizedBox(height: AppSizes.spaceXs),
+                          Text(
+                            r == null
+                                ? 'Belum ada tes'
+                                : c.irt.proficiencyLabel(r.theta),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.labelMd,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSizes.spaceMd),
+                  Expanded(
+                    child: NeoCard(
+                      color: AppColors.accentGreen,
+                      padding: const EdgeInsets.all(AppSizes.spaceLg),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Text('KETUNTASAN',
+                              style: AppTextStyles.eyebrow),
+                          const SizedBox(height: AppSizes.spaceSm),
+                          Text(
+                            '$passedCount/$totalNodes',
+                            style: AppTextStyles.displayNum,
+                          ),
+                          const Spacer(),
+                          const SizedBox(height: AppSizes.spaceSm),
+                          NeoProgressBar(
+                            value: passedRatio,
+                            height: 10,
+                            color: AppColors.accentYellow,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSizes.spaceLg),
             NeoCard(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(AppSizes.spaceLg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const SectionTitle('Perkembangan Kemampuan (θ)', icon: Icons.show_chart),
-                  const SizedBox(height: 12),
+                  const SectionTitle('Perkembangan Kemampuan (θ)',
+                      icon: Icons.show_chart),
+                  const SizedBox(height: AppSizes.spaceMd),
                   if (r == null)
                     const Text('Belum ada data. Kerjakan tes diagnostik terlebih dahulu.',
                         style: AppTextStyles.bodyMd)

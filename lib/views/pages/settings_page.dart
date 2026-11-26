@@ -36,17 +36,7 @@ class SettingsPage extends StatelessWidget {
             AppSizes.spaceXl,
           ),
           children: <Widget>[
-            // Profil Section
-            const SectionTitle(
-              'Profil',
-              icon: Icons.person_outline,
-              style: AppTextStyles.titleMd,
-            ),
-            const SizedBox(height: AppSizes.spaceMd),
-            NeoCard(
-              padding: const EdgeInsets.all(AppSizes.spaceXl),
-              child: _ProfileForm(profile: profile),
-            ),
+            _ProfileForm(profile: profile),
             const SizedBox(height: AppSizes.spaceXl),
 
             // Logout Section
@@ -240,22 +230,35 @@ class _ProfileFormState extends State<_ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
+    final String displayName = _nameController.text.trim().isNotEmpty
+        ? _nameController.text.trim()
+        : (widget.profile?.name ?? 'Siswa');
+    final String displayClass = _classController.text.trim().isNotEmpty
+        ? _classController.text.trim()
+        : (widget.profile?.className ?? 'SMA Kelas 10');
+
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          // Avatar + ganti foto
-          Center(
-            child: Column(
+          // Lime Bento Profile Banner
+          NeoCard(
+            color: AppColors.accentYellow,
+            padding: const EdgeInsets.all(AppSizes.spaceLg),
+            child: Row(
               children: <Widget>[
                 Stack(
                   children: <Widget>[
                     ProfileAvatar(
                       initials: _nameController.text.isNotEmpty
-                          ? _nameController.text.trim().split(RegExp(r'\s+')).first[0].toUpperCase()
+                          ? _nameController.text
+                              .trim()
+                              .split(RegExp(r'\s+'))
+                              .first[0]
+                              .toUpperCase()
                           : (widget.profile?.initials ?? '?'),
-                      size: 80,
+                      size: 76,
                       photoPath: _photoPath,
                     ),
                     Positioned(
@@ -265,18 +268,18 @@ class _ProfileFormState extends State<_ProfileForm> {
                         onTap: _pickImage,
                         borderRadius: BorderRadius.circular(20),
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(7),
                           decoration: BoxDecoration(
-                            color: AppColors.accentYellow,
+                            color: AppColors.surface,
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.ink,
-                              width: AppSizes.borderThick,
+                              width: AppSizes.borderThin,
                             ),
                           ),
                           child: const Icon(
                             Icons.camera_alt_outlined,
-                            size: 18,
+                            size: 16,
                             color: AppColors.ink,
                           ),
                         ),
@@ -284,61 +287,107 @@ class _ProfileFormState extends State<_ProfileForm> {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSizes.spaceMd),
-                const Text(
-                  'Ketuk ikon kamera untuk ganti foto',
-                  style: AppTextStyles.caption,
+                const SizedBox(width: AppSizes.spaceLg),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        displayName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.titleLg,
+                      ),
+                      const SizedBox(height: AppSizes.spaceXs),
+                      Text(
+                        displayClass,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.bodyMd,
+                      ),
+                      const SizedBox(height: AppSizes.spaceSm),
+                      const Pill(
+                        label: 'Tersimpan lokal',
+                        icon: Icons.lock_outline,
+                        background: AppColors.surface,
+                        bordered: true,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: AppSizes.spaceXl),
-
-          // Nama (wajib)
-          TextFormField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Nama Lengkap *',
-              hintText: 'Masukkan nama',
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nama wajib diisi';
-              }
-              return null;
-            },
-            textCapitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: AppSizes.spaceMd),
-
-          // Kelas
-          TextFormField(
-            controller: _classController,
-            decoration: const InputDecoration(
-              labelText: 'Kelas',
-              hintText: 'Contoh: SMA Kelas 10',
-            ),
-            textCapitalization: TextCapitalization.words,
-          ),
-          const SizedBox(height: AppSizes.spaceMd),
-
-          // Sekolah
-          TextFormField(
-            controller: _schoolController,
-            decoration: const InputDecoration(
-              labelText: 'Asal Sekolah',
-              hintText: 'Nama sekolah',
-            ),
-            textCapitalization: TextCapitalization.words,
-          ),
           const SizedBox(height: AppSizes.spaceLg),
 
-          // Simpan
-          NeoButton(
-            expand: true,
-            icon: Icons.save_outlined,
-            label: 'Simpan Profil',
-            onPressed: _saveProfile,
+          // Form Edit Profil
+          NeoCard(
+            borderWidth: AppSizes.borderThin,
+            padding: const EdgeInsets.all(AppSizes.spaceXl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: EyebrowLabel(label: 'Edit Profil'),
+                ),
+                const SizedBox(height: AppSizes.spaceMd),
+
+                // Nama (wajib)
+                TextFormField(
+                  controller: _nameController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Lengkap *',
+                    hintText: 'Masukkan nama',
+                    prefixIcon: Icon(Icons.person_outline),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Nama wajib diisi';
+                    }
+                    return null;
+                  },
+                  textCapitalization: TextCapitalization.words,
+                ),
+                const SizedBox(height: AppSizes.spaceMd),
+
+                // Kelas
+                TextFormField(
+                  controller: _classController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'Kelas',
+                    hintText: 'Contoh: SMA Kelas 10',
+                    prefixIcon: Icon(Icons.class_outlined),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                ),
+                const SizedBox(height: AppSizes.spaceMd),
+
+                // Sekolah
+                TextFormField(
+                  controller: _schoolController,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) => _saveProfile(),
+                  decoration: const InputDecoration(
+                    labelText: 'Asal Sekolah',
+                    hintText: 'Nama sekolah',
+                    prefixIcon: Icon(Icons.school_outlined),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                ),
+                const SizedBox(height: AppSizes.spaceLg),
+
+                // Simpan
+                NeoButton(
+                  expand: true,
+                  icon: Icons.save_outlined,
+                  label: 'Simpan Profil',
+                  onPressed: _saveProfile,
+                ),
+              ],
+            ),
           ),
         ],
       ),

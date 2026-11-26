@@ -42,7 +42,9 @@ void main() {
 
   const List<Size> viewports = <Size>[
     Size(360, 640),
+    Size(360, 800),
     Size(412, 915),
+    Size(640, 360),
   ];
 
   final Uint8List pngBytes = _samplePng();

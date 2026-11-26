@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../controllers/app_controller.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_constants.dart';
+import '../../core/app_sizes.dart';
 import '../../core/app_text_styles.dart';
 import '../../core/formatters.dart';
 import '../../models/models.dart';
@@ -115,73 +116,136 @@ class _NodeTile extends StatelessWidget {
     final RemedialSession? sess = session;
     final double? barValue = sess != null ? sess.score / 100 : mastery;
     final bool ok = barValue != null && barValue >= AppConstants.masteryRatio;
+    final bool passed = sess != null && sess.passed;
+
+    final String statusLabel;
+    final Color statusBg;
+    final IconData statusIcon;
+    if (locked) {
+      statusLabel = 'Terkunci';
+      statusBg = AppColors.surface;
+      statusIcon = Icons.lock_outline;
+    } else if (passed) {
+      statusLabel = 'Tuntas';
+      statusBg = AppColors.accentGreen;
+      statusIcon = Icons.check_circle_outline;
+    } else if (sess != null && !sess.passed) {
+      statusLabel = 'Belum tuntas';
+      statusBg = AppColors.accentPink;
+      statusIcon = Icons.replay_outlined;
+    } else if (studied) {
+      statusLabel = 'Video selesai · Menunggu post-test';
+      statusBg = AppColors.accentYellow;
+      statusIcon = Icons.quiz_outlined;
+    } else {
+      statusLabel = 'Belum dimulai';
+      statusBg = AppColors.accentBlue;
+      statusIcon = Icons.play_circle_outline;
+    }
+
+    final Color badgeBg = locked
+        ? AppColors.surface
+        : (passed
+            ? AppColors.accentGreen
+            : (isRoot ? AppColors.accentPink : AppColors.accentYellow));
+
     return NeoCard(
       onTap: () => Flows.openRemedial(context, node.id),
+      color: locked ? AppColors.background : AppColors.surface,
+      borderWidth: locked ? AppSizes.borderThin : AppSizes.borderThick,
+      elevated: !locked,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Row(
             children: <Widget>[
-              CircleAvatar(
-                radius: 18,
-                backgroundColor:
-                    locked ? AppColors.surface : (isRoot ? AppColors.accentPink : AppColors.surface),
+              Container(
+                width: 36,
+                height: 36,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: badgeBg,
+                  borderRadius: AppSizes.radius(AppSizes.radiusChip),
+                  border: Border.all(
+                    color: AppColors.ink,
+                    width: AppSizes.borderThin,
+                  ),
+                ),
                 child: locked
                     ? const Icon(Icons.lock, size: 16, color: AppColors.ink)
-                    : step != null
-                        ? Text('$step', style: AppTextStyles.titleSm)
-                        : Text('L${node.level}', style: AppTextStyles.labelMd),
+                    : passed
+                        ? const Icon(Icons.check, size: 18, color: AppColors.ink)
+                        : step != null
+                            ? Text('$step', style: AppTextStyles.titleSm)
+                            : Text('L${node.level}',
+                                style: AppTextStyles.labelMd),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSizes.spaceMd),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(node.title, style: AppTextStyles.titleSm),
-                    const SizedBox(height: 2),
-                    Text(
-                      <String>[
-                        if (locked) 'terkunci',
-                        if (isRoot) 'Akar masalah',
-                        '${node.keyPoints.length} poin kunci',
-                        if (!studied && !locked) 'belum dimulai',
-                        if (studied && sess == null)
-                          'video selesai · menunggu post-test',
-                        if (sess != null && !sess.passed) 'belum tuntas',
-                        if (sess != null && sess.passed) 'tuntas',
-                        if (prerequisites.isNotEmpty)
-                          'Prasyarat: ${prerequisites.join(', ')}',
-                      ].join(' • '),
-                      style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
+                    const SizedBox(height: AppSizes.spaceXs),
+                    Wrap(
+                      spacing: AppSizes.spaceXs,
+                      runSpacing: AppSizes.spaceXs,
+                      children: <Widget>[
+                        Pill(
+                          label: statusLabel,
+                          icon: statusIcon,
+                          background: statusBg,
+                          bordered: true,
+                        ),
+                        if (isRoot)
+                          const Pill(
+                            label: 'Akar masalah',
+                            background: AppColors.accentPink,
+                            bordered: true,
+                          ),
+                      ],
                     ),
+                    if (prerequisites.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: AppSizes.spaceXs),
+                      Text(
+                        'Prasyarat: ${prerequisites.join(', ')}',
+                        style: AppTextStyles.labelMd
+                            .copyWith(color: AppColors.ink),
+                      ),
+                    ],
                   ],
                 ),
               ),
-              Icon(locked ? Icons.lock_outline : Icons.chevron_right),
+              Icon(
+                locked ? Icons.lock_outline : Icons.chevron_right,
+                color: AppColors.ink,
+              ),
             ],
           ),
           if (barValue != null) ...<Widget>[
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSizes.spaceMd),
             Row(
               children: <Widget>[
                 Expanded(
                   child: NeoProgressBar(
                     value: barValue,
-                    height: 8,
+                    height: 10,
                     color: ok ? AppColors.accentGreen : AppColors.accentPink,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: AppSizes.spaceMd),
                 Text(
                   sess != null ? '${sess.score}%' : Formatters.percent(barValue),
-                  style: AppTextStyles.labelMd,
+                  style: AppTextStyles.labelStrong,
                 ),
               ],
             ),
           ] else ...<Widget>[
-            const SizedBox(height: 10),
-            Text('Belum dinilai',
-                style: AppTextStyles.labelMd.copyWith(color: AppColors.ink)),
+            const SizedBox(height: AppSizes.spaceSm),
+            Text(
+              'Belum dinilai • ${node.keyPoints.length} poin kunci',
+              style: AppTextStyles.labelMd.copyWith(color: AppColors.ink),
+            ),
           ],
         ],
       ),
